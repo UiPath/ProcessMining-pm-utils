@@ -1,0 +1,8 @@
+{
+    "files.eol": "\n",
+    "editor.renderWhitespace": "all",
+    "files.insertFinalNewline": true,
+    "files.associations": {
+        "*.sql": "jinja-sql"
+    }
+}
