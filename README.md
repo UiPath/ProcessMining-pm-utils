@@ -10,54 +10,268 @@ packages:
     revision: [tag name of the release]
 ```
 
+To use the macros of this package, you may need to define variables in your `dbt_project.yml`. Per macro is indicated which variables need to be defined. The following shows an example configuration of the variables:
+
+```
+vars:
+  # Set the used database. Supported options: "sqlserver", "snowflake".
+  database: "sqlserver"
+  # Name of the schema where the transformations run.
+  schema: "my_schema"
+  # Date and time formats.
+  # For SQL Server defined by integers and for Snowflake defined by strings.
+  date_format: 23 # sqlserver: 23, snowflake: 'YYYY-MM-DD'
+  time_format: 8 # sqlserver: 8, snowflake: 'hh24:mi:ss'
+  datetime_format: 20 # sqlserver: 20, snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3'
+```
+
 ## Contents
 This dbt package contains macros for SQL functions to run the dbt project on multiple databases and for schema tests. The databases that are currently supported are Snowflake and SQL Server.
 
-[Multiple databases](#Multiple-databases)
-- [date_from_timestamp](#date_from_timestamp)
-- [string_agg](#string_agg)
+- [Multiple databases](#Multiple-databases)
+  - [date_from_timestamp](#date_from_timestamp)
+  - [string_agg](#string_agg)
+  - [timestamp_from_date](#timestamp_from_date)
+  - [timestamp_from_parts](#)
+  - [to_date](#)
+  - [to_double](#)
+  - [to_integer](#)
+  - [to_time](#)
+  - [to_timestamp](#)
+  - [to_varchar](#)
+- [Schema tests](#)
+  - [test_equal_rowcount](#test_equal_rowcount)
+  - [test_exists](#test_exists)
+  - [test_type_boolean](#test_type_boolean)
+  - [test_type_date](#test_type_date)
+  - [test_type_double](#test_type_double)
+  - [test_type_integer](#test_type_integer)
+  - [test_type_timestamp](#test_type_timestamp)
+  - [test_unique_combination_of_columns](#test_unique_combination_of_columns)
 
 ### Multiple databases
 
 #### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
 This macro extracts the date part from a datetime attribute. 
-- Snowflake: `to_date([expression])`
-- SQL Server: `try_convert(date, [expression])`
 
-Usage: `{{ date_from_timestamp([expression]) }}`
+Usage: 
+`{{ date_from_timestamp([expression]) }}`
+
+Variables:
+- database
 
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
+This macro aggregates string attributes separated by the given delimiter. This macro can only be used as an aggregate function.
+
+Usage:
+`{{ string_agg([expression], [delimiter]) }}`
+
+Variables:
+- database
 
 #### timestamp_from_date ([source](macros/multiple_databases/timestamp_from_date.sql))
+This macro creates a timestamp based on only a date attribute. The time part of the timestamp is set to 00:00:00. 
+
+Usage:
+`{{ timestamp_from_date([expression]) }}`
+
+Variables:
+- database
 
 #### timestamp_from_parts ([source](macros/multiple_databases/timestamp_from_parts.sql))
+This macro create a timestamp based on a date and time attribute.
+
+Usage: 
+`{{ timestamp_from_parts([date_expression], [time_expression]) }}`
+
+Variables: 
+- database
 
 #### to_date ([source](macros/multiple_databases/to_date.sql))
+This macro converts an attribute to a date attribute.
+
+Usage: 
+`{{ to_date([expression]) }}`
+
+Variables: 
+- database
+- date_format
 
 #### to_double ([source](macros/multiple_databases/to_double.sql))
+This macro converts an attribute to a double attribute.
+
+Usage: 
+`{{ to_double([expression]) }}`
+
+Variables: 
+- database
 
 #### to_integer ([source](macros/multiple_databases/to_integer.sql))
+This macro converts an attribute to an integer attribute.
+
+Usage: 
+`{{ to_integer([expression]) }}`
+
+Variables: 
+- database
 
 #### to_time ([source](macros/multiple_databases/to_time.sql))
+This macro converts an attribute to a time attribute.
+
+Usage: 
+`{{ to_time([expression]) }}`
+
+Variables: 
+- database
+- time_format
 
 #### to_timestamp ([source](macros/multiple_databases/to_timestamp.sql))
+This macro converts an attribute to a timestamp attribute.
+
+Usage: 
+`{{ to_timestamp([expression]) }}`
+
+Variables: 
+- database
+- datetime_format
 
 #### to_varchar ([source](macros/multiple_databases/to_varchar.sql))
+This macro converts an attribute to a string attribute.
+
+Usage: 
+`{{ to_varchar([expression]) }}`
+
+Variables: 
+- database
 
 ### Schema tests
 
 #### test_equal_rowcount ([source](macros/schema_tests/test_equal_rowcount.sql))
+This schema test evaluates whether two models have the same number of rows.
+
+Usage:
+```
+models:
+  - name: Model_A
+    tests:
+      - pm_utils.equal_rowcount:
+          compare_model: 'Model_B'
+```
+Variables: 
+- schema
 
 #### test_exists ([source](macros/schema_tests/test_exists.sql))
+This schema test evaluates whether a column is available in the model.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.exists
+```
 
 #### test_type_boolean ([source](macros/schema_tests/test_type_boolean.sql))
+This schema test evaluates whether an attribute is a boolean represented by the numeric values 0 and 1.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.type_boolean
+```
 
 #### test_type_date ([source](macros/schema_tests/test_type_date.sql))
+This schema test evaluates whether an attribute is a date data type.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.type_date
+              table: "'Model_A'"
+              column: "'Column_A'"
+```
+
+Variables: 
+- database
+- schema
 
 #### test_type_double ([source](macros/schema_tests/test_type_double.sql))
+This schema test evaluates whether an attribute is a double data type.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.type_double
+              table: "'Model_A'"
+              column: "'Column_A'"
+```
+
+Variables: 
+- database
+- schema
 
 #### test_type_integer ([source](macros/schema_tests/test_type_integer.sql))
+This schema test evaluates whether an attribute is an integer data type.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.type_integer
+              table: "'Model_A'"
+              column: "'Column_A'"
+```
+
+Variables: 
+- database
+- schema
 
 #### test_type_timestamp ([source](macros/schema_tests/test_type_timestamp.sql))
+This schema test evaluates whether an attribute is a timestamp data type.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.type_timestamp
+              table: "'Model_A'"
+              column: "'Column_A'"
+```
+
+Variables: 
+- database
+- schema
 
 #### test_unique_combination_of_columns ([source](macros/schema_tests/test_unique_combination_of_columns.sql))
+This schema test evaluates whether the combination of columns is unique. This test can be defined by two or more columns.
+
+Usage:
+```
+models:
+  - name: Model_A
+    tests:
+      - pm_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - '"Column_A"'
+            - '"Column_B"'
+```
