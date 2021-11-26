@@ -3,9 +3,17 @@
 -- Aggregation of string attributes separated by the delimiter.
 -- This function can only be used as an aggregate.
 {% if target.type == 'snowflake' %}
-    listagg({{ string_attribute }}, '{{ delimiter }}')
+    {% if delimiter is defined %}
+        listagg({{ string_attribute }}, '{{ delimiter }}')
+    {% else %}
+        listagg({{ string_attribute }}, ', ')
+    {% endif %}
 {% elif target.type == 'sqlserver' %}
-    string_agg({{ string_attribute}}, '{{ delimiter }}')
+    {% if delimiter is defined %}
+        string_agg({{ string_attribute}}, '{{ delimiter }}')
+    {% else %}
+        string_agg({{ string_attribute}}, ', ')
+    {% endif %}
 {% endif %}
 
 {% endmacro %}
