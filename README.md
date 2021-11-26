@@ -26,7 +26,7 @@ vars:
 ```
 
 ## Contents
-This dbt package contains macros for SQL functions to run the dbt project on multiple databases and for schema tests. The databases that are currently supported are Snowflake and SQL Server.
+This dbt package contains macros for SQL functions to run the dbt project on multiple databases and for generic tests. The databases that are currently supported are Snowflake and SQL Server.
 
 - [Multiple databases](#Multiple-databases)
   - [date_from_timestamp](#date_from_timestamp-source)
@@ -39,7 +39,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [to_time](#to_time-source)
   - [to_timestamp](#to_timestamp-source)
   - [to_varchar](#to_varchar-source)
-- [Schema tests](#Schema-tests)
+- [Generic tests](#Generic-tests)
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
   - [test_type_boolean](#test_type_boolean-source)
@@ -144,10 +144,10 @@ Usage:
 Variables: 
 - database
 
-### Schema tests
+### Generic tests
 
-#### test_equal_rowcount ([source](macros/schema_tests/test_equal_rowcount.sql))
-This schema test evaluates whether two models have the same number of rows.
+#### test_equal_rowcount ([source](macros/generic_tests/test_equal_rowcount.sql))
+This generic test evaluates whether two models have the same number of rows.
 
 Usage:
 ```
@@ -160,8 +160,8 @@ models:
 Variables: 
 - schema
 
-#### test_exists ([source](macros/schema_tests/test_exists.sql))
-This schema test evaluates whether a column is available in the model.
+#### test_exists ([source](macros/generic_tests/test_exists.sql))
+This generic test evaluates whether a column is available in the model.
 
 Usage:
 ```
@@ -173,8 +173,8 @@ models:
           - pm_utils.exists
 ```
 
-#### test_type_boolean ([source](macros/schema_tests/test_type_boolean.sql))
-This schema test evaluates whether an attribute is a boolean represented by the numeric values 0 and 1.
+#### test_type_boolean ([source](macros/generic_tests/test_type_boolean.sql))
+This generic test evaluates whether an attribute is a boolean represented by the numeric values 0 and 1.
 
 Usage:
 ```
@@ -186,8 +186,8 @@ models:
           - pm_utils.type_boolean
 ```
 
-#### test_type_date ([source](macros/schema_tests/test_type_date.sql))
-This schema test evaluates whether an attribute is a date data type.
+#### test_type_date ([source](macros/generic_tests/test_type_date.sql))
+This generic test evaluates whether an attribute is a date data type.
 
 Usage:
 ```
@@ -205,8 +205,8 @@ Variables:
 - database
 - schema
 
-#### test_type_double ([source](macros/schema_tests/test_type_double.sql))
-This schema test evaluates whether an attribute is a double data type.
+#### test_type_double ([source](macros/generic_tests/test_type_double.sql))
+This generic test evaluates whether an attribute is a double data type.
 
 Usage:
 ```
@@ -224,8 +224,8 @@ Variables:
 - database
 - schema
 
-#### test_type_integer ([source](macros/schema_tests/test_type_integer.sql))
-This schema test evaluates whether an attribute is an integer data type.
+#### test_type_integer ([source](macros/generic_tests/test_type_integer.sql))
+This generic test evaluates whether an attribute is an integer data type.
 
 Usage:
 ```
@@ -243,8 +243,8 @@ Variables:
 - database
 - schema
 
-#### test_type_timestamp ([source](macros/schema_tests/test_type_timestamp.sql))
-This schema test evaluates whether an attribute is a timestamp data type.
+#### test_type_timestamp ([source](macros/generic_tests/test_type_timestamp.sql))
+This generic test evaluates whether an attribute is a timestamp data type.
 
 Usage:
 ```
@@ -262,8 +262,8 @@ Variables:
 - database
 - schema
 
-#### test_unique_combination_of_columns ([source](macros/schema_tests/test_unique_combination_of_columns.sql))
-This schema test evaluates whether the combination of columns is unique. This test can be defined by two or more columns.
+#### test_unique_combination_of_columns ([source](macros/generic_tests/test_unique_combination_of_columns.sql))
+This generic test evaluates whether the combination of columns is unique. This test can be defined by two or more columns.
 
 Usage:
 ```
