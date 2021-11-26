@@ -1,8 +1,8 @@
 {% macro to_integer(attribute) %}
 
-{% if var("database") == 'snowflake' %}
+{% if target.type == 'snowflake' %}
     try_to_number({{ attribute }})
-{% elif var("database") == 'sqlserver' %}
+{% elif target.type == 'sqlserver' %}
     try_convert(bigint, {{ attribute }})
 {% endif %}
 

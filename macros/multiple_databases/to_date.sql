@@ -1,8 +1,8 @@
 {% macro to_date(attribute) %}
 
-{% if var("database") == 'snowflake' %}
+{% if target.type == 'snowflake' %}
     try_to_date({{ attribute }}, {{ var("date_format") }})
-{% elif var("database") == 'sqlserver' %}
+{% elif target.type == 'sqlserver' %}
     try_convert(date, {{ attribute }}, {{ var("date_format") }})
 {% endif %}
 

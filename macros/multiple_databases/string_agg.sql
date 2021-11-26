@@ -2,9 +2,9 @@
 
 -- Aggregation of string attributes separated by the delimiter.
 -- This function can only be used as an aggregate.
-{% if var("database") == 'snowflake' %}
+{% if target.type == 'snowflake' %}
     listagg({{ string_attribute }}, '{{ delimiter }}')
-{% elif var("database") == 'sqlserver' %}
+{% elif target.type == 'sqlserver' %}
     string_agg({{ string_attribute}}, '{{ delimiter }}')
 {% endif %}
 

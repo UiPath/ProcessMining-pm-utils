@@ -14,15 +14,13 @@ To use the macros of this package, you may need to define variables in your `dbt
 
 ```
 vars:
-  # Set the used database. Supported options: "sqlserver", "snowflake".
-  database: "sqlserver"
   # Name of the schema where the transformations run.
   schema: "my_schema"
   # Date and time formats.
   # For SQL Server defined by integers and for Snowflake defined by strings.
-  date_format: 23 # sqlserver: 23, snowflake: 'YYYY-MM-DD'
-  time_format: 8 # sqlserver: 8, snowflake: 'hh24:mi:ss'
-  datetime_format: 20 # sqlserver: 20, snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3'
+  date_format: 23 # SQL Server: 23, Snowflake: 'YYYY-MM-DD'
+  time_format: 8 # SQL Server: 8, Snowflake: 'hh24:mi:ss'
+  datetime_format: 20 # SQL Server: 20, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3'
 ```
 
 ## Contents
@@ -57,17 +55,11 @@ This macro extracts the date part from a datetime attribute.
 Usage: 
 `{{ date_from_timestamp([expression]) }}`
 
-Variables:
-- database
-
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
 This macro aggregates string attributes separated by the given delimiter. This macro can only be used as an aggregate function.
 
 Usage:
 `{{ string_agg([expression], [delimiter]) }}`
-
-Variables:
-- database
 
 #### timestamp_from_date ([source](macros/multiple_databases/timestamp_from_date.sql))
 This macro creates a timestamp based on only a date attribute. The time part of the timestamp is set to 00:00:00. 
@@ -75,17 +67,11 @@ This macro creates a timestamp based on only a date attribute. The time part of 
 Usage:
 `{{ timestamp_from_date([expression]) }}`
 
-Variables:
-- database
-
 #### timestamp_from_parts ([source](macros/multiple_databases/timestamp_from_parts.sql))
 This macro create a timestamp based on a date and time attribute.
 
 Usage: 
 `{{ timestamp_from_parts([date_expression], [time_expression]) }}`
-
-Variables: 
-- database
 
 #### to_date ([source](macros/multiple_databases/to_date.sql))
 This macro converts an attribute to a date attribute.
@@ -94,7 +80,6 @@ Usage:
 `{{ to_date([expression]) }}`
 
 Variables: 
-- database
 - date_format
 
 #### to_double ([source](macros/multiple_databases/to_double.sql))
@@ -103,17 +88,11 @@ This macro converts an attribute to a double attribute.
 Usage: 
 `{{ to_double([expression]) }}`
 
-Variables: 
-- database
-
 #### to_integer ([source](macros/multiple_databases/to_integer.sql))
 This macro converts an attribute to an integer attribute.
 
 Usage: 
 `{{ to_integer([expression]) }}`
-
-Variables: 
-- database
 
 #### to_time ([source](macros/multiple_databases/to_time.sql))
 This macro converts an attribute to a time attribute.
@@ -122,7 +101,6 @@ Usage:
 `{{ to_time([expression]) }}`
 
 Variables: 
-- database
 - time_format
 
 #### to_timestamp ([source](macros/multiple_databases/to_timestamp.sql))
@@ -132,7 +110,6 @@ Usage:
 `{{ to_timestamp([expression]) }}`
 
 Variables: 
-- database
 - datetime_format
 
 #### to_varchar ([source](macros/multiple_databases/to_varchar.sql))
@@ -140,9 +117,6 @@ This macro converts an attribute to a string attribute.
 
 Usage: 
 `{{ to_varchar([expression]) }}`
-
-Variables: 
-- database
 
 ### Generic tests
 
@@ -202,7 +176,6 @@ models:
 ```
 
 Variables: 
-- database
 - schema
 
 #### test_type_double ([source](macros/generic_tests/test_type_double.sql))
@@ -221,7 +194,6 @@ models:
 ```
 
 Variables: 
-- database
 - schema
 
 #### test_type_integer ([source](macros/generic_tests/test_type_integer.sql))
@@ -240,7 +212,6 @@ models:
 ```
 
 Variables: 
-- database
 - schema
 
 #### test_type_timestamp ([source](macros/generic_tests/test_type_timestamp.sql))
@@ -259,7 +230,6 @@ models:
 ```
 
 Variables: 
-- database
 - schema
 
 #### test_unique_combination_of_columns ([source](macros/generic_tests/test_unique_combination_of_columns.sql))

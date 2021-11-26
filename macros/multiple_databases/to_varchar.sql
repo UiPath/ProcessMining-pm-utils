@@ -1,8 +1,8 @@
 {% macro to_varchar(attribute) %}
 
-{% if var("database") == 'snowflake' %}
+{% if target.type == 'snowflake' %}
     to_varchar({{ attribute }})
-{% elif var("database") == 'sqlserver' %}
+{% elif target.type == 'sqlserver' %}
     convert(nvarchar(50), {{ attribute }})
 {% endif %}
 

@@ -1,8 +1,8 @@
 {% macro to_timestamp(attribute) %}
 
-{% if var("database") == 'snowflake' %}
+{% if target.type == 'snowflake' %}
     try_to_timestamp({{ attribute }}, {{ var("datetime_format") }})
-{% elif var("database") == 'sqlserver' %}
+{% elif target.type == 'sqlserver' %}
     try_convert(datetime, {{ attribute }}, {{ var("datetime_format") }})
 {% endif %}
 

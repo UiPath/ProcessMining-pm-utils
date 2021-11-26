@@ -1,8 +1,8 @@
 {% macro to_double(attribute) %}
 
-{% if var("database") == 'snowflake' %}
+{% if target.type == 'snowflake' %}
     try_to_double({{ attribute }})
-{% elif var("database") == 'sqlserver' %}
+{% elif target.type == 'sqlserver' %}
     try_convert(float, {{ attribute }})
 {% endif %}
 

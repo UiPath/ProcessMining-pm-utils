@@ -1,8 +1,8 @@
 {% macro timestamp_from_parts(date_attribute, time_attribute) %}
 
-{% if var("database") == 'snowflake' %}
+{% if target.type == 'snowflake' %}
     timestamp_from_parts({{ date_attribute }}, {{ time_attribute }})
-{% elif var("database") == 'sqlserver' %}
+{% elif target.type == 'sqlserver' %}
     datetimefromparts(
         datepart(year, {{ date_attribute }}),
         datepart(month, {{ date_attribute }}),
