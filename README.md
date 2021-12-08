@@ -28,6 +28,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 
 - [Multiple databases](#Multiple-databases)
   - [date_from_timestamp](#date_from_timestamp-source)
+  - [left_from_char](#left_from_char-source)
   - [string_agg](#string_agg-source)
   - [timestamp_from_date](#timestamp_from_date-source)
   - [timestamp_from_parts](#timestamp_from_parts-source)
@@ -38,14 +39,17 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [to_timestamp](#to_timestamp-source)
   - [to_varchar](#to_varchar-source)
 - [Generic tests](#Generic-tests)
+  - [test_edgecount](#test_edgecount-source)
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
+  - [text_startplacecount_sinkplacecount](#test_startplacecount_sinkplacecount-source)
   - [test_type_boolean](#test_type_boolean-source)
   - [test_type_date](#test_type_date-source)
   - [test_type_double](#test_type_double-source)
   - [test_type_integer](#test_type_integer-source)
   - [test_type_timestamp](#test_type_timestamp-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
+  - [test_values_nonnegative](#test_values_nonnegative-source)
 
 ### Multiple databases
 
@@ -54,6 +58,12 @@ This macro extracts the date part from a datetime attribute.
 
 Usage: 
 `{{ date_from_timestamp([expression]) }}`
+
+#### left_from_char ([source](macros/multiple_databases/left_from_char.sql))
+This macro extracts the string left from the character.
+
+Usage: 
+`{{ left_from_char([attribute], [character]) }}`
 
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
 This macro aggregates string attributes separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function.
@@ -120,6 +130,22 @@ Usage:
 
 ### Generic tests
 
+#### test_edgecount ([source](macros/generic_tests/test_edgecount.sql))
+This generic test evaluates whether the number of edges coincide with the number of cases and events.
+
+Usage:
+```
+models:
+  - name: Edge_table_A
+    tests:
+	  - pm_utils.edgecount:
+       	case_model: Case_table_A
+       	event_model: Event_table_A
+```
+
+Variables:
+- schema
+
 #### test_equal_rowcount ([source](macros/generic_tests/test_equal_rowcount.sql))
 This generic test evaluates whether two models have the same number of rows.
 
@@ -131,6 +157,7 @@ models:
       - pm_utils.equal_rowcount:
           compare_model: 'Model_B'
 ```
+
 Variables: 
 - schema
 
@@ -146,6 +173,22 @@ models:
         tests:
           - pm_utils.exists
 ```
+
+#### text_startplacecount_sinkplacecount ([source](macros/generic_tests/test_startplacecount_sinkplacecount.sql))
+This generic test evaluates whether every case has a startplace and a sinkplace.
+
+Usage:
+```
+models:
+  - name: Model_A
+    tests:
+      - pm_utils.startplacecount_sinkplacecount:
+          compare_model: 'Model_B'
+```
+
+Variables:
+- schema
+
 
 #### test_type_boolean ([source](macros/generic_tests/test_type_boolean.sql))
 This generic test evaluates whether an attribute is a boolean represented by the numeric values 0 and 1.
@@ -236,4 +279,16 @@ models:
           combination_of_columns:
             - 'Column_A'
             - 'Column_B'
+```
+
+#### test_values_nonnegative ([source](macros/generic_tests/test_values_nonnegative.sql))
+This generic test whether the values of the column are nonnegative.
+
+Usage:
+```
+models:
+  - name: Model_A
+    tests:
+      - pm_utils.values_nonnegative:
+          column_name: "'Column_A'"
 ```
