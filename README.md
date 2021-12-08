@@ -39,6 +39,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [to_timestamp](#to_timestamp-source)
   - [to_varchar](#to_varchar-source)
 - [Generic tests](#Generic-tests)
+  - [test_attribute_length](#test_attribute_length-source)
   - [test_edgecount](#test_edgecount-source)
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
@@ -129,6 +130,17 @@ Usage:
 `{{ to_varchar([expression]) }}`
 
 ### Generic tests
+
+#### test_attribute_length ([source](macros/generic_tests/test_attribute_length.sql))
+This generic test evaluates whether the number of every value in the column has a particular length.
+
+Usage:
+```
+models:
+- name: Model_A
+        tests:
+          - pm_utils.attribute_length:
+              length: '"Length"'
 
 #### test_edgecount ([source](macros/generic_tests/test_edgecount.sql))
 This generic test evaluates whether the number of edges coincide with the number of cases and events.
