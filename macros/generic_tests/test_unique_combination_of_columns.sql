@@ -2,7 +2,7 @@
 
 {% set column_list = [] %}
 {% for column in combination_of_columns %}
-    {% set column_list = column_list.append(column) %}
+    {% set column_list = column_list.append('"'+column+'"') %}
 {% endfor %}
 
 {% set columns_csv = column_list | join(', ') %}

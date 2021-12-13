@@ -1,14 +1,10 @@
-{% macro test_type_date(model, column_name, table, column) %}
+{% macro test_type_date(model, column_name) %}
 
 select *
 from Information_schema.Columns
 where Information_schema.Columns."TABLE_SCHEMA" = '{{ var("schema") }}'
-    and Information_schema.Columns."TABLE_NAME" = {{ table }}
-    and Information_schema.Columns."COLUMN_NAME" = {{ column }}
-{% if target.type == 'snowflake' %}
-    and Information_schema.Columns."DATA_TYPE" <> 'DATE'
-{% elif target.type == 'sqlserver' %}
-    and Information_schema.Columns."DATA_TYPE" <> 'date'
-{% endif %}
+    and Information_schema.Columns."TABLE_NAME" = '{{ model.name }}'
+    and Information_schema.Columns."COLUMN_NAME" = '{{ column_name }}'
+    and lower(Information_schema.Columns."DATA_TYPE") <> 'date'
 
 {% endmacro %}

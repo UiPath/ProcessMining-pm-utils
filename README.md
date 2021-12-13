@@ -171,8 +171,6 @@ models:
       - name: '"Column_A"'
         tests:
           - pm_utils.type_date
-              table: "'Model_A'"
-              column: "'Column_A'"
 ```
 
 Variables: 
@@ -189,8 +187,6 @@ models:
       - name: '"Column_A"'
         tests:
           - pm_utils.type_double
-              table: "'Model_A'"
-              column: "'Column_A'"
 ```
 
 Variables: 
@@ -207,8 +203,6 @@ models:
       - name: '"Column_A"'
         tests:
           - pm_utils.type_integer
-              table: "'Model_A'"
-              column: "'Column_A'"
 ```
 
 Variables: 
@@ -225,8 +219,6 @@ models:
       - name: '"Column_A"'
         tests:
           - pm_utils.type_timestamp
-              table: "'Model_A'"
-              column: "'Column_A'"
 ```
 
 Variables: 
@@ -242,6 +234,6 @@ models:
     tests:
       - pm_utils.unique_combination_of_columns:
           combination_of_columns:
-            - '"Column_A"'
-            - '"Column_B"'
+            - 'Column_A'
+            - 'Column_B'
 ```
