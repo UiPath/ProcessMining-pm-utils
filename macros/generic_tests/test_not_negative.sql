@@ -1,4 +1,4 @@
-{% macro test_values_nonnegative(model, column_name) %}
+{% macro test_not_negative(model, column_name) %}
 
 select {{ column_name }}
 from {{ model }}
