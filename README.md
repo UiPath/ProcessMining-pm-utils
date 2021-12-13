@@ -44,7 +44,6 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
   - [test_not_negative](#test_not_negative-source)
-  - [text_startplacecount_sinkplacecount](#test_startplacecount_sinkplacecount-source)
   - [test_type_boolean](#test_type_boolean-source)
   - [test_type_date](#test_type_date-source)
   - [test_type_double](#test_type_double-source)
@@ -199,22 +198,6 @@ models:
         tests:
           - pm_utils.not_negative
 ```
-
-#### text_startplacecount_sinkplacecount ([source](macros/generic_tests/test_startplacecount_sinkplacecount.sql))
-This generic test evaluates whether every case has a startplace and a sinkplace.
-
-Usage:
-```
-models:
-  - name: Model_A
-    tests:
-      - pm_utils.startplacecount_sinkplacecount:
-          compare_model: 'Model_B'
-```
-
-Variables:
-- schema
-
 
 #### test_type_boolean ([source](macros/generic_tests/test_type_boolean.sql))
 This generic test evaluates whether an attribute is a boolean represented by the numeric values 0 and 1.
