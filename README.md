@@ -40,9 +40,10 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [to_varchar](#to_varchar-source)
 - [Generic tests](#Generic-tests)
   - [test_attribute_length](#test_attribute_length-source)
-  - [test_edgecount](#test_edgecount-source)
+  - [test_edge_count](#test_edge_count-source)
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
+  - [test_not_negative](#test_not_negative-source)
   - [text_startplacecount_sinkplacecount](#test_startplacecount_sinkplacecount-source)
   - [test_type_boolean](#test_type_boolean-source)
   - [test_type_date](#test_type_date-source)
@@ -50,7 +51,6 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_type_integer](#test_type_integer-source)
   - [test_type_timestamp](#test_type_timestamp-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
-  - [test_values_nonnegative](#test_values_nonnegative-source)
 
 ### Multiple databases
 
@@ -141,18 +141,19 @@ models:
         tests:
           - pm_utils.attribute_length:
               length: '"Length"'
+```
 
-#### test_edgecount ([source](macros/generic_tests/test_edgecount.sql))
-This generic test evaluates whether the number of edges coincide with the number of cases and events.
+#### test_edge_count ([source](macros/generic_tests/test_edge_count.sql))
+This generic test evaluates whether the number of edges is as expected based on the event log. The expected number of edges is equal to the number of events plus the number of cases, since also edges from the source node and to the sink node are taken into account.
 
 Usage:
 ```
 models:
   - name: Edge_table_A
     tests:
-	  - pm_utils.edgecount:
-       	case_model: Case_table_A
-       	event_model: Event_table_A
+      - pm_utils.edge_count:
+          event_log: 'Event_log_model'
+          case_ID: 'Case_ID'
 ```
 
 Variables:
@@ -184,6 +185,19 @@ models:
       - name: '"Column_A"'
         tests:
           - pm_utils.exists
+```
+
+#### test_not_negative ([source](macros/generic_tests/test_not_negative.sql))
+This generic test evaluates whether the values of the column are not negative.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.not_negative
 ```
 
 #### text_startplacecount_sinkplacecount ([source](macros/generic_tests/test_startplacecount_sinkplacecount.sql))
@@ -291,16 +305,4 @@ models:
           combination_of_columns:
             - 'Column_A'
             - 'Column_B'
-```
-
-#### test_values_nonnegative ([source](macros/generic_tests/test_values_nonnegative.sql))
-This generic test whether the values of the column are nonnegative.
-
-Usage:
-```
-models:
-  - name: Model_A
-    tests:
-      - pm_utils.values_nonnegative:
-          column_name: "'Column_A'"
 ```
