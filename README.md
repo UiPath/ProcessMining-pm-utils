@@ -44,13 +44,13 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
   - [test_not_negative](#test_not_negative-source)
+  - [test_one_column_not_null](#test_one_column_not_null-source)
   - [test_type_boolean](#test_type_boolean-source)
   - [test_type_date](#test_type_date-source)
   - [test_type_double](#test_type_double-source)
   - [test_type_integer](#test_type_integer-source)
   - [test_type_timestamp](#test_type_timestamp-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
-  - [test_one_column_not_null](#test_one_column_not_null)  
 
 ### Multiple databases
 
@@ -200,6 +200,20 @@ models:
           - pm_utils.not_negative
 ```
 
+#### test_one_column_not_null ([source](macros/generic_tests/test_one_column_not_null.sql))
+This generic test evaluates whether exactly one out of the specified columns does contain a value. This test can be defined by two or more columns.
+
+Usage:
+```
+models:
+  - name: Model_A
+    tests:
+      - pm_utils.one_column_not_null:
+          columns:
+            - 'Column_A'
+            - 'Column_B'
+```
+
 #### test_type_boolean ([source](macros/generic_tests/test_type_boolean.sql))
 This generic test evaluates whether an attribute is a boolean represented by the numeric values 0 and 1.
 
@@ -287,20 +301,6 @@ models:
     tests:
       - pm_utils.unique_combination_of_columns:
           combination_of_columns:
-            - 'Column_A'
-            - 'Column_B'
-```
-
-#### test_one_column_not_null ([source](macros/generic_tests/test_one_column_not_null.sql))
-This generic test evaluates whether exactly one out of the specified columns does contain a value. This test can be defined by two or more columns.
-
-Usage:
-```
-models:
-  - name: Model_A
-    tests:
-      - pm_utils.one_column_not_null:
-          columns:
             - 'Column_A'
             - 'Column_B'
 ```
