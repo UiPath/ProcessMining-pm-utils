@@ -14,8 +14,6 @@ To use the macros of this package, you may need to define variables in your `dbt
 
 ```
 vars:
-  # Name of the schema where the transformations run.
-  schema: "my_schema"
   # Date and time formats.
   # For SQL Server defined by integers and for Snowflake defined by strings.
   date_format: 23 # SQL Server: 23, Snowflake: 'YYYY-MM-DD'
@@ -28,7 +26,6 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 
 - [Multiple databases](#Multiple-databases)
   - [date_from_timestamp](#date_from_timestamp-source)
-  - [left_from_char](#left_from_char-source)
   - [string_agg](#string_agg-source)
   - [timestamp_from_date](#timestamp_from_date-source)
   - [timestamp_from_parts](#timestamp_from_parts-source)
@@ -51,7 +48,8 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_type_integer](#test_type_integer-source)
   - [test_type_timestamp](#test_type_timestamp-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
-
+- [Generic](#Generic)
+  - [left_from_char](#left_from_char-source)
 ### Multiple databases
 
 #### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
@@ -59,12 +57,6 @@ This macro extracts the date part from a datetime attribute.
 
 Usage: 
 `{{ date_from_timestamp([expression]) }}`
-
-#### left_from_char ([source](macros/multiple_databases/left_from_char.sql))
-This macro extracts the string left from the character.
-
-Usage: 
-`{{ left_from_char([attribute], [character]) }}`
 
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
 This macro aggregates string attributes separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function.
@@ -137,10 +129,10 @@ This generic test evaluates whether the number of every value in the column has 
 Usage:
 ```
 models:
-- name: Model_A
-        tests:
-          - pm_utils.attribute_length:
-              length: '"Length"'
+  - name: Model_A
+    tests:
+      - pm_utils.attribute_length:
+          length: 'Length'
 ```
 
 #### test_edge_count ([source](macros/generic_tests/test_edge_count.sql))
@@ -156,9 +148,6 @@ models:
           case_ID: 'Case_ID'
 ```
 
-Variables:
-- schema
-
 #### test_equal_rowcount ([source](macros/generic_tests/test_equal_rowcount.sql))
 This generic test evaluates whether two models have the same number of rows.
 
@@ -170,9 +159,6 @@ models:
       - pm_utils.equal_rowcount:
           compare_model: 'Model_B'
 ```
-
-Variables: 
-- schema
 
 #### test_exists ([source](macros/generic_tests/test_exists.sql))
 This generic test evaluates whether a column is available in the model.
@@ -240,9 +226,6 @@ models:
           - pm_utils.type_date
 ```
 
-Variables: 
-- schema
-
 #### test_type_double ([source](macros/generic_tests/test_type_double.sql))
 This generic test evaluates whether an attribute is a double data type.
 
@@ -255,9 +238,6 @@ models:
         tests:
           - pm_utils.type_double
 ```
-
-Variables: 
-- schema
 
 #### test_type_integer ([source](macros/generic_tests/test_type_integer.sql))
 This generic test evaluates whether an attribute is an integer data type.
@@ -272,9 +252,6 @@ models:
           - pm_utils.type_integer
 ```
 
-Variables: 
-- schema
-
 #### test_type_timestamp ([source](macros/generic_tests/test_type_timestamp.sql))
 This generic test evaluates whether an attribute is a timestamp data type.
 
@@ -287,9 +264,6 @@ models:
         tests:
           - pm_utils.type_timestamp
 ```
-
-Variables: 
-- schema
 
 #### test_unique_combination_of_columns ([source](macros/generic_tests/test_unique_combination_of_columns.sql))
 This generic test evaluates whether the combination of columns is unique. This test can be defined by two or more columns.
@@ -304,3 +278,11 @@ models:
             - 'Column_A'
             - 'Column_B'
 ```
+
+### Generic tests
+
+#### left_from_char ([source](macros/multiple_databases/left_from_char.sql))
+This macro extracts the string left from the character.
+
+Usage: 
+`{{ left_from_char('[attribute]', '[character]') }}`
