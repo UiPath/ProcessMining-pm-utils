@@ -50,6 +50,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
 - [Generic](#Generic)
   - [left_from_char](#left_from_char-source)
+
 ### Multiple databases
 
 #### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
@@ -124,7 +125,7 @@ Usage:
 ### Generic tests
 
 #### test_attribute_length ([source](macros/generic_tests/test_attribute_length.sql))
-This generic test evaluates whether the number of every value in the column has a particular length.
+This generic test evaluates whether the values of the column have a particular length.
 
 Usage:
 ```
@@ -279,9 +280,9 @@ models:
             - 'Column_B'
 ```
 
-### Generic tests
+### Generic
 
-#### left_from_char ([source](macros/multiple_databases/left_from_char.sql))
+#### left_from_char ([source](macros/generic/left_from_char.sql))
 This macro extracts the string left from the character.
 
 Usage: 
