@@ -1,10 +1,5 @@
 name: 'pm_utils'
-version: '0.1.0'
-
-require-dbt-version: [">=0.20.0", "<=1.0.0"]
-
+version: '0.1.1'
 config-version: 2
 
-target-path: "target"
-clean-targets: ["target", "dbt_modules"]
-macro-paths: ["macros"]
+require-dbt-version: [">=1.0.0", "<2.0.0"]
