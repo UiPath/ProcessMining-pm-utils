@@ -50,6 +50,8 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
 - [Generic](#Generic)
   - [left_from_char](#left_from_char-source)
+- [Process mining tables](#Process-mining-tables)
+  - [generate_variant](#generate_variant-source)
 
 ### Multiple databases
 
@@ -287,3 +289,23 @@ This macro extracts the string left from the character.
 
 Usage: 
 `{{ left_from_char('[attribute]', '[character]') }}`
+
+### Process mining tables
+
+#### generate_variant ([source](macros/process_mining_tables/generate_variant.sql))
+A variant is a particular order of activities that a case executes. The most occurring variant is named "Variant 1", the next most occurring one "Variant 2", etc. This macro generates a cases table with for each case the variant. 
+
+The required input is an event log model with attributes describing the case ID, activity, and event order. With the argument `table_name` you indicate how to name the generated table. The generated table contains two columns: one according to the given case ID and `Variant`.
+
+Usage:
+```
+{{ pm_utils.generate_variant(
+    table_name = 'Cases_table_with_variant',
+    event_log_model = 'Event_log',
+    case_ID = 'Case_ID',
+    activity = 'Activity',
+    event_order = 'Event_order')
+}}
+```
+
+This generates the table `Cases_table_with_variant` with columns `Case_ID` and `Variant`.
