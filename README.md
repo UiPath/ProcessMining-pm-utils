@@ -59,31 +59,31 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 This macro extracts the date part from a datetime attribute. 
 
 Usage: 
-`{{ date_from_timestamp([expression]) }}`
+`{{ pm_utils.date_from_timestamp('[expression]') }}`
 
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
 This macro aggregates string attributes separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function.
 
 Usage:
-`{{ string_agg([expression], [delimiter]) }}`
+`{{ pm_utils.string_agg('[expression]', '[delimiter]') }}`
 
 #### timestamp_from_date ([source](macros/multiple_databases/timestamp_from_date.sql))
 This macro creates a timestamp based on only a date attribute. The time part of the timestamp is set to 00:00:00. 
 
 Usage:
-`{{ timestamp_from_date([expression]) }}`
+`{{ pm_utils.timestamp_from_date('[expression]') }}`
 
 #### timestamp_from_parts ([source](macros/multiple_databases/timestamp_from_parts.sql))
 This macro create a timestamp based on a date and time attribute.
 
 Usage: 
-`{{ timestamp_from_parts([date_expression], [time_expression]) }}`
+`{{ pm_utils.timestamp_from_parts('[date_expression]', '[time_expression]') }}`
 
 #### to_date ([source](macros/multiple_databases/to_date.sql))
 This macro converts an attribute to a date attribute.
 
 Usage: 
-`{{ to_date([expression]) }}`
+`{{ pm_utils.to_date('[expression]') }}`
 
 Variables: 
 - date_format
@@ -92,19 +92,19 @@ Variables:
 This macro converts an attribute to a double attribute.
 
 Usage: 
-`{{ to_double([expression]) }}`
+`{{ pm_utils.to_double('[expression]') }}`
 
 #### to_integer ([source](macros/multiple_databases/to_integer.sql))
 This macro converts an attribute to an integer attribute.
 
 Usage: 
-`{{ to_integer([expression]) }}`
+`{{ pm_utils.to_integer('[expression]') }}`
 
 #### to_time ([source](macros/multiple_databases/to_time.sql))
 This macro converts an attribute to a time attribute.
 
 Usage: 
-`{{ to_time([expression]) }}`
+`{{ pm_utils.to_time('[expression]') }}`
 
 Variables: 
 - time_format
@@ -113,7 +113,7 @@ Variables:
 This macro converts an attribute to a timestamp attribute.
 
 Usage: 
-`{{ to_timestamp([expression]) }}`
+`{{ pm_utils.to_timestamp('[expression]') }}`
 
 Variables: 
 - datetime_format
@@ -122,7 +122,7 @@ Variables:
 This macro converts an attribute to a string attribute.
 
 Usage: 
-`{{ to_varchar([expression]) }}`
+`{{ pm_utils.to_varchar('[expression]') }}`
 
 ### Generic tests
 
@@ -288,7 +288,7 @@ models:
 This macro extracts the string left from the character.
 
 Usage: 
-`{{ left_from_char('[attribute]', '[character]') }}`
+`{{ pm_utils.left_from_char('[expression]', '[character]') }}`
 
 ### Process mining tables
 
