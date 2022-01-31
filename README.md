@@ -51,6 +51,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 - [Generic](#Generic)
   - [left_from_char](#left_from_char-source)
 - [Process mining tables](#Process-mining-tables)
+  - [generate_edge_table](#generate_edge_table-source)
   - [generate_variant](#generate_variant-source)
 
 ### Multiple databases
@@ -291,6 +292,27 @@ Usage:
 `{{ pm_utils.left_from_char('[expression]', '[character]') }}`
 
 ### Process mining tables
+
+#### generate_edge_table ([source](macros/process_mining_tables/generate_edge_table.sql))
+The edge table contains all transitions in the process graph. Each transition is indicated by the `From_activity` and the `To_activtiy` and for which case this transition took place. The edge table includes transitions from the source node and to the sink node.
+
+The required input is an event log model with attributes describing the case ID, activity, and event order. With the argument `table_name` you indicate how to name the generated table. The generated table contains at least the following columns: `Edge_ID`, one according to the given case ID, `From_activity` and `To_activity`. It also generates a column `Unique_edge`, which contains the value 1 once per occurrence of an edge per case.
+
+Optional input is a list of properties. This generates columns like `Unique_edge`, which contains the value 1 once per occurrence of an edge per the given property. The name of this column is `Unique_edge` concatenated with the property.
+
+Usage:
+```
+{{ pm_utils.generate_edge_table(
+    table_name = 'Edge_table',
+    event_log_model = 'Event_log',
+    case_ID = 'Case_ID', 
+    activity = 'Activity', 
+    event_order = 'Event_order',
+    properties = ['Property1', 'Property2'])
+}}
+```
+
+This generates the table `Edge_table` with columns `Edge_ID`, `Case_ID`, `From_activity`, `To_activity`, `Unique_edge`, `Unique_edge_Property1` and `Unique_edge_Property2`.
 
 #### generate_variant ([source](macros/process_mining_tables/generate_variant.sql))
 A variant is a particular order of activities that a case executes. The most occurring variant is named "Variant 1", the next most occurring one "Variant 2", etc. This macro generates a cases table with for each case the variant. 
