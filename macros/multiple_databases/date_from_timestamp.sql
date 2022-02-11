@@ -1,9 +1,9 @@
-{% macro date_from_timestamp(attribute) %}
+{%- macro date_from_timestamp(attribute) -%}
 
-{% if target.type == 'snowflake' %}
+{%- if target.type == 'snowflake' -%}
     to_date({{ attribute }})
-{% elif target.type == 'sqlserver' %}
+{%- elif target.type == 'sqlserver' -%}
     try_convert(date, {{ attribute }})
-{% endif %}
+{%- endif -%}
 
-{% endmacro %}
+{%- endmacro -%}

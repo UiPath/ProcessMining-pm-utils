@@ -1,4 +1,4 @@
-{% macro generate_variant(table_name, event_log_model, case_ID, activity, event_order) %}
+{%- macro generate_variant(table_name, event_log_model, case_ID, activity, event_order) -%}
 
 Event_log as (
     select * from {{ ref(event_log_model) }}
@@ -8,11 +8,11 @@ Event_log as (
 Cases_with_variant_ID as (
     select
         Event_log."{{ case_ID }}",
-        {% if target.type == 'snowflake' %}
+        {% if target.type == 'snowflake' -%}
             listagg(Event_log."{{ activity }}", '->')
-        {% elif target.type == 'sqlserver' %}
+        {% elif target.type == 'sqlserver' -%}
             string_agg(Event_log."{{ activity }}", '->')
-        {% endif %}
+        {% endif -%}
             within group (order by Event_log."{{ event_order }}") as "Variant_ID"
     from Event_log
     group by Event_log."{{ case_ID }}"
@@ -37,4 +37,4 @@ Variant as (
         on Cases_with_variant_ID."Variant_ID" = Variant."Variant_ID"
 )
 
-{% endmacro %}
+{%- endmacro -%}
