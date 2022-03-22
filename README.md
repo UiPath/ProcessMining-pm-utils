@@ -49,6 +49,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_type_timestamp](#test_type_timestamp-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
 - [Generic](#Generic)
+  - [optional](#optional-source)
   - [left_from_char](#left_from_char-source)
 - [Process mining tables](#Process-mining-tables)
   - [generate_edge_table](#generate_edge_table-source)
@@ -290,6 +291,18 @@ This macro extracts the string left from the character.
 
 Usage: 
 `{{ pm_utils.left_from_char('[expression]', '[character]') }}`
+
+#### optional ([source](macros/generic/optional.sql))
+This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional.
+
+Usage:
+`{{ pm_utils.optional('Column_A', source(source_name, table_name)) }}`
+
+Alternatively, you can use this macro for non-source data. Use instead of the source function, the ref function: `ref(table_name)`.
+
+To keep the SQL in the model more readable, you can define a Jinja variable for the reference to the source table:
+
+`{% set source_table = source(source_name, table_name) %}`
 
 ### Process mining tables
 
