@@ -3,7 +3,7 @@
 {%- if target.type == 'snowflake' -%}
     to_varchar({{ attribute }})
 {%- elif target.type == 'sqlserver' -%}
-    convert(nvarchar(50), {{ attribute }})
+    convert(nvarchar(max), {{ attribute }})
 {%- endif -%}
 
 {%- endmacro -%}
