@@ -26,6 +26,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 
 - [Multiple databases](#Multiple-databases)
   - [date_from_timestamp](#date_from_timestamp-source)
+  - [datediff](#datediff-source)
   - [string_agg](#string_agg-source)
   - [timestamp_from_date](#timestamp_from_date-source)
   - [timestamp_from_parts](#timestamp_from_parts-source)
@@ -63,6 +64,12 @@ This macro extracts the date part from a datetime attribute.
 
 Usage: 
 `{{ pm_utils.date_from_timestamp('[expression]') }}`
+
+#### datediff ([source](macros/multiple_databases/datediff.sql))
+This macro computes the difference between two date, time, or datetime expressions based on the specified datepart. It returns an integer indicating the difference in, for example, milliseconds, days, or months.
+
+Usage: 
+`{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
 
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
 This macro aggregates string attributes separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function.
