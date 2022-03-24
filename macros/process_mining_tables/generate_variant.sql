@@ -11,7 +11,7 @@ Cases_with_variant_ID as (
         {% if target.type == 'snowflake' -%}
             listagg(Event_log."{{ activity }}", '->')
         {% elif target.type == 'sqlserver' -%}
-            string_agg(Event_log."{{ activity }}", '->')
+            string_agg(convert(nvarchar(max), Event_log."{{ activity }}"), '->')
         {% endif -%}
             within group (order by Event_log."{{ event_order }}") as "Variant_ID"
     from Event_log
