@@ -10,9 +10,9 @@
     {%- endif -%}
 {%- elif target.type == 'sqlserver' -%}
     {%- if delimiter is defined -%}
-        string_agg({{ string_attribute}}, '{{ delimiter }}')
+        string_agg(convert(nvarchar(max), {{ string_attribute}}), '{{ delimiter }}')
     {%- else -%}
-        string_agg({{ string_attribute}}, ', ')
+        string_agg(convert(nvarchar(max), {{ string_attribute}}), ', ')
     {%- endif -%}
 {%- endif -%}
 
