@@ -29,6 +29,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [string_agg](#string_agg-source)
   - [timestamp_from_date](#timestamp_from_date-source)
   - [timestamp_from_parts](#timestamp_from_parts-source)
+  - [to_boolean](#to_boolean-source)
   - [to_date](#to_date-source)
   - [to_double](#to_double-source)
   - [to_integer](#to_integer-source)
@@ -80,6 +81,12 @@ This macro create a timestamp based on a date and time attribute.
 
 Usage: 
 `{{ pm_utils.timestamp_from_parts('[date_expression]', '[time_expression]') }}`
+
+#### to_boolean ([source](macros/multiple_databases/to_boolean.sql))
+This macro converts an attribute to a boolean attribute.
+
+Usage: 
+`{{ pm_utils.to_boolean('[expression]') }}`
 
 #### to_date ([source](macros/multiple_databases/to_date.sql))
 This macro converts an attribute to a date attribute.
