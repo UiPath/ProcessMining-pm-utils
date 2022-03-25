@@ -1,8 +1,8 @@
 {%- macro string_agg(string_attribute, delimiter) -%}
 
--- Aggregation of string attributes separated by the delimiter.
--- This function can only be used as an aggregate.
-{% if target.type == 'snowflake' -%}
+{# Aggregation of string attributes separated by the delimiter.
+   This function can only be used as an aggregate. #}
+{%- if target.type == 'snowflake' -%}
     {%- if delimiter is defined -%}
         listagg({{ string_attribute }}, '{{ delimiter }}')
     {%- else -%}
