@@ -6,7 +6,7 @@ See the instructions *How do I add a package to my project?* in the [dbt documen
 
 ```
 packages:
-  - git: "https://github.com/UiPath-Process-Mining/pm-utils.git" # git URL
+  - git: "https://github.com/UiPath/ProcessMining-pm-utils.git"
     revision: [tag name of the release]
 ```
 
@@ -18,7 +18,7 @@ vars:
   # For SQL Server defined by integers and for Snowflake defined by strings.
   date_format: 23 # SQL Server: 23, Snowflake: 'YYYY-MM-DD'
   time_format: 8 # SQL Server: 8, Snowflake: 'hh24:mi:ss'
-  datetime_format: 20 # SQL Server: 20, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3'
+  datetime_format: 21 # SQL Server: 21, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3'
 ```
 
 ## Contents
