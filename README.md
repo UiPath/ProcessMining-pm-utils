@@ -303,7 +303,7 @@ Usage:
 This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `time`, `datetime`, and `text`. When no data type is set, the optional column is considered to be text. 
 
 Usage:
-`{{ pm_utils.optional('"Column_A"', source(source_name, table_name)), 'data_type' }}`
+`{{ pm_utils.optional(source(source_name, table_name), '"Column_A"', 'data_type') }}`
 
 Alternatively, you can use this macro for non-source data. Use instead of the source function, the ref function: `ref(table_name)`.
 
