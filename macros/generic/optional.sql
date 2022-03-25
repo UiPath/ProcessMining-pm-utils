@@ -1,4 +1,4 @@
-{%- macro optional(optional_column, source_table, data_type) -%}
+{%- macro optional(source_table, optional_column, data_type) -%}
 
 {%- set columns = adapter.get_columns_in_relation(source_table) -%}
 
@@ -9,7 +9,7 @@
 {%- endfor -%}
 
 {# When the column is in the list, use the column, otherwise create the column with null values.#}
-{% if optional_column in column_names -%}
+{%- if optional_column in column_names -%}
     {% set column_value = optional_column -%}
 {%- else -%}    
     {% set column_value = 'null' -%}
