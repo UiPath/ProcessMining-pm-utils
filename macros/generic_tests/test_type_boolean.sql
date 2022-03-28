@@ -1,8 +1,14 @@
 {% macro test_type_boolean(model, column_name) %}
 
--- Boolean values are represented by the numeric values 1 and 0.
-select {{ column_name }}
-from {{ model }}
-where not {{ column_name }} in (1, 0)
+select *
+from Information_schema.Columns
+where Information_schema.Columns."TABLE_SCHEMA" = '{{ model.schema }}'
+    and Information_schema.Columns."TABLE_NAME" = '{{ model.name }}'
+    and Information_schema.Columns."COLUMN_NAME" = '{{ column_name }}'
+{% if target.type == 'snowflake' %}
+    and Information_schema.Columns."DATA_TYPE" <> 'BOOLEAN'
+{% elif target.type == 'sqlserver' %}
+    and Information_schema.Columns."DATA_TYPE" <> 'bit'
+{% endif %}
 
 {% endmacro %}
