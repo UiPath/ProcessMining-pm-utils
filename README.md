@@ -17,7 +17,7 @@ vars:
   # Date and time formats.
   # For SQL Server defined by integers and for Snowflake defined by strings.
   date_format: 23     # default: SQL Server: 23, Snowflake: 'YYYY-MM-DD'
-  time_format: 8      # default: SQL Server:  8, Snowflake: 'hh24:mi:ss'
+  time_format: 14     # default: SQL Server: 14, Snowflake: 'hh24:mi:ss.ff3'
   datetime_format: 21 # default: SQL Server: 21, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3'
 ```
 
@@ -101,6 +101,9 @@ This macro converts an attribute to a date attribute.
 Usage: 
 `{{ pm_utils.to_date('[expression]') }}`
 
+Variables:
+- date_format
+
 #### to_double ([source](macros/multiple_databases/to_double.sql))
 This macro converts an attribute to a double attribute.
 
@@ -119,11 +122,17 @@ This macro converts an attribute to a time attribute.
 Usage: 
 `{{ pm_utils.to_time('[expression]') }}`
 
+Variables:
+- time_format
+
 #### to_timestamp ([source](macros/multiple_databases/to_timestamp.sql))
 This macro converts an attribute to a timestamp attribute.
 
 Usage: 
 `{{ pm_utils.to_timestamp('[expression]') }}`
+
+Variables:
+- datetime_format
 
 #### to_varchar ([source](macros/multiple_databases/to_varchar.sql))
 This macro converts an attribute to a string attribute.
@@ -308,6 +317,13 @@ Alternatively, you can use this macro for non-source data. Use instead of the so
 To keep the SQL in the model more readable, you can define a Jinja variable for the reference to the source table:
 
 `{% set source_table = source(source_name, table_name) %}`
+
+Variables:
+- date_format
+- time_format
+- datetime_format
+
+These variables are only required when the `data_type` is used with the values `date`, `time`, or `datetime`.
 
 ### Process mining tables
 
