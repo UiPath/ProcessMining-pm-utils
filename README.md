@@ -38,7 +38,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [to_timestamp](#to_timestamp-source)
   - [to_varchar](#to_varchar-source)
 - [Generic tests](#Generic-tests)
-  - [test_attribute_length](#test_attribute_length-source)
+  - [test_field_length](#test_field_length-source)
   - [test_edge_count](#test_edge_count-source)
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
@@ -60,7 +60,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 ### Multiple databases
 
 #### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
-This macro extracts the date part from a datetime attribute. 
+This macro extracts the date part from a datetime field. 
 
 Usage: 
 `{{ pm_utils.date_from_timestamp('[expression]') }}`
@@ -72,31 +72,31 @@ Usage:
 `{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
 
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
-This macro aggregates string attributes separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function.
+This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function.
 
 Usage:
 `{{ pm_utils.string_agg('[expression]', '[delimiter]') }}`
 
 #### timestamp_from_date ([source](macros/multiple_databases/timestamp_from_date.sql))
-This macro creates a timestamp based on only a date attribute. The time part of the timestamp is set to 00:00:00. 
+This macro creates a timestamp based on only a date field. The time part of the timestamp is set to 00:00:00. 
 
 Usage:
 `{{ pm_utils.timestamp_from_date('[expression]') }}`
 
 #### timestamp_from_parts ([source](macros/multiple_databases/timestamp_from_parts.sql))
-This macro create a timestamp based on a date and time attribute.
+This macro create a timestamp based on a date and time field.
 
 Usage: 
 `{{ pm_utils.timestamp_from_parts('[date_expression]', '[time_expression]') }}`
 
 #### to_boolean ([source](macros/multiple_databases/to_boolean.sql))
-This macro converts an attribute to a boolean attribute.
+This macro converts a field to a boolean field.
 
 Usage: 
 `{{ pm_utils.to_boolean('[expression]') }}`
 
 #### to_date ([source](macros/multiple_databases/to_date.sql))
-This macro converts an attribute to a date attribute.
+This macro converts a field to a date field.
 
 Usage: 
 `{{ pm_utils.to_date('[expression]') }}`
@@ -105,19 +105,19 @@ Variables:
 - date_format
 
 #### to_double ([source](macros/multiple_databases/to_double.sql))
-This macro converts an attribute to a double attribute.
+This macro converts a field to a double field.
 
 Usage: 
 `{{ pm_utils.to_double('[expression]') }}`
 
 #### to_integer ([source](macros/multiple_databases/to_integer.sql))
-This macro converts an attribute to an integer attribute.
+This macro converts a field to an integer field.
 
 Usage: 
 `{{ pm_utils.to_integer('[expression]') }}`
 
 #### to_time ([source](macros/multiple_databases/to_time.sql))
-This macro converts an attribute to a time attribute.
+This macro converts a field to a time field.
 
 Usage: 
 `{{ pm_utils.to_time('[expression]') }}`
@@ -126,7 +126,7 @@ Variables:
 - time_format
 
 #### to_timestamp ([source](macros/multiple_databases/to_timestamp.sql))
-This macro converts an attribute to a timestamp attribute.
+This macro converts a field to a timestamp field.
 
 Usage: 
 `{{ pm_utils.to_timestamp('[expression]') }}`
@@ -135,14 +135,14 @@ Variables:
 - datetime_format
 
 #### to_varchar ([source](macros/multiple_databases/to_varchar.sql))
-This macro converts an attribute to a string attribute.
+This macro converts a field to a string field.
 
 Usage: 
 `{{ pm_utils.to_varchar('[expression]') }}`
 
 ### Generic tests
 
-#### test_attribute_length ([source](macros/generic_tests/test_attribute_length.sql))
+#### test_field_length ([source](macros/generic_tests/test_field_length.sql))
 This generic test evaluates whether the values of the column have a particular length.
 
 Usage:
@@ -150,7 +150,7 @@ Usage:
 models:
   - name: Model_A
     tests:
-      - pm_utils.attribute_length:
+      - pm_utils.field_length:
           length: 'Length'
 ```
 
@@ -220,7 +220,7 @@ models:
 ```
 
 #### test_type_boolean ([source](macros/generic_tests/test_type_boolean.sql))
-This generic test evaluates whether an attribute is a boolean represented by the numeric values 0 and 1.
+This generic test evaluates whether a field is a boolean represented by the numeric values 0 and 1.
 
 Usage:
 ```
@@ -233,7 +233,7 @@ models:
 ```
 
 #### test_type_date ([source](macros/generic_tests/test_type_date.sql))
-This generic test evaluates whether an attribute is a date data type.
+This generic test evaluates whether a field is a date data type.
 
 Usage:
 ```
@@ -246,7 +246,7 @@ models:
 ```
 
 #### test_type_double ([source](macros/generic_tests/test_type_double.sql))
-This generic test evaluates whether an attribute is a double data type.
+This generic test evaluates whether a field is a double data type.
 
 Usage:
 ```
@@ -259,7 +259,7 @@ models:
 ```
 
 #### test_type_integer ([source](macros/generic_tests/test_type_integer.sql))
-This generic test evaluates whether an attribute is an integer data type.
+This generic test evaluates whether a field is an integer data type.
 
 Usage:
 ```
@@ -272,7 +272,7 @@ models:
 ```
 
 #### test_type_timestamp ([source](macros/generic_tests/test_type_timestamp.sql))
-This generic test evaluates whether an attribute is a timestamp data type.
+This generic test evaluates whether a field is a timestamp data type.
 
 Usage:
 ```
@@ -330,7 +330,7 @@ These variables are only required when the `data_type` is used with the values `
 #### generate_edge_table ([source](macros/process_mining_tables/generate_edge_table.sql))
 The edge table contains all transitions in the process graph. Each transition is indicated by the `From_activity` and the `To_activtiy` and for which case this transition took place. The edge table includes transitions from the source node and to the sink node.
 
-The required input is an event log model with attributes describing the case ID, activity, and event order. With the argument `table_name` you indicate how to name the generated table. The generated table contains at least the following columns: `Edge_ID`, one according to the given case ID, `From_activity` and `To_activity`. It also generates a column `Unique_edge`, which contains the value 1 once per occurrence of an edge per case.
+The required input is an event log model with fields describing the case ID, activity, and event order. With the argument `table_name` you indicate how to name the generated table. The generated table contains at least the following columns: `Edge_ID`, one according to the given case ID, `From_activity` and `To_activity`. It also generates a column `Unique_edge`, which contains the value 1 once per occurrence of an edge per case.
 
 Optional input is a list of properties. This generates columns like `Unique_edge`, which contains the value 1 once per occurrence of an edge per the given property. The name of this column is `Unique_edge` concatenated with the property.
 
@@ -351,7 +351,7 @@ This generates the table `Edge_table` with columns `Edge_ID`, `Case_ID`, `From_a
 #### generate_variant ([source](macros/process_mining_tables/generate_variant.sql))
 A variant is a particular order of activities that a case executes. The most occurring variant is named "Variant 1", the next most occurring one "Variant 2", etc. This macro generates a cases table with for each case the variant. 
 
-The required input is an event log model with attributes describing the case ID, activity, and event order. With the argument `table_name` you indicate how to name the generated table. The generated table contains two columns: one according to the given case ID and `Variant`.
+The required input is an event log model with fields describing the case ID, activity, and event order. With the argument `table_name` you indicate how to name the generated table. The generated table contains two columns: one according to the given case ID and `Variant`.
 
 Usage:
 ```
