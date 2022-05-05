@@ -1,4 +1,4 @@
-{% macro test_attribute_length(model, column_name, length) %}
+{% macro test_field_length(model, column_name, length) %}
 
 select {{ column_name }}
 from {{ model }}

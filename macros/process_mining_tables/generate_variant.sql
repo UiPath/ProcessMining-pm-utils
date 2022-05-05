@@ -27,7 +27,7 @@ Variant as (
     group by Cases_with_variant_ID."Variant_ID"
 ),
 
--- The variants are joined to the cases on the Variant ID to create a table with the Case ID and Variant attribute.
+-- The variants are joined to the cases on the Variant ID to create a table with the Case ID and Variant field.
 {{ table_name }} as (
     select
         Cases_with_variant_ID."{{ case_ID }}",

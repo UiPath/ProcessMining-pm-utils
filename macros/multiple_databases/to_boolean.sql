@@ -1,16 +1,16 @@
-{%- macro to_boolean(attribute) -%}
+{%- macro to_boolean(field) -%}
 
 {%- if target.type == 'snowflake' -%}
-    {%- if attribute in ('true', 'false', '1', '0') -%}
-        try_to_boolean('{{ attribute }}')
+    {%- if field in ('true', 'false', '1', '0') -%}
+        try_to_boolean('{{ field }}')
     {%- else -%}
-        try_to_boolean(to_varchar({{ attribute }}))
+        try_to_boolean(to_varchar({{ field }}))
     {%- endif -%}
 {%- elif target.type == 'sqlserver' -%}
-    {%- if attribute in ('true', 'false', '1', '0') -%}
-        try_convert(bit, '{{ attribute }}')
+    {%- if field in ('true', 'false', '1', '0') -%}
+        try_convert(bit, '{{ field }}')
     {%- else -%}
-        try_convert(bit, {{ attribute }})
+        try_convert(bit, {{ field }})
     {%- endif -%}
 {%- endif -%}
 
