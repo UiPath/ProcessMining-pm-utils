@@ -1,5 +1,5 @@
-{%- macro left_from_char(attribute, character) -%}
+{%- macro left_from_char(field, character) -%}
 
-left({{ attribute }}, charindex('{{ character }}', {{ attribute }}) - 1)
+left({{ field }}, charindex('{{ character }}', {{ field }}) - 1)
 
 {%- endmacro -%}

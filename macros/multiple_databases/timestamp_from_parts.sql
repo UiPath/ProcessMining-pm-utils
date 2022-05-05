@@ -1,16 +1,16 @@
-{%- macro timestamp_from_parts(date_attribute, time_attribute) -%}
+{%- macro timestamp_from_parts(date_field, time_field) -%}
 
 {%- if target.type == 'snowflake' -%}
-    timestamp_from_parts({{ date_attribute }}, {{ time_attribute }})
+    timestamp_from_parts({{ date_field }}, {{ time_field }})
 {%- elif target.type == 'sqlserver' -%}
     datetimefromparts(
-        datepart(year, {{ date_attribute }}),
-        datepart(month, {{ date_attribute }}),
-        datepart(day, {{ date_attribute }}),
-        datepart(hour, {{ time_attribute }}),
-        datepart(minute, {{ time_attribute }}),
-        datepart(second, {{ time_attribute }}),
-        datepart(millisecond, {{ time_attribute }})
+        datepart(year, {{ date_field }}),
+        datepart(month, {{ date_field }}),
+        datepart(day, {{ date_field }}),
+        datepart(hour, {{ time_field }}),
+        datepart(minute, {{ time_field }}),
+        datepart(second, {{ time_field }}),
+        datepart(millisecond, {{ time_field }})
     )
 {%- endif -%}
 
