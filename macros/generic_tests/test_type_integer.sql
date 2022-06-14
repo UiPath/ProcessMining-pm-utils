@@ -8,7 +8,7 @@ where Information_schema.Columns."TABLE_SCHEMA" = '{{ model.schema }}'
 {% if target.type == 'snowflake' %}
     and Information_schema.Columns."DATA_TYPE" <> 'NUMBER'
 {% elif target.type == 'sqlserver' %}
-    and Information_schema.Columns."DATA_TYPE" <> 'int'
+    and Information_schema.Columns."DATA_TYPE" not in ('int', 'bigint')
 {% endif %}
 
 {% endmacro %}
