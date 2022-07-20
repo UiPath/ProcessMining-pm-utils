@@ -39,10 +39,11 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [to_timestamp](#to_timestamp-source)
   - [to_varchar](#to_varchar-source)
 - [Generic tests](#Generic-tests)
-  - [test_field_length](#test_field_length-source)
   - [test_edge_count](#test_edge_count-source)
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
+  - [test_field_length](#test_field_length-source)
+  - [test_format](#test_format-source)
   - [test_not_negative](#test_not_negative-source)
   - [test_one_column_not_null](#test_one_column_not_null-source)
   - [test_type_boolean](#test_type_boolean-source)
@@ -153,18 +154,6 @@ Usage:
 
 ### Generic tests
 
-#### test_field_length ([source](macros/generic_tests/test_field_length.sql))
-This generic test evaluates whether the values of the column have a particular length.
-
-Usage:
-```
-models:
-  - name: Model_A
-    tests:
-      - pm_utils.field_length:
-          length: 'Length'
-```
-
 #### test_edge_count ([source](macros/generic_tests/test_edge_count.sql))
 This generic test evaluates whether the number of edges is as expected based on the event log. The expected number of edges is equal to the number of events plus the number of cases, since also edges from the source node and to the sink node are taken into account.
 
@@ -201,6 +190,32 @@ models:
       - name: '"Column_A"'
         tests:
           - pm_utils.exists
+```
+
+#### test_field_length ([source](macros/generic_tests/test_field_length.sql))
+This generic test evaluates whether the values of the column have a particular length.
+
+Usage:
+```
+models:
+  - name: Model_A
+    tests:
+      - pm_utils.field_length:
+          length: 'Length'
+```
+
+#### test_format ([source](macros/generic_tests/test_format.sql))
+This generic test evaluates whether the format of values of the column is as expected. Use this test on source tables to test the format of values before any transformation takes place. The test fails if at least one value has an incorrect format. Use the argument `data_type` to indicate the data type of the column. Possible values are: `date`, `time`, and `datetime`.
+
+Usage:
+```
+sources:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.format:
+              data_type: [data_type]
 ```
 
 #### test_not_negative ([source](macros/generic_tests/test_not_negative.sql))
