@@ -108,7 +108,7 @@ Usage:
 `{{ pm_utils.to_boolean('[expression]') }}`
 
 #### to_date ([source](macros/multiple_databases/to_date.sql))
-This macro converts a field to a date field.
+This macro converts a field to a date field. The expression can be in a date or a datetime format.
 
 Usage: 
 `{{ pm_utils.to_date('[expression]') }}`
