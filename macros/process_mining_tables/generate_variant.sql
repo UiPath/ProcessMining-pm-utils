@@ -22,7 +22,7 @@ Cases_with_variant_ID as (
 Variant as (
     select
         Cases_with_variant_ID."Variant_ID",
-        concat('Variant ', row_number() over (order by count(Cases_with_variant_ID."Variant_ID") desc)) as "Variant"
+        concat({{ pm_utils.as_varchar('Variant ') }}, row_number() over (order by count(Cases_with_variant_ID."Variant_ID") desc)) as "Variant"
     from Cases_with_variant_ID
     group by Cases_with_variant_ID."Variant_ID"
 ),
