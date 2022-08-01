@@ -25,6 +25,7 @@ vars:
 This dbt package contains macros for SQL functions to run the dbt project on multiple databases and for generic tests. The databases that are currently supported are Snowflake and SQL Server.
 
 - [Multiple databases](#Multiple-databases)
+  - [as_varchar](#as_varchar-source)
   - [date_from_timestamp](#date_from_timestamp-source)
   - [datediff](#datediff-source)
   - [generate_id](#generate_id-source)
@@ -60,6 +61,12 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [generate_variant](#generate_variant-source)
 
 ### Multiple databases
+
+#### as_varchar ([source](macros/multiple_databases/as_varchar.sql))
+This macro converts a string to the data type `nvarchar(2000)` for SQL Server. Use the macro `to_varchar()` to convert a field to this data type.
+
+Usage: 
+`{{ pm_utils.as_varchar('[expression]') }}`
 
 #### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
 This macro extracts the date part from a datetime field. 
@@ -147,7 +154,7 @@ Variables:
 - datetime_format
 
 #### to_varchar ([source](macros/multiple_databases/to_varchar.sql))
-This macro converts a field to a string field.
+This macro converts a field to the data type `nvarchar(2000)` for SQL Server. Use the macro `as_varchar()` to convert a string to the this data type.
 
 Usage: 
 `{{ pm_utils.to_varchar('[expression]') }}`
