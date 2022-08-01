@@ -51,6 +51,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_type_double](#test_type_double-source)
   - [test_type_integer](#test_type_integer-source)
   - [test_type_timestamp](#test_type_timestamp-source)
+  - [test_type_varchar](#test_type_varchar-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
 - [Generic](#Generic)
   - [optional](#optional-source)
@@ -308,6 +309,20 @@ models:
       - name: '"Column_A"'
         tests:
           - pm_utils.type_timestamp
+```
+
+
+#### test_type_varchar ([source](macros/generic_tests/test_type_varchar.sql))
+This generic test evaluates whether a field is a string data type. For SQL Server, it is checked that the data type is `nvarchar` and that the length is not `max`.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.type_varchar
 ```
 
 #### test_unique_combination_of_columns ([source](macros/generic_tests/test_unique_combination_of_columns.sql))
