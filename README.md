@@ -84,7 +84,7 @@ Usage:
 ```
 
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
-This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function.
+This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function. For SQL Server, the maximum supported length is 2000. 
 
 Usage:
 `{{ pm_utils.string_agg('[expression]', '[delimiter]') }}`
