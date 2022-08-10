@@ -10,7 +10,7 @@ packages:
     revision: [tag name of the release]
 ```
 
-This package contains some date/time conversion macros. You can override the default format that is used in the macros by defining variables in your `dbt_project.yml`. The following shows an example configuration of all the possible variables and the default values used:
+This package contains some date/time conversion macros. You can override the default format that is used in the macros by defining variables in your `dbt_project.yml`. The following shows an example configuration of the possible date and time formatting variables and their default values:
 
 ```
 vars:
@@ -26,6 +26,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 
 - [Multiple databases](#Multiple-databases)
   - [as_varchar](#as_varchar-source)
+  - [create_index](#create_index-source)
   - [date_from_timestamp](#date_from_timestamp-source)
   - [datediff](#datediff-source)
   - [generate_id](#generate_id-source)
@@ -68,6 +69,19 @@ This macro converts a string to the data type `nvarchar(2000)` for SQL Server. U
 
 Usage: 
 `{{ pm_utils.as_varchar('[expression]') }}`
+
+#### create_index ([source](macros/multiple_databases/create_index.sql))
+This macro creates a clustered columnstore index on the source table given as argument for SQL Server.
+
+Usage: 
+```
+{{ config(
+    pre_hook="pm_utils.create_index('[input_table]') }}"
+) }}
+```
+
+Variables:
+- schema_sources
 
 #### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
 This macro extracts the date part from a datetime field. 
