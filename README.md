@@ -71,17 +71,22 @@ Usage:
 `{{ pm_utils.as_varchar('[expression]') }}`
 
 #### create_index ([source](macros/multiple_databases/create_index.sql))
-This macro creates a clustered columnstore index on the source table given as argument for SQL Server.
+This macro creates a clustered columnstore index on the current model for SQL Server. This macro should be used in a dbt post-hook.
 
-Usage: 
+Usage:
 ```
 {{ config(
-    pre_hook="pm_utils.create_index('[input_table]') }}"
+    post_hook="{{ pm_utils.create_index() }}"
 ) }}
 ```
 
-Variables:
-- schema_sources
+In case you want to create the index on a source table, refer to the table using the source function in the argument. Use the macro in a pre-hook of the model where you use the source table.
+
+```
+{{ config(
+    pre_hook="{{ pm_utils.create_index(source('[source_name]', '[source_table]')) }}"
+) }}
+```
 
 #### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
 This macro extracts the date part from a datetime field. 
@@ -101,7 +106,7 @@ This macro generates an id field for the current model. This macro can only be u
 Usage:
 ```
 {{ config(
-    post_hook="{{ generate_id('[id_field]') }}"
+    post_hook="{{ pm_utils.generate_id('[id_field]') }}"
 ) }}
 ```
 
