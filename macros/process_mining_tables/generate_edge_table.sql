@@ -12,11 +12,12 @@ Last_events_of_cases as (
 ),
 
 /* The Edges table contains all edges indicated by the Case ID, the From activity and To activity.
-The edge table also includes edges from the source node and to the sink node. The source and sink nodes are indicated by Activity = NULL.
+The edge table also includes edges from the source node and to the sink node. The source and sink nodes are indicated by Activity = null.
 Optionally, additional properties of the event log can be added to the edge table to optimize metrics. */
 Edges_preprocessing as (
     select
         Event_log."{{ case_ID }}",
+        Event_log."{{ event_order }}",
         lag(Event_log."{{ activity }}") over (
             partition by Event_log."{{ case_ID }}"
             order by Event_log."{{ event_order }}") as "From_activity",
@@ -26,11 +27,12 @@ Edges_preprocessing as (
         {% endfor -%}
     from Event_log
     union all
-    -- To generate the edges to the sink node, records are appended with the activtiy of the last event as From activity and NULL as To activity.
+    -- To generate the edges to the sink node, records are appended with the activtiy of the last event as From activity and null as To activity.
     select
         Event_log."{{ case_ID }}",
+        null as "{{ event_order }}",
         Event_log."{{ activity }}" as "From_activity",
-        NULL as "To_activity"
+        null as "To_activity"
         {% for property in properties -%}
             , Event_log."{{ property }}"
         {% endfor -%}
@@ -39,9 +41,10 @@ Edges_preprocessing as (
         on Event_log."{{ event_order }}" = Last_events_of_cases."Event_order_last_event"
 ),
 
+-- Order by condition includes Case ID and Event order to sort on unique values. In this way, row_number() returns always the same values.
 Edges_with_edge_ID as (
     select
-        row_number() over (order by Edges_preprocessing."{{ case_ID }}") as "Edge_ID",
+        row_number() over (order by Edges_preprocessing."{{ case_ID }}", Edges_preprocessing."{{ event_order }}") as "Edge_ID",
         Edges_preprocessing."{{ case_ID }}",
         Edges_preprocessing."From_activity",
         Edges_preprocessing."To_activity"
@@ -81,15 +84,15 @@ Edge_first_occurence as (
         Edges_with_edge_ID."To_activity",
         -- Every first occurence of an edge is marked as unique, therefore given the value 1.
         case
-            when Edge_first_occurence."Edge_first_occurence" is not NULL
+            when Edge_first_occurence."Edge_first_occurence" is not null
             then 1
-            else NULL
+            else null
         end as "Unique_edge"
         {% for property in properties -%}
             , case
-                when {{'Edge_first_occurence' ~ '_' ~ property }}."Edge_first_occurence" is not NULL
+                when {{'Edge_first_occurence' ~ '_' ~ property }}."Edge_first_occurence" is not null
                 then 1
-                else NULL
+                else null
             end as "{{ 'Unique_edge' ~ '_' ~ property }}"
         {% endfor -%}
     from Edges_with_edge_ID 
