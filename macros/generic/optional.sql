@@ -16,21 +16,21 @@
 {%- endif -%}
 
 {%- if data_type == 'boolean' -%}
-    {{ pm_utils.to_boolean(column_value) }} as {{ optional_column }}
+    {{ pm_utils.to_boolean(column_value) }}
 {%- elif data_type == 'date' -%}
-    {{ pm_utils.to_date(column_value) }} as {{ optional_column }}
+    {{ pm_utils.to_date(column_value) }}
 {%- elif data_type == 'double' -%}
-    {{ pm_utils.to_double(column_value) }} as {{ optional_column }}
+    {{ pm_utils.to_double(column_value) }}
 {%- elif data_type == 'integer' -%}
-    {{ pm_utils.to_integer(column_value) }} as {{ optional_column }}
+    {{ pm_utils.to_integer(column_value) }}
 {%- elif data_type == 'time' -%}
-    {{ pm_utils.to_time(column_value) }} as {{ optional_column }}
+    {{ pm_utils.to_time(column_value) }}
 {%- elif data_type == 'datetime' -%}
-    {{ pm_utils.to_timestamp(column_value) }} as {{ optional_column }}
+    {{ pm_utils.to_timestamp(column_value) }}
 {%- elif data_type == 'text' -%}
-    {{ pm_utils.to_varchar(column_value) }} as {{ optional_column }}
+    {{ pm_utils.to_varchar(column_value) }}
 {%- else -%}
-    {{ pm_utils.to_varchar(column_value) }} as {{ optional_column }}
+    {{ pm_utils.to_varchar(column_value) }}
 {%- endif -%}
 
 {%- endmacro -%}
