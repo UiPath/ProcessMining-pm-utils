@@ -30,6 +30,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [date_from_timestamp](#date_from_timestamp-source)
   - [datediff](#datediff-source)
   - [generate_id](#generate_id-source)
+  - [min_boolean](#min_boolean-source)
   - [string_agg](#string_agg-source)
   - [timestamp_from_date](#timestamp_from_date-source)
   - [timestamp_from_parts](#timestamp_from_parts-source)
@@ -110,6 +111,11 @@ Usage:
 ) }}
 ```
 
+#### min_boolean ([source](macros/multiple_databases/min_boolean.sql))
+This macro selects the minimum of the records in an aggregate expression for boolean fields.
+
+Usage:
+`{{ pm_utils.min_boolean('[expression]') }}`
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
 This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function. For SQL Server, the maximum supported length is 2000. 
 
