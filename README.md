@@ -48,6 +48,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_field_length](#test_field_length-source)
   - [test_format](#test_format-source)
   - [test_not_negative](#test_not_negative-source)
+  - [test_not_null](#test_not_null-source)
   - [test_one_column_not_null](#test_one_column_not_null-source)
   - [test_type_boolean](#test_type_boolean-source)
   - [test_type_date](#test_type_date-source)
@@ -56,6 +57,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_type_timestamp](#test_type_timestamp-source)
   - [test_type_varchar](#test_type_varchar-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
+  - [test_unique](#test_unique-source)
 - [Generic](#Generic)
   - [optional](#optional-source)
   - [left_from_char](#left_from_char-source)
@@ -116,6 +118,7 @@ This macro selects the minimum of the records in an aggregate expression for boo
 
 Usage:
 `{{ pm_utils.min_boolean('[expression]') }}`
+
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
 This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function. For SQL Server, the maximum supported length is 2000. 
 
@@ -226,7 +229,7 @@ models:
 ```
 
 #### test_field_length ([source](macros/generic_tests/test_field_length.sql))
-This generic test evaluates whether the values of the column have a particular length.
+This generic test evaluates whether the values of the column have a particular length. The test is only executed when the column exists on the table.
 
 Usage:
 ```
@@ -238,7 +241,7 @@ models:
 ```
 
 #### test_format ([source](macros/generic_tests/test_format.sql))
-This generic test evaluates whether the format of values of the column is as expected. Use this test on source tables to test the format of values before any transformation takes place. The test fails if at least one value has an incorrect format. Use the argument `data_type` to indicate the data type of the column. Possible values are: `date`, `time`, and `datetime`.
+This generic test evaluates whether the format of values of the column is as expected. Use this test on source tables to test the format of values before any transformation takes place. The test fails if at least one value has an incorrect format. Use the argument `data_type` to indicate the data type of the column. Possible values are: `date`, `time`, and `datetime`. The test is only executed when the column exists on the table.
 
 Usage:
 ```
@@ -264,8 +267,21 @@ models:
           - pm_utils.not_negative
 ```
 
+#### test_not_null ([source](macros/generic_tests/test_not_null.sql))
+This generic test evaluates whether the values of the column are not null. The test is only executed when the column exists on the table.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.not_null
+```
+
 #### test_one_column_not_null ([source](macros/generic_tests/test_one_column_not_null.sql))
-This generic test evaluates whether exactly one out of the specified columns does contain a value. This test can be defined by two or more columns.
+This generic test evaluates whether exactly one out of the specified columns does contain a value. This test can be defined by two or more columns. The test is only executed when all columns exist on the table.
 
 Usage:
 ```
@@ -279,7 +295,7 @@ models:
 ```
 
 #### test_type_boolean ([source](macros/generic_tests/test_type_boolean.sql))
-This generic test evaluates whether a field is a boolean represented by the numeric values 0 and 1.
+This generic test evaluates whether a field is a boolean or bit data type depending on the database.
 
 Usage:
 ```
@@ -358,7 +374,7 @@ models:
 ```
 
 #### test_unique_combination_of_columns ([source](macros/generic_tests/test_unique_combination_of_columns.sql))
-This generic test evaluates whether the combination of columns is unique. This test can be defined by two or more columns.
+This generic test evaluates whether the combination of columns is unique. This test can be defined by two or more columns. The test is only executed when all columns exist on the table.
 
 Usage:
 ```
@@ -369,6 +385,19 @@ models:
           combination_of_columns:
             - 'Column_A'
             - 'Column_B'
+```
+
+#### test_unique ([source](macros/generic_tests/test_unique.sql))
+This generic test evaluates whether the values of the column are unique. The test is only executed when the column exists on the table.
+
+Usage:
+```
+models:
+  - name: Model_A
+    columns:
+      - name: '"Column_A"'
+        tests:
+          - pm_utils.unique
 ```
 
 ### Generic
