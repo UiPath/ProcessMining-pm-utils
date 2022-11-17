@@ -1,4 +1,4 @@
-{% macro test_unique_combination_of_columns(model, combination_of_columns) %}
+{% macro test_unique_combination_of_columns(model, combination_of_columns, name) %}
 
 {% set exists_query %}
 select count(*) as "record_count"
