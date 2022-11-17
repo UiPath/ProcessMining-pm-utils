@@ -1,4 +1,4 @@
-{% macro test_exists(model, column_name) %}
+{% macro test_exists(model, column_name, name) %}
 
 {# Test fails if 0 records are returned. #}
 {{ config(fail_calc = 'case when count(*) = 0 then 1 else 0 end') }}

@@ -1,4 +1,4 @@
-{% macro test_one_column_not_null(model, columns) %}
+{% macro test_one_column_not_null(model, columns, name) %}
 
 {% set exists_query %}
 select count(*) as "record_count"

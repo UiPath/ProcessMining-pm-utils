@@ -1,4 +1,4 @@
-{% macro test_unique(model, column_name) %}
+{% macro test_unique(model, column_name, name) %}
 
 {% set exists_query %}
 select count(*) as "record_count"

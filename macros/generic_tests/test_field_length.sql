@@ -1,4 +1,4 @@
-{% macro test_field_length(model, column_name, length) %}
+{% macro test_field_length(model, column_name, length, name) %}
 
 {% set exists_query %}
 select count(*) as "record_count"
