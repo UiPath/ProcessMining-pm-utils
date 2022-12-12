@@ -59,8 +59,9 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
   - [test_unique](#test_unique-source)
 - [Generic](#Generic)
-  - [optional](#optional-source)
+  - [concat](#concat-source)
   - [left_from_char](#left_from_char-source)
+  - [optional](#optional-source)
 - [Process mining tables](#Process-mining-tables)
   - [generate_edge_table](#generate_edge_table-source)
   - [generate_variant](#generate_variant-source)
@@ -401,6 +402,15 @@ models:
 ```
 
 ### Generic
+
+#### concat ([source](macros/generic/concat.sql))
+This macro concatenates two or more strings together. In case a value is `null` it is concatenated as the empty string `''`. 
+
+Usage: 
+`{{ pm_utils.concat('"Field_A"', '"Field_B"') }}`
+
+To pass a string as argument, make sure to use double quotes:
+`{{ pm_utils.concat('"Field_A"', "' - '", '"Field_B"') }}`
 
 #### left_from_char ([source](macros/generic/left_from_char.sql))
 This macro extracts the string left from the character.
