@@ -2,10 +2,10 @@
 
 {% set exists_query %}
 select count(*) as "record_count"
-from Information_schema.Columns
-where Information_schema.Columns."TABLE_SCHEMA" = '{{ model.schema }}'
-    and Information_schema.Columns."TABLE_NAME" = '{{ model.name }}'
-    and Information_schema.Columns."COLUMN_NAME" in (
+from "INFORMATION_SCHEMA"."COLUMNS"
+where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
+    and "INFORMATION_SCHEMA"."COLUMNS"."TABLE_NAME" = '{{ model.name }}'
+    and "INFORMATION_SCHEMA"."COLUMNS"."COLUMN_NAME" in (
         {%- for column in combination_of_columns -%}
         '{{ column }}' {{',' if not loop.last }}
         {%- endfor -%}
