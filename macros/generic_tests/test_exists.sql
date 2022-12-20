@@ -4,9 +4,9 @@
 {{ config(fail_calc = 'case when count(*) = 0 then 1 else 0 end') }}
 
 select *
-from Information_schema.Columns
-where Information_schema.Columns."TABLE_SCHEMA" = '{{ model.schema }}'
-    and Information_schema.Columns."TABLE_NAME" = '{{ model.name }}'
-    and Information_schema.Columns."COLUMN_NAME" = replace('{{ column_name }}', '"', '')
+from "INFORMATION_SCHEMA"."COLUMNS"
+where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
+    and "INFORMATION_SCHEMA"."COLUMNS"."TABLE_NAME" = '{{ model.name }}'
+    and "INFORMATION_SCHEMA"."COLUMNS"."COLUMN_NAME" = replace('{{ column_name }}', '"', '')
 
 {% endmacro %}

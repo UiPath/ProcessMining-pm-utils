@@ -1,10 +1,10 @@
 {% macro test_type_date(model, column_name) %}
 
 select *
-from Information_schema.Columns
-where Information_schema.Columns."TABLE_SCHEMA" = '{{ model.schema }}'
-    and Information_schema.Columns."TABLE_NAME" = '{{ model.name }}'
-    and Information_schema.Columns."COLUMN_NAME" = replace('{{ column_name }}', '"', '')
-    and lower(Information_schema.Columns."DATA_TYPE") <> 'date'
+from "INFORMATION_SCHEMA"."COLUMNS"
+where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
+    and "INFORMATION_SCHEMA"."COLUMNS"."TABLE_NAME" = '{{ model.name }}'
+    and "INFORMATION_SCHEMA"."COLUMNS"."COLUMN_NAME" = replace('{{ column_name }}', '"', '')
+    and lower("INFORMATION_SCHEMA"."COLUMNS"."DATA_TYPE") <> 'date'
 
 {% endmacro %}
