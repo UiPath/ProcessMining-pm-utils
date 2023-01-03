@@ -1,33 +1,22 @@
 {% macro test_unique(model, column_name, name) %}
 
-{% set exists_query %}
-select count(*) as "record_count"
-from "INFORMATION_SCHEMA"."COLUMNS"
-where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
-    and "INFORMATION_SCHEMA"."COLUMNS"."TABLE_NAME" = '{{ model.name }}'
-    and "INFORMATION_SCHEMA"."COLUMNS"."COLUMN_NAME" = replace('{{ column_name }}', '"', '')
-{% endset %}
+{%- set columns = adapter.get_columns_in_relation(model) -%}
 
-{# Execute the exists query. The record count is 1 if the field exists and 0 if it does not exist.#}
-{% set result_exists_query = run_query(exists_query) %}
-
-{# Get record count only when dbt is in execute mode to prevent compilation errors. #}
-{% if execute %}
-{% set record_count = result_exists_query.columns['record_count'].values()[0] %}
-{% else %}
-{% set record_count = 1 %}
-{% endif %}
+{%- set column_names = [] -%}
+{%- for column in columns -%}
+    {%- set column_names = column_names.append('"' + column.name + '"') -%}
+{%- endfor -%}
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
-{% if record_count > 0 %}
-select {{ column_name }}
-from {{ model }}
-group by {{ column_name }}
-having count(*) > 1
+{% if column_name in column_names %}
+    select {{ column_name }}
+    from {{ model }}
+    group by {{ column_name }}
+    having count(*) > 1
 {% else %}
-select 'dummy_value' as "dummy"
-from {{ model }}
-where 1 = 0
+    select 'dummy_value' as "dummy"
+    from {{ model }}
+    where 1 = 0
 {% endif %}
 
 {% endmacro %}
