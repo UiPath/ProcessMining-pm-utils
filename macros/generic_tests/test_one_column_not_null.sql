@@ -1,43 +1,35 @@
 {% macro test_one_column_not_null(model, columns, name) %}
 
-{% set exists_query %}
-select count(*) as "record_count"
-from "INFORMATION_SCHEMA"."COLUMNS"
-where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
-    and "INFORMATION_SCHEMA"."COLUMNS"."TABLE_NAME" = '{{ model.name }}'
-    and "INFORMATION_SCHEMA"."COLUMNS"."COLUMN_NAME" in (
-        {%- for column in columns -%}
-        '{{ column }}' {{',' if not loop.last }}
-        {%- endfor -%}
-    )
-{% endset %}
+{%- set columns_in_relation = adapter.get_columns_in_relation(model) -%}
 
-{# Execute the exists query. The record count is the same as number of columns if all fields exist. #}
-{% set result_exists_query = run_query(exists_query) %}
+{%- set column_names = [] -%}
+{%- for column in columns_in_relation -%}
+    {%- set column_names = column_names.append('"' + column.name + '"') -%}
+{%- endfor -%}
 
-{# Get record count only when dbt is in execute mode to prevent compilation errors. #}
-{% if execute %}
-{% set record_count = result_exists_query.columns['record_count'].values()[0] %}
-{% else %}
-{% set record_count = columns|length %}
-{% endif %}
+{%- set execute_test = true -%}
 
-{# Only execute test when fields exists. Otherwise execute a dummy test that always succeeds. #}
-{% if record_count == columns|length %}
-{% set column_list = [] %}
 {% for column in columns %}
-    {% set column_list = column_list.append('case when "' + column + '" is not NULL then 1 else 0 end') %}
-{% endfor %}
+    {% if column not in column_names %}
+        {%- set execute_test = false -%}
+    {%- endif -%}
+{%- endfor -%}
 
-{% set calculation = column_list | join('\n    + ') %}
+{# Only execute test when all fields exist. Otherwise execute a dummy test that always succeeds. #}
+{% if execute_test == true %}
+    {% set column_list = [] %}
+    {% for column in columns %}
+        {% set column_list = column_list.append('case when "' + column + '" is not NULL then 1 else 0 end') %}
+    {% endfor %}
+    {% set calculation = column_list | join('\n    + ') %}
 
-select *
-from {{ model }}
-where {{ calculation }} <> 1
+    select *
+    from {{ model }}
+    where {{ calculation }} <> 1
 {% else %}
-select 'dummy_value' as "dummy"
-from {{ model }}
-where 1 = 0
+    select 'dummy_value' as "dummy"
+    from {{ model }}
+    where 1 = 0
 {% endif %}
 
 {% endmacro %}
