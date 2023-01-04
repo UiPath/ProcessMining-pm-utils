@@ -4,19 +4,19 @@
 
 {%- set column_names = [] -%}
 {%- for column in columns_in_relation -%}
-    {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- set column_names = column_names.append(column.name) -%}
 {%- endfor -%}
 
-{%- set execute_test = true -%}
+{%- set ns = namespace(execute_test = true) -%}
 
 {% for column in columns %}
     {% if column not in column_names %}
-        {%- set execute_test = false -%}
+        {%- set ns.execute_test = false -%}
     {%- endif -%}
 {%- endfor -%}
 
 {# Only execute test when all fields exist. Otherwise execute a dummy test that always succeeds. #}
-{% if execute_test == true %}
+{% if ns.execute_test %}
     {% set column_list = [] %}
     {% for column in combination_of_columns %}
         {% set column_list = column_list.append('"'+column+'"') %}
