@@ -1,4 +1,4 @@
-{% macro test_unique_combination_of_columns(model, combination_of_columns, name) %}
+{% macro test_unique_combination_of_columns(model, combination_of_columns) %}
 
 {%- set columns_in_relation = adapter.get_columns_in_relation(model) -%}
 
