@@ -16,9 +16,11 @@
 
     {% set query %}
         select count(*) as "test_record_count"
-        from {{ model }}
-        group by {{ column_name }}
-        having count(*) > 1
+        from (
+            select {{ column_name }}
+            from {{ model }}
+            group by {{ column_name }}
+            having count(*) > 1) as "table_grouped"
     {% endset %}
 
     {% set result = run_query(query) %}

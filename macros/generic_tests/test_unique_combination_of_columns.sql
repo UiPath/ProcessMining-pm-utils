@@ -31,9 +31,11 @@
 
     {% set query %}
         select count(*) as "test_record_count"
-        from {{ model }}
-        group by {{ columns_csv }}
-        having count(*) > 1
+        from (
+            select {{ columns_csv }}
+            from {{ model }}
+            group by {{ columns_csv }}
+            having count(*) > 1) as "table_grouped"
     {% endset %}
 
     {% set result = run_query(query) %}
