@@ -1,4 +1,4 @@
-{% macro test_field_length(model, column_name, length, name) %}
+{% macro test_field_length(model, column_name, length) %}
 
 {%- set columns = adapter.get_columns_in_relation(model) -%}
 

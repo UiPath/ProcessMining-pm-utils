@@ -1,4 +1,4 @@
-{% macro test_one_column_not_null(model, columns, name) %}
+{% macro test_one_column_not_null(model, columns) %}
 
 {%- set columns_in_relation = adapter.get_columns_in_relation(model) -%}
 

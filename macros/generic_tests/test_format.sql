@@ -1,4 +1,4 @@
-{% macro test_format(model, column_name, data_type, name) %}
+{% macro test_format(model, column_name, data_type) %}
 
 {{ config(fail_calc = 'coalesce("diff_count", 0)') }}
 
