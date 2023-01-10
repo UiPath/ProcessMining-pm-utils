@@ -1,6 +1,6 @@
 {% macro test_format(model, column_name, data_type, name) %}
 
-{{ config(fail_calc = 'coalesce(diff_count, 0)') }}
+{{ config(fail_calc = 'coalesce("diff_count", 0)') }}
 
 {%- set columns = adapter.get_columns_in_relation(model) -%}
 
@@ -13,7 +13,7 @@
 {% if column_name in column_names %}
     {% set query %}
         select
-            abs(count_before_casting - count_after_casting) as diff_count
+            abs(count_before_casting - count_after_casting) as "diff_count"
         from (
             select
                 count(*) as count_before_casting 
