@@ -31,7 +31,7 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {{ log("Message", True) }}
+        {{ log("There are duplicate values in '" ~ model.name ~ "." ~ column_name ~ "'. Make sure that all records have unique values.", True) }}
     {% endif %}
 {% else %}
     select 'dummy_value' as "dummy"

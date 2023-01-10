@@ -46,7 +46,16 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {{ log("Message", True) }}
+        {% set log_text = [] %}
+        {% for column in columns %}
+            {% set log_text = log_text.append("'" ~ model.column ~ "'") %}
+            {% if loop.index0 < (columns|length - 1) %}
+                {% set log_text = log_text.append(", ") %}
+            {% elif loop.index0 == columns|length - 1 %}
+                {% set log_text = log_text.append(" and ") %}
+            {% endif %}
+        {% endfor %}
+        {{ log("There are duplicate values in the combination of the fields " ~ log_text ~ ". Make sure all records have a unique combination of values for these fields.", True) }}
     {% endif %}
 {% else %}
     select 'dummy_value' as "dummy"
