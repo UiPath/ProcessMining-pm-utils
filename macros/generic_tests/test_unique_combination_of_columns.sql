@@ -9,7 +9,7 @@
 
 {%- set ns = namespace(execute_test = true) -%}
 
-{% for column in columns %}
+{% for column in combination_of_columns %}
     {% if column not in column_names %}
         {%- set ns.execute_test = false -%}
     {%- endif -%}
@@ -19,7 +19,7 @@
 {% if ns.execute_test %}
     {% set column_list = [] %}
     {% for column in combination_of_columns %}
-        {% set column_list = column_list.append('"'+column+'"') %}
+        {% set column_list = column_list.append('"' + column + '"') %}
     {% endfor %}
 
     {% set columns_csv = column_list | join(', ') %}
@@ -48,15 +48,18 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {% set log_text = [] %}
-        {% for column in columns %}
-            {% set log_text = log_text.append("'" ~ model.column ~ "'") %}
-            {% if loop.index0 < (columns|length - 1) %}
-                {% set log_text = log_text.append(", ") %}
-            {% elif loop.index0 == columns|length - 1 %}
-                {% set log_text = log_text.append(" and ") %}
+        {% set log_text_list = [] %}
+        {% for column in combination_of_columns %}
+            {% if loop.index < (combination_of_columns|length - 1) %}
+                {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "', " %}
+            {% elif loop.index == combination_of_columns|length - 1 %}
+                {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "' and " %}
+            {% else %}
+                {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "'" %}
             {% endif %}
+            {% set log_text_list = log_text_list.append(log_entry) %}
         {% endfor %}
+        {% set log_text = log_text_list | join('') %}
         {{ log("There are duplicate values in the combination of the fields " ~ log_text ~ ". Make sure all records have a unique combination of values for these fields.", True) }}
     {% endif %}
 {% else %}

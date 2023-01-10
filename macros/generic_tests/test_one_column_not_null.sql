@@ -43,15 +43,18 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {% set log_text = [] %}
+        {% set log_text_list = [] %}
         {% for column in columns %}
-            {% set log_text = log_text.append("'" ~ model.column ~ "'") %}
-            {% if loop.index0 < (columns|length - 1) %}
-                {% set log_text = log_text.append(", ") %}
-            {% elif loop.index0 == columns|length - 1 %}
-                {% set log_text = log_text.append(" and ") %}
+            {% if loop.index < (columns|length - 1) %}
+                {% set log_entry = "'" ~ column ~ "', " %}
+            {% elif loop.index == columns|length - 1 %}
+                {% set log_entry = "'" ~ column ~ "' and " %}
+            {% else %}
+                {% set log_entry = "'" ~ column ~ "'" %}
             {% endif %}
+            {% set log_text_list = log_text_list.append(log_entry) %}
         {% endfor %}
+        {% set log_text = log_text_list | join('') %}
         {{ log("The table '" ~ model.name ~ "' contains records that have values in multiple fields for " ~ log_text ~ ". Make sure that only one field has a value and the others are NULL in each record.", True) }}
     {% endif %}
 {% else %}
