@@ -29,7 +29,7 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {{ log("Message", True) }}
+        {{ log("The field '" ~ model.name ~ "." ~ column_name ~ "' shouldn't contain NULL values.", True) }}
     {% endif %}
 {% else %}
     select 'dummy_value' as "dummy"

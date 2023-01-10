@@ -43,7 +43,16 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {{ log("Message", True) }}
+        {% set log_text = [] %}
+        {% for column in columns %}
+            {% set log_text = log_text.append("'" ~ model.column ~ "'") %}
+            {% if loop.index0 < (columns|length - 1) %}
+                {% set log_text = log_text.append(", ") %}
+            {% elif loop.index0 == columns|length - 1 %}
+                {% set log_text = log_text.append(" and ") %}
+            {% endif %}
+        {% endfor %}
+        {{ log("The table '" ~ model.name ~ "' contains records that have values in multiple fields for " ~ log_text ~ ". Make sure that only one field has a value and the others are NULL in each record.", True) }}
     {% endif %}
 {% else %}
     select 'dummy_value' as "dummy"

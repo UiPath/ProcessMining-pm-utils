@@ -43,7 +43,24 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_diff_count > 0 %}
-        {{ log("Message", True) }}
+        {%- if target.type == 'snowflake' -%}
+            {%- if data_type == 'date' -%}
+                {% set log_text = var("date_format", "YYYY-MM-DD") %}
+            {%- elif data_type == 'time' -%}
+                {% set log_text = var("time_format", "hh24:mi:ss.ff3")  %}
+            {%- elif data_type == 'datetime' -%}
+                {% set log_text = var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3")  %}
+            {%- endif -%}
+        {%- elif target.type == 'sqlserver' -%}
+            {%- if data_type == 'date' -%}
+                {% set log_text = var("date_format", 23) %}
+            {%- elif data_type == 'time' -%}
+                {% set log_text = var("time_format", 14)  %}
+            {%- elif data_type == 'datetime' -%}
+                {% set log_text = var("datetime_format", 21)  %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ log("The field '" ~ model.name ~ "." ~ column_name ~ "' contains values that don't follow the format " ~ log_text ~ ".", True) }}
     {% endif %}
 {% else %}
     select 'dummy_value' as "dummy"

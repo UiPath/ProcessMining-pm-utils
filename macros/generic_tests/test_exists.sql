@@ -27,7 +27,7 @@ where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
 
 {# User-friendly log message when the test fails. #}
 {% if test_record_count == 0 %}
-    {{ log("Message", True) }}
+    {{ log("The field '" ~ model.name ~ "." ~ column_name ~ "' doesn't exist in the source data. Note that the field detection is case-sensitive.", True) }}
 {% endif %}
 
 {% endmacro %}

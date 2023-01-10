@@ -29,7 +29,7 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {{ log("Message", True) }}
+        {{ log("Not all records of the field '" ~ model.name ~ "." ~ column_name ~ "' have the expected " ~ length ~ " character length. Please investigate whether the values are loaded as desired.", True) }}
     {% endif %}
 {% else %}
     select 'dummy_value' as "dummy"
