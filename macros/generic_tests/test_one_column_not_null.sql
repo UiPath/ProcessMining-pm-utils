@@ -1,5 +1,6 @@
 {% macro test_one_column_not_null(model, columns) %}
 
+{# Get columns in the relation to check if the fields exist. #}
 {%- set columns_in_relation = adapter.get_columns_in_relation(model) -%}
 
 {%- set column_names = [] -%}
@@ -23,10 +24,12 @@
     {% endfor %}
     {% set calculation = column_list | join('\n    + ') %}
 
+    {# Query the records that fail the test. #}
     select *
     from {{ model }}
     where {{ calculation }} <> 1
 
+    {# Query to get the record count when executing the test. #}
     {% set query %}
         select count(*) as "test_record_count"
         from {{ model }}

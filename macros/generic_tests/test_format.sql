@@ -1,7 +1,9 @@
 {% macro test_format(model, column_name, data_type) %}
 
+{# Test fails if the difference in number of null values before and after data type casting is different. #}
 {{ config(fail_calc = 'coalesce("diff_count", 0)') }}
 
+{# Get columns in the relation to check if the field exists. #}
 {%- set columns = adapter.get_columns_in_relation(model) -%}
 
 {%- set column_names = [] -%}
@@ -11,6 +13,7 @@
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
 {% if column_name in column_names %}
+    {# Query to get the difference in number of null values. #}
     {% set query %}
         select
             abs(count_before_casting - count_after_casting) as "diff_count"
