@@ -1,5 +1,6 @@
 {% macro test_unique_combination_of_columns(model, combination_of_columns) %}
 
+{# Get columns in the relation to check if the fields exist. #}
 {%- set columns_in_relation = adapter.get_columns_in_relation(model) -%}
 
 {%- set column_names = [] -%}
@@ -24,11 +25,13 @@
 
     {% set columns_csv = column_list | join(', ') %}
 
+    {# Query the records that fail the test. #}
     select {{ columns_csv }}
     from {{ model }}
     group by {{ columns_csv }}
     having count(*) > 1
 
+    {# Query to get the record count when executing the test. #}
     {% set query %}
         select count(*) as "test_record_count"
         from (

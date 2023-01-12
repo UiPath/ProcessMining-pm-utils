@@ -1,5 +1,6 @@
 {% macro test_not_null(model, column_name) %}
 
+{# Get columns in the relation to check if the field exists. #}
 {%- set columns = adapter.get_columns_in_relation(model) -%}
 
 {%- set column_names = [] -%}
@@ -9,10 +10,12 @@
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
 {% if column_name in column_names %}
+    {# Query the records that fail the test. #}
     select {{ column_name }}
     from {{ model }}
     where {{ column_name }} is null
 
+    {# Query to get the record count when executing the test. #}
     {% set query %}
         select count(*) as "test_record_count"
         from {{ model }}
