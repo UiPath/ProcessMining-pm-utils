@@ -66,9 +66,9 @@
         {{ log("The field '" ~ model.name ~ "." ~ column_name ~ "' contains values that don't follow the format " ~ log_text ~ ".", True) }}
     {% endif %}
 {% else %}
-    select 'dummy_value' as "dummy"
+    select top 1
+        0 as "diff_count"
     from {{ model }}
-    where 1 = 0
 {% endif %}
 
 {% endmacro %}
