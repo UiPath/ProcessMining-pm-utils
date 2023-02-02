@@ -1,0 +1,20 @@
+name: Check for JIRA issue key🔑
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+    branches: [main, "release/*", "hotfix/*", "dev*"]
+
+jobs:
+  check_jira_issue_key:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check JIRA issue key
+        uses: Slashgear/action-check-pr-title@v4.3.0
+        with:
+          regexp: '(DNA|PCI|SRE)-\d*'
