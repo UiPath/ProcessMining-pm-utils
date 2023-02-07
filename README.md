@@ -62,6 +62,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [concat](#concat-source)
   - [left_from_char](#left_from_char-source)
   - [optional](#optional-source)
+  - [optional_table](#optional_table-source)
 - [Process mining tables](#Process-mining-tables)
   - [generate_edge_table](#generate_edge_table-source)
   - [generate_variant](#generate_variant-source)
@@ -418,14 +419,6 @@ This macro extracts the string left from the character.
 Usage: 
 `{{ pm_utils.left_from_char('[expression]', '[character]') }}`
 
-#### optional_table ([source](macros/generic/optional_table.sql))
-This macro checks whether the source table is present. If the table is not present, it creates a table without records in your target schema. If the table is present, it selects the table from the source schema. Use this macro to allow for missing source tables when that data is optional.
-
-Usage:
-`{{ pm_utils.optional_table(source('source_name', 'table_name')) }}`
-
-Note: you can only apply the macro for source tables in combination with the `optional()` macro applied to all its fields.
-
 #### optional ([source](macros/generic/optional.sql))
 This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `time`, `datetime`, and `text`. When no data type is set, the optional column is considered to be text. 
 
@@ -444,6 +437,14 @@ Variables:
 - datetime_format
 
 These variables are only required when the `data_type` is used with the values `date`, `time`, or `datetime`.
+
+#### optional_table ([source](macros/generic/optional_table.sql))
+This macro checks whether the source table is present. If the table is not present, it creates a table without records in your target schema. If the table is present, it selects the table from the source schema. Use this macro to allow for missing source tables when that data is optional.
+
+Usage:
+`{{ pm_utils.optional_table(source('source_name', 'table_name')) }}`
+
+Note: you can only apply the macro for source tables in combination with the `optional()` macro applied to all its fields.
 
 ### Process mining tables
 
