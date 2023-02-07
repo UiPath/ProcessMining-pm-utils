@@ -29,6 +29,12 @@
     {{ pm_utils.to_timestamp(column_value) }}
 {%- elif data_type == 'text' -%}
     {{ pm_utils.to_varchar(column_value) }}
+{%- elif data_type == 'id' -%}
+    {% if optional_column in column_names %}
+        {{ pm_utils.to_integer(column_value) }}
+    {% else %}
+        row_number() over (order by (select null))
+    {% endif%}
 {%- else -%}
     {{ pm_utils.to_varchar(column_value) }}
 {%- endif -%}
