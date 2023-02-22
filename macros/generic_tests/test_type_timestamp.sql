@@ -8,7 +8,7 @@ where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
 {% if target.type == 'snowflake' %}
     and "INFORMATION_SCHEMA"."COLUMNS"."DATA_TYPE" <> 'TIMESTAMP_NTZ'
 {% elif target.type == 'sqlserver' %}
-    and "INFORMATION_SCHEMA"."COLUMNS"."DATA_TYPE" <> 'datetime'
+    and "INFORMATION_SCHEMA"."COLUMNS"."DATA_TYPE" <> 'datetime2'
 {% endif %}
 
 {% endmacro %}
