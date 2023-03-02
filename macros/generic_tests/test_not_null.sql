@@ -13,13 +13,13 @@
     {# Query the records that fail the test. #}
     select {{ column_name }}
     from {{ model }}
-    where {{ column_name }} is null
+    where {{ column_name }} is null or len({{ column_name }}) = 0
 
     {# Query to get the record count when executing the test. #}
     {% set query %}
         select count(*) as "test_record_count"
         from {{ model }}
-        where {{ column_name }} is null
+        where {{ column_name }} is null or len({{ column_name }}) = 0
     {% endset %}
 
     {% set result = run_query(query) %}
@@ -32,7 +32,7 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {{ log("The field '" ~ model.name ~ "." ~ column_name ~ "' shouldn't contain NULL values.", True) }}
+        {{ log("The field '" ~ model.name ~ "." ~ column_name ~ "' shouldn't contain NULL or empty values.", True) }}
     {% endif %}
 {% else %}
     select 'dummy_value' as "dummy"
