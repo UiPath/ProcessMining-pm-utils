@@ -270,7 +270,7 @@ models:
 ```
 
 #### test_not_null ([source](macros/generic_tests/test_not_null.sql))
-This generic test evaluates whether the values of the column are not null. The test is only executed when the column exists on the table.
+This generic test evaluates whether the values of the column are not null or empty. The test is only executed when the column exists on the table.
 
 Usage:
 ```
