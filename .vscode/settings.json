@@ -4,5 +4,25 @@
     "files.insertFinalNewline": true,
     "files.associations": {
         "*.sql": "jinja-sql"
-    }
+    },
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#a3e3c7",
+        "activityBar.background": "#a3e3c7",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#a66cd2",
+        "activityBarBadge.foreground": "#15202b",
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#a3e3c7",
+        "statusBar.background": "#7cd7af",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#55cb97",
+        "statusBarItem.remoteBackground": "#7cd7af",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#7cd7af",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#7cd7af99",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.remoteColor": "#7cd7af"
 }

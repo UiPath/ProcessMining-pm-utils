@@ -9,10 +9,7 @@
             s.nextval as "{{ id_field }}"
         from {{ this }}, table(getnextval(seq_{{ this.identifier }})) s
     )
-
-
 {%- elif target.type == 'sqlserver' -%}
-
     alter table {{ this }}
     add "{{ id_field }}" bigint identity(1,1)
 {%- endif -%}

@@ -7,8 +7,6 @@
             then {{ pm_utils.date_from_timestamp(field) }}
         else try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}')
     end
-{%- elif target.type == 'databricks' -%}
-    {{ field }}
 {%- elif target.type == 'sqlserver' -%}
     try_convert(date, {{ field }}, {{ var("date_format", 23) }})
 {%- endif -%}

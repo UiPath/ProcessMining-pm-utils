@@ -1,14 +1,14 @@
 {% macro test_type_timestamp(model, column_name) %}
 
 select *
-from "INFORMATION_SCHEMA"."COLUMNS"
-where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
-    and "INFORMATION_SCHEMA"."COLUMNS"."TABLE_NAME" = '{{ model.name }}'
-    and "INFORMATION_SCHEMA"."COLUMNS"."COLUMN_NAME" = replace('{{ column_name }}', '"', '')
+from Information_schema.Columns
+where Information_schema.Columns."TABLE_SCHEMA" = '{{ model.schema }}'
+    and Information_schema.Columns."TABLE_NAME" = '{{ model.name }}'
+    and Information_schema.Columns."COLUMN_NAME" = replace('{{ column_name }}', '"', '')
 {% if target.type == 'snowflake' %}
-    and "INFORMATION_SCHEMA"."COLUMNS"."DATA_TYPE" <> 'TIMESTAMP_NTZ'
+    and Information_schema.Columns."DATA_TYPE" <> 'TIMESTAMP_NTZ'
 {% elif target.type == 'sqlserver' %}
-    and "INFORMATION_SCHEMA"."COLUMNS"."DATA_TYPE" <> 'datetime2'
+    and Information_schema.Columns."DATA_TYPE" <> 'datetime'
 {% endif %}
 
 {% endmacro %}

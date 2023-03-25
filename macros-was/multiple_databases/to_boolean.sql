@@ -6,8 +6,6 @@
     {%- else -%}
         try_to_boolean(to_varchar({{ field }}))
     {%- endif -%}
-{%- elif target.type == 'databricks' -%}
-    cast({{ field }} as BOOLEAN)
 {%- elif target.type == 'sqlserver' -%}
     {%- if field in ('true', 'false', '1', '0') -%}
         try_convert(bit, '{{ field }}')

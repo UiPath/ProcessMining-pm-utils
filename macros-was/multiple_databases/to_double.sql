@@ -2,8 +2,6 @@
 
 {%- if target.type == 'snowflake' -%}
     try_to_double(to_varchar({{ field }}))
-{%- elif target.type == 'databricks' -%}
-    cast({{ field }} as DOUBLE)
 {%- elif target.type == 'sqlserver' -%}
     try_convert(float, {{ field }})
 {%- endif -%}
