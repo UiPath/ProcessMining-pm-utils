@@ -11,15 +11,28 @@
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
 {% if column_name in column_names %}
     {# Query the records that fail the test. #}
-    select {{ column_name }}
-    from {{ model }}
-    where {{ column_name }} is null or len({{ column_name }}) = 0
+    {%- if target.type == 'snowflake' -%}
+        select {{ column_name }}
+        from {{ model }}
+        where len({{ column_name }}) is null or len({{ column_name }}) = 0
 
+    {%- elif target.type == 'sqlserver' -%}
+        select {{ column_name }}
+        from {{ model }}
+        where datalength({{ column_name }}) is null or datalength({{ column_name }}) = 0
+    {%- endif -%}
+    
     {# Query to get the record count when executing the test. #}
     {% set query %}
-        select count(*) as "test_record_count"
-        from {{ model }}
-        where {{ column_name }} is null or len({{ column_name }}) = 0
+        {%- if target.type == 'snowflake' -%}
+            select count(*) as "test_record_count"
+            from {{ model }}
+            where len({{ column_name }}) is null or len({{ column_name }}) = 0
+        {%- elif target.type == 'sqlserver' -%}
+            select count(*) as "test_record_count"
+            from {{ model }}
+            where datalength({{ column_name }}) = null or datalength({{ column_name }}) = 0
+        {%- endif -%}
     {% endset %}
 
     {% set result = run_query(query) %}
