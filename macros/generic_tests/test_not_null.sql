@@ -14,12 +14,11 @@
     {%- if target.type == 'snowflake' -%}
         select {{ column_name }}
         from {{ model }}
-        where len({{ column_name }}) is null or len({{ column_name }}) = 0
-
+        where ({{ column_name }}) is null or len({{ column_name }}) = 0
     {%- elif target.type == 'sqlserver' -%}
         select {{ column_name }}
         from {{ model }}
-        where datalength({{ column_name }}) is null or datalength({{ column_name }}) = 0
+        where {{ column_name }} is null or datalength({{ column_name }}) = 0
     {%- endif -%}
     
     {# Query to get the record count when executing the test. #}
@@ -27,11 +26,11 @@
         {%- if target.type == 'snowflake' -%}
             select count(*) as "test_record_count"
             from {{ model }}
-            where len({{ column_name }}) is null or len({{ column_name }}) = 0
+            where {{ column_name }} is null or len({{ column_name }}) = 0
         {%- elif target.type == 'sqlserver' -%}
             select count(*) as "test_record_count"
             from {{ model }}
-            where datalength({{ column_name }}) = null or datalength({{ column_name }}) = 0
+            where {{ column_name }} is null or datalength({{ column_name }}) = 0
         {%- endif -%}
     {% endset %}
 
