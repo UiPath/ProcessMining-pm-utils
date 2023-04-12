@@ -63,7 +63,12 @@
             {% set log_text_list = log_text_list.append(log_entry) %}
         {% endfor %}
         {% set log_text = log_text_list | join('') %}
-        {{ log("There are duplicate values in the combination of the fields " ~ log_text ~ ". Make sure all records have a unique combination of values for these fields.", True) }}
+        {% set json_object =
+            {"Key": "TestUniqueCombinationOfColumns", "Details": {"log_text": "" ~ log_text ~ ""}, "Category": "UserError", "Message": "There are duplicate values in the combination of the fields " ~ log_text ~ ". Make sure all records have a unique combination of values for these fields."}
+        %}
+        {% if var("log_result", False) == True %}
+            {{ log(json_object, True) }}
+        {% endif %}
     {% endif %}
 {% else %}
     select 'dummy_value' as "dummy"
