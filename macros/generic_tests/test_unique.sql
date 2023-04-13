@@ -37,7 +37,14 @@
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
         {% if var("log_result", False) == True %}
-            {{ log('{"Key": "TestUnique", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '"}, "Category": "UserError", "Message": "There are duplicate values in \'' ~ model.name ~ '.' ~ column_name ~ '\'. Make sure that all records have unique values."}', True) }}
+            {% if config.get('severity') == 'warn' %}
+                {% set log_category = 'UserWarning' %}
+            {% elif config.get('severity') == 'error' %}
+                {% set log_category = 'UserError' %}
+            {% else %}
+                {% set log_category = 'UserError' %}
+            {% endif %}
+            {{ log('{"Key": "TestUnique", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '"}, "Category": "' ~ log_category ~ '", "Message": "There are duplicate values in \'' ~ model.name ~ '.' ~ column_name ~ '\'. Make sure that all records have unique values."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}

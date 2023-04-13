@@ -51,20 +51,29 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {% set log_text_list = [] %}
-        {% for column in combination_of_columns %}
-            {% if loop.index < (combination_of_columns|length - 1) %}
-                {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "', " %}
-            {% elif loop.index == combination_of_columns|length - 1 %}
-                {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "' and " %}
-            {% else %}
-                {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "'" %}
-            {% endif %}
-            {% set log_text_list = log_text_list.append(log_entry) %}
-        {% endfor %}
-        {% set log_text = log_text_list | join('') %}
         {% if var("log_result", False) == True %}
-            {{ log('{"Key": "TestUniqueCombinationOfColumns", "Details": {"log_text": "' ~ log_text ~ '"}, "Category": "UserError", "Message": "There are duplicate values in the combination of the fields ' ~ log_text ~ '. Make sure all records have a unique combination of values for these fields."}', True) }}
+            {# Generate variable part of log text. #}
+            {% set log_text_list = [] %}
+            {% for column in combination_of_columns %}
+                {% if loop.index < (combination_of_columns|length - 1) %}
+                    {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "', " %}
+                {% elif loop.index == combination_of_columns|length - 1 %}
+                    {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "' and " %}
+                {% else %}
+                    {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "'" %}
+                {% endif %}
+                {% set log_text_list = log_text_list.append(log_entry) %}
+            {% endfor %}
+            {% set log_text = log_text_list | join('') %}
+            {# Define log category. #}
+            {% if config.get('severity') == 'warn' %}
+                {% set log_category = 'UserWarning' %}
+            {% elif config.get('severity') == 'error' %}
+                {% set log_category = 'UserError' %}
+            {% else %}
+                {% set log_category = 'UserError' %}
+            {% endif %}
+            {{ log('{"Key": "TestUniqueCombinationOfColumns", "Details": {"log_text": "' ~ log_text ~ '"}, "Category": "' ~ log_category ~ '", "Message": "There are duplicate values in the combination of the fields ' ~ log_text ~ '. Make sure all records have a unique combination of values for these fields."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}
