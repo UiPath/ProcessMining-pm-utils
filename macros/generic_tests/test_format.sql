@@ -64,7 +64,14 @@
             {%- endif -%}
         {%- endif -%}
         {% if var("log_result", False) == True %}
-            {{ log('{"Key": "TestFormat", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '", "log_text": "' ~ log_text ~ '"}, "Category": "UserError", "Message": "The field \'' ~ model.name ~ '.' ~ column_name ~ '\' contains values that don\'t follow the format ' ~ log_text ~ '."}', True) }}
+            {% if config.get('severity') == 'warn' %}
+                {% set log_category = 'UserWarning' %}
+            {% elif config.get('severity') == 'error' %}
+                {% set log_category = 'UserError' %}
+            {% else %}
+                {% set log_category = 'UserError' %}
+            {% endif %}
+            {{ log('{"Key": "TestFormat", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '", "log_text": "' ~ log_text ~ '"}, "Category": "' ~ log_category ~ '", "Message": "The field \'' ~ model.name ~ '.' ~ column_name ~ '\' contains values that don\'t follow the format ' ~ log_text ~ '."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}
