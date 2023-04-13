@@ -58,11 +58,8 @@
             {% set log_text_list = log_text_list.append(log_entry) %}
         {% endfor %}
         {% set log_text = log_text_list | join('') %}
-        {% set json_object =
-            {"Key": "TestOneColumnNotNull", "Details": {"model_name": "" ~ model.name ~ "", "log_text": "" ~ log_text ~ ""}, "Category": "UserError", "Message": "The table '" ~ model.name ~ "' contains records that have values in multiple fields for " ~ log_text ~ ". Make sure that only one field has a value and the others are NULL in each record."}
-        %}
         {% if var("log_result", False) == True %}
-            {{ log(json_object, True) }}
+            {{ log('{"Key": "TestOneColumnNotNull", "Details": {"model_name": "" ~ model.name ~ "", "log_text": "" ~ log_text ~ ""}, "Category": "UserError", "Message": "The table \'" ~ model.name ~ "\' contains records that have values in multiple fields for " ~ log_text ~ ". Make sure that only one field has a value and the others are NULL in each record."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}

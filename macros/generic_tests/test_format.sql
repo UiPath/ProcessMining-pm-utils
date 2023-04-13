@@ -63,11 +63,8 @@
                 {% set log_text = var("datetime_format", 21)  %}
             {%- endif -%}
         {%- endif -%}
-        {% set json_object =
-            {"Key": "TestFormat", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ "", "log_text": "" ~ log_text ~ ""}, "Category": "UserError", "Message": "The field '" ~ model.name ~ "." ~ column_name ~ "' contains values that don't follow the format " ~ log_text ~ "."}
-        %}
         {% if var("log_result", False) == True %}
-            {{ log(json_object, True) }}
+            {{ log('{"Key": "TestFormat", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ "", "log_text": "" ~ log_text ~ ""}, "Category": "UserError", "Message": "The field \'" ~ model.name ~ "." ~ column_name ~ "\' contains values that don\'t follow the format " ~ log_text ~ "."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}

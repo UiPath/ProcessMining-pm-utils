@@ -29,11 +29,8 @@ where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
 
 {# User-friendly log message when the test fails. #}
 {% if test_record_count == 0 %}
-    {% set json_object =
-        {"Key": "TestExists", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ ""}, "Category": "UserError", "Message": "The field '" ~ model.name ~ "." ~ column_name ~ "' doesn't exist in the source data. Note that the field detection is case-sensitive."}
-    %}
     {% if var("log_result", False) == True %}
-        {{ log(json_object, True) }}
+        {{ log('{"Key": "TestExists", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ ""}, "Category": "UserError", "Message": "The field \'" ~ model.name ~ "." ~ column_name ~ "\' doesn\'t exist in the source data. Note that the field detection is case-sensitive."}', True) }}
     {% endif %}
 {% endif %}
 
