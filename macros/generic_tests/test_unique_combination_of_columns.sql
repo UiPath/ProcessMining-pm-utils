@@ -64,7 +64,7 @@
         {% endfor %}
         {% set log_text = log_text_list | join('') %}
         {% if var("log_result", False) == True %}
-            {{ log('{"Key": "TestUniqueCombinationOfColumns", "Details": {"log_text": "" ~ log_text ~ ""}, "Category": "UserError", "Message": "There are duplicate values in the combination of the fields " ~ log_text ~ ". Make sure all records have a unique combination of values for these fields."}', True) }}
+            {{ log('{"Key": "TestUniqueCombinationOfColumns", "Details": {"log_text": "' ~ log_text ~ '"}, "Category": "UserError", "Message": "There are duplicate values in the combination of the fields ' ~ log_text ~ '. Make sure all records have a unique combination of values for these fields."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}

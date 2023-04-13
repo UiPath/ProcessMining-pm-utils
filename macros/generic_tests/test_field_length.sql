@@ -33,7 +33,7 @@
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
         {% if var("log_result", False) == True %}
-            {{ log('{"Key": "TestFieldLength", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ "", "length": "" ~ length ~ ""}, "Category": "UserError", "Message": "Not all records of the field \'" ~ model.name ~ "." ~ column_name ~ "\' have the expected " ~ length ~ " character length. Please investigate whether the values are loaded as desired."}', True) }}
+            {{ log('{"Key": "TestFieldLength", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '", "length": "' ~ length ~ '"}, "Category": "UserError", "Message": "Not all records of the field \'' ~ model.name ~ '.' ~ column_name ~ '\' have the expected ' ~ length ~ ' character length. Please investigate whether the values are loaded as desired."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}

@@ -64,7 +64,7 @@
             {%- endif -%}
         {%- endif -%}
         {% if var("log_result", False) == True %}
-            {{ log('{"Key": "TestFormat", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ "", "log_text": "" ~ log_text ~ ""}, "Category": "UserError", "Message": "The field \'" ~ model.name ~ "." ~ column_name ~ "\' contains values that don\'t follow the format " ~ log_text ~ "."}', True) }}
+            {{ log('{"Key": "TestFormat", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '", "log_text": "' ~ log_text ~ '"}, "Category": "UserError", "Message": "The field \'' ~ model.name ~ '.' ~ column_name ~ '\' contains values that don\'t follow the format ' ~ log_text ~ '."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}
