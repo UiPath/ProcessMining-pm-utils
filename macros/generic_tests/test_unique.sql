@@ -36,11 +36,8 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {% set json_object =
-            {"Key": "TestUnique", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ ""}, "Category": "UserError", "Message": "There are duplicate values in '" ~ model.name ~ "." ~ column_name ~ "'. Make sure that all records have unique values."}
-        %}
         {% if var("log_result", False) == True %}
-            {{ log(json_object, True) }}
+            {{ log('{"Key": "TestUnique", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ ""}, "Category": "UserError", "Message": "There are duplicate values in \'" ~ model.name ~ "." ~ column_name ~ "\'. Make sure that all records have unique values."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}

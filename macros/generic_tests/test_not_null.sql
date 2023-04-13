@@ -44,11 +44,8 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {% set json_object =
-            {"Key": "TestNotNull", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ ""}, "Category": "UserError", "Message": "The field '" ~ model.name ~ "." ~ column_name ~ "' shouldn't contain NULL or empty values."}
-        %}
         {% if var("log_result", False) == True %}
-            {{ log(json_object, True) }}
+            {{ log('{"Key": "TestNotNull", "Details": {"model_name": "" ~ model.name ~ "", "column_name": "" ~ column_name ~ ""}, "Category": "UserError", "Message": "The field \'" ~ model.name ~ "." ~ column_name ~ "\' shouldn\'t contain NULL or empty values."}', True) }}
         {% endif %}
     {% endif %}
 {% else %}
