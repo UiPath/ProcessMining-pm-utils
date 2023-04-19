@@ -37,7 +37,7 @@ where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
         {% else %}
             {% set log_category = 'UserError' %}
         {% endif %}
-        {{ log('{"Key": "TestExists", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '"}, "Category": "' ~ log_category ~ '", "Message": "The field \'' ~ model.name ~ '.' ~ column_name ~ '\' doesn\'t exist in the source data. Note that the field detection is case-sensitive."}', True) }}
+        {{ log(tojson({'Key': 'TestExists', 'Details': {'model_name': model.name, 'column_name': column_name}, 'Category': log_category, 'Message': 'The field \'' ~ model.name ~ '.' ~ column_name ~ '\' doesn\'t exist in the source data. Note that the field detection is case-sensitive.'}), True) }}
     {% endif %}
 {% endif %}
 

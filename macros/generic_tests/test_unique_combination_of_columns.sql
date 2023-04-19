@@ -73,7 +73,7 @@
             {% else %}
                 {% set log_category = 'UserError' %}
             {% endif %}
-            {{ log('{"Key": "TestUniqueCombinationOfColumns", "Details": {"log_text": "' ~ log_text ~ '"}, "Category": "' ~ log_category ~ '", "Message": "There are duplicate values in the combination of the fields ' ~ log_text ~ '. Make sure all records have a unique combination of values for these fields."}', True) }}
+            {{ log(tojson({'Key': 'TestUniqueCombinationOfColumns', 'Details': {'log_text': log_text}, 'Category': log_category, 'Message': 'There are duplicate values in the combination of the fields ' ~ log_text ~ '. Make sure all records have a unique combination of values for these fields.'}), True) }}
         {% endif %}
     {% endif %}
 {% else %}

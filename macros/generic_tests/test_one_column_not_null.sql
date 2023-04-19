@@ -68,7 +68,7 @@
             {% else %}
                 {% set log_category = 'UserError' %}
             {% endif %}
-            {{ log('{"Key": "TestOneColumnNotNull", "Details": {"model_name": "' ~ model.name ~ '", "log_text": "' ~ log_text ~ '"}, "Category": "' ~ log_category ~ '", "Message": "The table \'' ~ model.name ~ '\' contains records that have values in multiple fields for ' ~ log_text ~ '. Make sure that only one field has a value and the others are NULL in each record."}', True) }}
+            {{ log(tojson({'Key': 'TestOneColumnNotNull', 'Details': {'model_name': model.name, 'log_text': log_text}, 'Category': log_category, 'Message': 'The table \'' ~ model.name ~ '\' contains records that have values in multiple fields for ' ~ log_text ~ '. Make sure that only one field has a value and the others are NULL in each record.'}), True) }}
         {% endif %}
     {% endif %}
 {% else %}

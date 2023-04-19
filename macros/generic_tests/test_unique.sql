@@ -44,7 +44,7 @@
             {% else %}
                 {% set log_category = 'UserError' %}
             {% endif %}
-            {{ log('{"Key": "TestUnique", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '"}, "Category": "' ~ log_category ~ '", "Message": "There are duplicate values in \'' ~ model.name ~ '.' ~ column_name ~ '\'. Make sure that all records have unique values."}', True) }}
+            {{ log(tojson({'Key': 'TestUnique', 'Details': {'model_name': model.name, 'column_name': column_name}, 'Category': log_category, 'Message': 'There are duplicate values in \'' ~ model.name ~ '.' ~ column_name ~ '\'. Make sure that all records have unique values.'}), True) }}
         {% endif %}
     {% endif %}
 {% else %}

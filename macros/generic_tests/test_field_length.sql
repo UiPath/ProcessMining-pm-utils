@@ -40,7 +40,7 @@
             {% else %}
                 {% set log_category = 'UserError' %}
             {% endif %}
-            {{ log('{"Key": "TestFieldLength", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '", "length": "' ~ length ~ '"}, "Category": "' ~ log_category ~ '", "Message": "Not all records of the field \'' ~ model.name ~ '.' ~ column_name ~ '\' have the expected ' ~ length ~ ' character length. Please investigate whether the values are loaded as desired."}', True) }}
+            {{ log(tojson({'Key': 'TestFieldLength', 'Details': {'model_name': model.name, 'column_name': column_name, 'length': length}, 'Category': log_category, 'Message': 'Not all records of the field \'' ~ model.name ~ '.' ~ column_name ~ '\' have the expected ' ~ length ~ ' character length. Please investigate whether the values are loaded as desired.'}), True) }}
         {% endif %}
     {% endif %}
 {% else %}
