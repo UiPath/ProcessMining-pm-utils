@@ -52,7 +52,7 @@
             {% else %}
                 {% set log_category = 'UserError' %}
             {% endif %}
-            {{ log('{"Key": "TestNotNull", "Details": {"model_name": "' ~ model.name ~ '", "column_name": "' ~ column_name ~ '"}, "Category": "' ~ log_category ~ '", "Message": "The field \'' ~ model.name ~ '.' ~ column_name ~ '\' shouldn\'t contain NULL or empty values."}', True) }}
+            {{ log(tojson({'Key': 'TestNotNull', 'Details': {'model_name': model.name, 'column_name': column_name}, 'Category': log_category, 'Message': 'The field \'' ~ model.name ~ '.' ~ column_name ~ '\' shouldn\'t contain NULL or empty values.'}), True) }}
         {% endif %}
     {% endif %}
 {% else %}
