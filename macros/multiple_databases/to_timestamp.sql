@@ -1,9 +1,35 @@
-{%- macro to_timestamp(field) -%}
+{%- macro to_timestamp(field, table) -%}
 
 {%- if target.type == 'snowflake' -%}
     try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}')
 {%- elif target.type == 'sqlserver' -%}
     try_convert(datetime2, {{ field }}, {{ var("datetime_format", 21) }})
 {%- endif -%}
+
+{# Warning if type casting will introduce null values for at least 1 record. #}
+{% if table is defined %}
+    {% set query %}
+    select
+        count(*) as "record_count"
+    from "{{ table.database }}"."{{ table.schema }}"."{{ table.identifier }}"
+    where {{ field }} is not null and
+        {% if target.type == 'snowflake' -%}
+            try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}') is null
+        {% elif target.type == 'sqlserver' -%}
+            try_convert(datetime2, {{ field }}, {{ var("datetime_format", 21) }}) is null
+        {%- endif -%}
+    {% endset %}
+    
+    {% set result_query = run_query(query) %}
+    {% if execute %}
+        {% set record_count = result_query.columns['record_count'].values()[0] %}
+    {% else %}
+        {% set record_count = 0 %}
+    {% endif %}
+
+    {% if record_count > 0 %}
+        {{ log("Warning", True) }}
+    {% endif %}
+{% endif %}
 
 {%- endmacro -%}
