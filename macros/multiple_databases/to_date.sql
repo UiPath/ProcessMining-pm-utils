@@ -37,7 +37,9 @@
     {% endif %}
 
     {% if record_count > 0 %}
-        {{ log("Warning", True) }}
+        {% if var("log_result", False) == True %}
+            {{ log(tojson({'Key': 'ConvertDate', 'Details': {'table_identifier': table.identifier, 'field': field, 'record_count': record_count}, 'Category': 'UserWarning', 'Message': 'Failed to convert \'' ~ table.identifier ~ '.' ~ field ~ '\' to a date for ' ~ record_count ~ ' records. Their values are set to NULL.'}), True) }}
+        {% endif %}
     {% endif %}
 {% endif %}
 
