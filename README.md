@@ -61,6 +61,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 - [Generic](#Generic)
   - [concat](#concat-source)
   - [left_from_char](#left_from_char-source)
+  - [mandatory](#mandatory-source)
   - [optional](#optional-source)
   - [optional_table](#optional_table-source)
 - [Process mining tables](#Process-mining-tables)
@@ -419,8 +420,27 @@ This macro extracts the string left from the character.
 Usage: 
 `{{ pm_utils.left_from_char('[expression]', '[character]') }}`
 
+#### mandatory ([source](macros/generic/mandatory.sql))
+Use this macro for the mandatory columns in your source tables. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `time`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
+
+You can also set `id` as data type, which expects the values to be integers.
+
+Usage:
+`{{ pm_utils.mandatory(source('source_name', 'table_name'), '"Column_A"', 'data_type') }}`
+
+To keep the SQL in the model more readable, you can define a Jinja variable for the reference to the source table:
+
+`{% set source_table = source('source_name', 'table_name') %}`
+
+Variables:
+- date_format
+- time_format
+- datetime_format
+
+These variables are only required when the `data_type` is used with the values `date`, `time`, or `datetime`.
+
 #### optional ([source](macros/generic/optional.sql))
-This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `time`, `datetime`, and `text`. When no data type is set, the optional column is considered to be text.
+This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `time`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
 
 You can also set `id` as data type, which creates the column with unique integer values if the column is not present. If the column is present in that case, the values are expected to be integers.
 
