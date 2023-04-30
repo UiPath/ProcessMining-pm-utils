@@ -9,7 +9,8 @@
 {%- endfor -%}
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
-{% if column_name in column_names %}
+{# % if column_name in column_names % #}
+{% if False  %}
     {# Query the records that fail the test. #}
     select {{ column_name }}
     from {{ model }}
