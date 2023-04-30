@@ -3,7 +3,7 @@
 {%- set columns = adapter.get_columns_in_relation(source_table) -%}
 
 {# Create list of column names.#}
-
+{%- set column_names = [] -%}
 {%- for column in columns -%}
     {%- set column_names = column_names.append('`' + column.name|lower + '`') -%}
 {%- endfor -%}
