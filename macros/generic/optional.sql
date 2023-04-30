@@ -9,11 +9,7 @@
 {%- endfor -%}
 
 {# When the column is in the list, use the column, otherwise create the column with null values.#}
-{%- if optional_column in column_names -%}
-    {% set column_value = optional_column -%}
-{%- else -%}    
-    {% set column_value = 'null' -%}
-{%- endif -%}
+{% set column_value = optional_column -%}
 
 {%- if data_type == 'boolean' -%}
     {{ pm_utils.to_boolean(column_value) }}
