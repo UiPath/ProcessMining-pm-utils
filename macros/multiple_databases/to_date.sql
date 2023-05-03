@@ -1,4 +1,4 @@
-{%- macro to_date(field, table) -%}
+{%- macro to_date(field, relation) -%}
 
 {# Cast to date when the input is in a date or a datetime format. This is default behavior for SQL Server. #}
 {%- if target.type == 'snowflake' -%}
@@ -12,11 +12,11 @@
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
-{% if table is defined %}
+{% if relation is defined %}
     {% set query %}
     select
         count(*) as "record_count"
-    from "{{ table.database }}"."{{ table.schema }}"."{{ table.identifier }}"
+    from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
     where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             case
@@ -38,7 +38,7 @@
 
     {% if record_count > 0 %}
         {% if var("log_result", False) == True %}
-            {{ log(tojson({'Key': 'ConvertDate', 'Details': {'table_identifier': table.identifier, 'field': field, 'record_count': record_count|string}, 'Category': 'UserWarning', 'Message': 'Failed to convert \'' ~ table.identifier ~ '.' ~ field ~ '\' to a date for ' ~ record_count ~ ' records. Their values are set to NULL.'}), True) }}
+            {{ log(tojson({'Key': 'ConvertDate', 'Details': {'relation_identifier': relation.identifier, 'field': field, 'record_count': record_count|string}, 'Category': 'UserWarning', 'Message': 'Failed to convert \'' ~ relation.identifier ~ '.' ~ field ~ '\' to a date for ' ~ record_count ~ ' records. Their values are set to NULL.'}), True) }}
         {% endif %}
     {% endif %}
 {% endif %}
