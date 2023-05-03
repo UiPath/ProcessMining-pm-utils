@@ -1,6 +1,6 @@
-{%- macro optional(source_table, optional_column, data_type) -%}
+{%- macro optional(relation, optional_column, data_type) -%}
 
-{%- set columns = adapter.get_columns_in_relation(source_table) -%}
+{%- set columns = adapter.get_columns_in_relation(relation) -%}
 
 {# Create list of column names.#}
 {%- set column_names = [] -%}
@@ -16,22 +16,22 @@
 {%- endif -%}
 
 {%- if data_type == 'boolean' -%}
-    {{ pm_utils.to_boolean(column_value, source_table) }}
+    {{ pm_utils.to_boolean(column_value, relation) }}
 {%- elif data_type == 'date' -%}
-    {{ pm_utils.to_date(column_value, source_table) }}
+    {{ pm_utils.to_date(column_value, relation) }}
 {%- elif data_type == 'double' -%}
-    {{ pm_utils.to_double(column_value, source_table) }}
+    {{ pm_utils.to_double(column_value, relation) }}
 {%- elif data_type == 'integer' -%}
-    {{ pm_utils.to_integer(column_value, source_table) }}
+    {{ pm_utils.to_integer(column_value, relation) }}
 {%- elif data_type == 'time' -%}
-    {{ pm_utils.to_time(column_value, source_table) }}
+    {{ pm_utils.to_time(column_value, relation) }}
 {%- elif data_type == 'datetime' -%}
-    {{ pm_utils.to_timestamp(column_value, source_table) }}
+    {{ pm_utils.to_timestamp(column_value, relation) }}
 {%- elif data_type == 'text' -%}
     {{ pm_utils.to_varchar(column_value) }}
 {%- elif data_type == 'id' -%}
     {% if optional_column in column_names %}
-        {{ pm_utils.to_integer(column_value, source_table) }}
+        {{ pm_utils.to_integer(column_value, relation) }}
     {% else %}
         row_number() over (order by (select null))
     {% endif%}
