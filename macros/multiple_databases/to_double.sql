@@ -7,7 +7,7 @@
         when len({{ field }}) > 0
             then try_convert(float, {{ field }})
         else
-            NULL
+            try_convert(float, NULL)
     end
 {%- endif -%}
 
