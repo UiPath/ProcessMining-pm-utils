@@ -10,7 +10,12 @@
     {%- if field in ('true', 'false', '1', '0') -%}
         try_convert(bit, '{{ field }}')
     {%- else -%}
-        try_convert(bit, {{ field }})
+        case
+            when len({{ field }}) > 0
+                then try_convert(bit, {{ field }})
+            else
+                try_convert(bit, NULL)
+        end
     {%- endif -%}
 {%- endif -%}
 
