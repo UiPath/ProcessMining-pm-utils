@@ -3,7 +3,12 @@
 {%- if target.type == 'snowflake' -%}
     try_to_number(to_varchar({{ field }}))
 {%- elif target.type == 'sqlserver' -%}
-    try_convert(bigint, {{ field }})
+    case
+        when len({{ field }}) > 0
+            then try_convert(bigint, {{ field }})
+        else
+             try_convert(bigint, NULL)
+    end
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
