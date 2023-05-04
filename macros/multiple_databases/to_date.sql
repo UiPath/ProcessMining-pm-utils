@@ -8,7 +8,12 @@
         else try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}')
     end
 {%- elif target.type == 'sqlserver' -%}
-    try_convert(date, {{ field }}, {{ var("date_format", 23) }})
+    case
+        when len({{ field }}) > 0
+            then try_convert(date, {{ field }}, {{ var("date_format", 23) }})
+        else
+            try_convert(date, NULL)
+    end
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
