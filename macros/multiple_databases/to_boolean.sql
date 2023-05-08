@@ -14,7 +14,7 @@
             when len({{ field }}) > 0
                 then try_convert(bit, {{ field }})
             else
-                try_convert(bit, NULL)
+                try_convert(bit, null)
         end
     {%- endif -%}
 {%- endif -%}

@@ -5,14 +5,14 @@
         when len({{ field }}) > 0
             then to_date({{ field }})
         else
-            to_date(NULL)
+            to_date(null)
     end
 {%- elif target.type == 'sqlserver' -%}
     case
         when len({{ field }}) > 0
             then try_convert(date, {{ field }})
         else
-            try_convert(date, NULL)
+            try_convert(date, null)
     end
 {%- endif -%}
 

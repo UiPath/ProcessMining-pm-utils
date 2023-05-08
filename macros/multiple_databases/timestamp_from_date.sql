@@ -5,7 +5,7 @@
         when len({{ date_field }}) > 0
             then timestamp_from_parts({{ date_field }}, '0')
         else
-            timestamp_from_parts(NULL, NULL)
+            timestamp_from_parts(null, null)
     end
 {%- elif target.type == 'sqlserver' -%}
     case
@@ -22,13 +22,13 @@
                 )
         else
             datetime2fromparts(
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
                 3
             )
     end

@@ -7,7 +7,7 @@
         when len({{ field }}) > 0
             then try_convert(time, {{ field }}, {{ var("time_format", 14) }})
         else
-            try_convert(time, NULL)
+            try_convert(time, null)
     end
 {%- endif -%}
 

@@ -12,7 +12,7 @@
         when len({{ field }}) > 0
             then try_convert(date, {{ field }}, {{ var("date_format", 23) }})
         else
-            try_convert(date, NULL)
+            try_convert(date, null)
     end
 {%- endif -%}
 
