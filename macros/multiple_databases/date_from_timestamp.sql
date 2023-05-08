@@ -3,9 +3,9 @@
 {%- if target.type == 'snowflake' -%}
     case
         when len({{ field }}) > 0
-            then to_date({{ field }})
+            then try_to_date({{ field }})
         else
-            to_date(null)
+            try_to_date(null)
     end
 {%- elif target.type == 'sqlserver' -%}
     case
