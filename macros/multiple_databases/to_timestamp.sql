@@ -7,7 +7,7 @@
         when len({{ field }}) > 0
             then try_convert(datetime2, {{ field }}, {{ var("datetime_format", 21) }})
         else
-            try_convert(datetime2, NULL)
+            try_convert(datetime2, null)
     end
 {%- endif -%}
 

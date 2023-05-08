@@ -7,7 +7,7 @@
         when len({{ field }}) > 0
             then try_convert(bigint, {{ field }})
         else
-             try_convert(bigint, NULL)
+             try_convert(bigint, null)
     end
 {%- endif -%}
 
