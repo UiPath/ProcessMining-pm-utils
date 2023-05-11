@@ -75,9 +75,7 @@
         {% endif %}
     {% endif %}
 {% else %}
-    select top 1
-        0 as "diff_count"
-    from {{ model }}
+    select 0 as "diff_count"
 {% endif %}
 
 {% endmacro %}

@@ -57,7 +57,6 @@
     {% endif %}
 {% else %}
     select 'dummy_value' as "dummy"
-    from {{ model }}
     where 1 = 0
 {% endif %}
 
