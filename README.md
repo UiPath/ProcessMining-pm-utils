@@ -219,12 +219,14 @@ models:
 ```
 
 #### test_exists ([source](macros/generic_tests/test_exists.sql))
-This generic test evaluates whether a column is available in the model.
+This generic test evaluates whether a model is available or if a column is available in the model. When used to check the existence of a column, the check is only executed when the model exists to prevent the same error occurring multiple times. You should add this test on the model level whenever the existence of the model is uncertain (e.g. source tests).
 
 Usage:
 ```
 models:
   - name: Model_A
+    tests:
+      - pm_utils.exists
     columns:
       - name: '"Column_A"'
         tests:
