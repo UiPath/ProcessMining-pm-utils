@@ -5,7 +5,7 @@
         when len({{ field }}) > 0
             then try_to_date({{ field }})
         else
-            try_to_date(null)
+            to_date(null)
     end
 {%- elif target.type == 'sqlserver' -%}
     case
