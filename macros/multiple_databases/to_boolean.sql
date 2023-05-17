@@ -1,5 +1,6 @@
 {%- macro to_boolean(field, relation) -%}
 
+{# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
     {%- if field in ('true', 'false', '1', '0') -%}
         try_to_boolean('{{ field }}')

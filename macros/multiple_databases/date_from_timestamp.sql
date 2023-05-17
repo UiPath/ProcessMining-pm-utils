@@ -1,9 +1,10 @@
 {%- macro date_from_timestamp(field) -%}
 
+{# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
     case
         when len({{ field }}) > 0
-            then try_to_date({{ field }})
+            then try_to_date(to_varchar({{ field }}))
         else
             to_date(null)
     end
