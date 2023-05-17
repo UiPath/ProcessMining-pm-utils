@@ -1,5 +1,6 @@
 {%- macro to_time(field, relation) -%}
 
+{# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
     try_to_time(to_varchar({{ field }}), '{{ var("time_format", "hh24:mi:ss.ff3") }}')
 {%- elif target.type == 'sqlserver' -%}

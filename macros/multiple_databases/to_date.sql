@@ -1,6 +1,7 @@
 {%- macro to_date(field, relation) -%}
 
-{# Cast to date when the input is in a date or a datetime format. This is default behavior for SQL Server. #}
+{# Cast to date when the input is in a date or a datetime format. This is default behavior for SQL Server.
+Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
     case
         when try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}') is null
