@@ -30,7 +30,12 @@
                 else try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}')
             end is null
         {% elif target.type == 'sqlserver' -%}
-            try_convert(date, {{ field }}, {{ var("date_format", 23) }}) is null
+            case
+                when len({{ field }}) > 0
+                    then try_convert(date, {{ field }}, {{ var("date_format", 23) }})
+                else
+                    try_convert(date, null)
+            end is null
         {%- endif -%}
     {% endset %}
 

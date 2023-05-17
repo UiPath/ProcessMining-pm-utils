@@ -21,7 +21,12 @@
         {% if target.type == 'snowflake' -%}
             try_to_double(to_varchar({{ field }})) is null
         {% elif target.type == 'sqlserver' -%}
-            try_convert(float, {{ field }}) is null
+            case
+                when len({{ field }}) > 0
+                    then try_convert(float, {{ field }})
+                else
+                    try_convert(float, null)
+            end is null
         {%- endif -%}
     {% endset %}
 

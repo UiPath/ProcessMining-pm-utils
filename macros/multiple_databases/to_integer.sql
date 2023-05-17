@@ -21,7 +21,12 @@
         {% if target.type == 'snowflake' -%}
             try_to_number(to_varchar({{ field }})) is null
         {% elif target.type == 'sqlserver' -%}
-            try_convert(bigint, {{ field }}) is null
+            case
+                when len({{ field }}) > 0
+                    then try_convert(bigint, {{ field }})
+                else
+                    try_convert(bigint, null)
+            end is null
         {%- endif -%}
     {% endset %}
 

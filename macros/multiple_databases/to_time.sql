@@ -21,7 +21,12 @@
         {% if target.type == 'snowflake' -%}
             try_to_time(to_varchar({{ field }}), '{{ var("time_format", "hh24:mi:ss.ff3") }}') is null
         {% elif target.type == 'sqlserver' -%}
-            try_convert(time, {{ field }}, {{ var("time_format", 14) }}) is null
+            case
+                when len({{ field }}) > 0
+                    then try_convert(time, {{ field }}, {{ var("time_format", 14) }})
+                else
+                    try_convert(time, null)
+            end is null
         {%- endif -%}
     {% endset %}
 

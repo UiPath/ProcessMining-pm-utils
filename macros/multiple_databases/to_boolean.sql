@@ -36,7 +36,12 @@
             {%- if field in ('true', 'false', '1', '0') -%}
                 try_convert(bit, '{{ field }}') is null
             {%- else -%}
-                try_convert(bit, {{ field }}) is null
+                case
+                    when len({{ field }}) > 0
+                        then try_convert(bit, {{ field }})
+                    else
+                        try_convert(bit, null)
+                end is null
             {%- endif -%}
         {%- endif -%}
     {% endset %}
