@@ -1,6 +1,12 @@
 {%- macro optional(relation, optional_column, data_type) -%}
 
-{%- set columns = adapter.get_columns_in_relation(relation) -%}
+{# When the relation is not defined (optional tables), set the columns and relation to empty #}
+{%- if load_relation(relation) is none -%}
+    {%- set columns = [] -%}
+    {%- set relation = null -%}
+{%- else -%}
+    {%- set columns = adapter.get_columns_in_relation(relation) -%}
+{%- endif -%}
 
 {# Create list of column names.#}
 {%- set column_names = [] -%}
