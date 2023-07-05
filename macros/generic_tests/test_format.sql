@@ -1,14 +1,14 @@
 {% macro test_format(model, column_name, data_type) %}
 
 {# Test fails if the difference in number of null values before and after data type casting is different. #}
-{{ config(fail_calc = 'coalesce("diff_count", 0)') }}
+{{ config(fail_calc = 'coalesce(diff_count, 0)') }}
 
 {# Get columns in the relation to check if the field exists. #}
 {%- set columns = adapter.get_columns_in_relation(model) -%}
 
 {%- set column_names = [] -%}
 {%- for column in columns -%}
-    {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- set column_names = column_names.append( column.name ) -%}
 {%- endfor -%}
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
@@ -16,7 +16,7 @@
     {# Query to get the difference in number of null values. #}
     {% set query %}
         select
-            abs(count_before_casting - count_after_casting) as "diff_count"
+            abs(count_before_casting - count_after_casting) as diff_count
         from (
             select
                 count(*) as count_before_casting 
@@ -75,7 +75,7 @@
         {% endif %}
     {% endif %}
 {% else %}
-    select 0 as "diff_count"
+    select 0 as diff_count
 {% endif %}
 
 {% endmacro %}

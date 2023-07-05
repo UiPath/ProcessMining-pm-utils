@@ -3,6 +3,8 @@
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
     try_to_double(to_varchar({{ field }}))
+{%- elif target.type == 'databricks' -%}
+    cast({{ field }} as DOUBLE)
 {%- elif target.type == 'sqlserver' -%}
     case
         when len({{ field }}) > 0
@@ -21,6 +23,8 @@
     where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             try_to_double(to_varchar({{ field }})) is null
+        {%- elif target.type == 'databricks' -%}
+           cast({{ field }} as DOUBLE) is null
         {% elif target.type == 'sqlserver' -%}
             case
                 when len({{ field }}) > 0

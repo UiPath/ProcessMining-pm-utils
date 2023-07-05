@@ -2,6 +2,8 @@
 
 {%- if target.type == 'snowflake' -%}
     to_varchar({{ field }})
+{%- elif target.type == 'databricks' -%}
+    cast({{ field }} as STRING)
 {%- elif target.type == 'sqlserver' -%}
     case
         when charindex(' ', {{ field }}) > 0

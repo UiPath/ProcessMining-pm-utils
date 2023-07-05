@@ -5,7 +5,7 @@
 
 {%- set column_names = [] -%}
 {%- for column in columns -%}
-    {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- set column_names = column_names.append( column.name ) -%}
 {%- endfor -%}
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
@@ -17,7 +17,7 @@
 
     {# Query to get the record count when executing the test. #}
     {% set query %}
-        select count(*) as "test_record_count"
+        select count(*) as test_record_count
         from {{ model }}
         where len({{ column_name }}) <> {{ length }}
     {% endset %}
@@ -32,7 +32,7 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count > 0 %}
-        {% if var("log_result", False) == True %}
+        {% if var(log_result, False) == True %}
             {% if config.get('severity') == 'warn' %}
                 {% set log_category = 'UserWarning' %}
             {% elif config.get('severity') == 'error' %}
@@ -44,7 +44,7 @@
         {% endif %}
     {% endif %}
 {% else %}
-    select 'dummy_value' as "dummy"
+    select 'dummy_value' as dummy
     where 1 = 0
 {% endif %}
 

@@ -9,27 +9,27 @@
 {% if column_name is defined and not table_exists %}
 
     {# Dummy query to make sure the test always returns a result #}
-    select 'dummy_value' as "dummy"
+    select 'dummy_value' as dummy
 
 {% else %}
 
     {# Query the table info in INFORMATION_SCHEMA to check if it exists. If the test is defined on column level, also check if column exists #}
     select *
-    from "INFORMATION_SCHEMA"."COLUMNS"
-    where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
-        and "INFORMATION_SCHEMA"."COLUMNS"."TABLE_NAME" = '{{ model.name }}'
+    from INFORMATION_SCHEMA.COLUMNS
+    where INFORMATION_SCHEMA.COLUMNS.TABLE_SCHEMA = '{{ model.schema }}'
+        and INFORMATION_SCHEMA.COLUMNS.TABLE_NAME = '{{ model.name }}'
         {%- if column_name is defined -%}
-        and "INFORMATION_SCHEMA"."COLUMNS"."COLUMN_NAME" = replace('{{ column_name }}', '"', '')
+        and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME = '{{ column_name }}'
         {%- endif -%}
 
     {# Query to get the record count when executing the test. #}
     {% set query %}
-        select count(*) as "test_record_count"
-        from "INFORMATION_SCHEMA"."COLUMNS"
-        where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
-            and "INFORMATION_SCHEMA"."COLUMNS"."TABLE_NAME" = '{{ model.name }}'
+        select count(*) as test_record_count
+        from INFORMATION_SCHEMA.COLUMNS
+        where INFORMATION_SCHEMA.COLUMNS.TABLE_SCHEMA = '{{ model.schema }}'
+            and INFORMATION_SCHEMA.COLUMNS.TABLE_NAME = '{{ model.name }}'
             {%- if column_name is defined -%}
-            and "INFORMATION_SCHEMA"."COLUMNS"."COLUMN_NAME" = replace('{{ column_name }}', '"', '')
+            and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME = '{{ column_name }}'
             {% endif %}
     {% endset %}
 
@@ -43,7 +43,7 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count == 0 %}
-        {% if var("log_result", False) == True %}
+        {% if var(log_result, False) == True %}
             {% if config.get('severity') == 'warn' %}
                 {% set log_category = 'UserWarning' %}
             {% elif config.get('severity') == 'error' %}

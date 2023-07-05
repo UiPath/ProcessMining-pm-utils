@@ -20,7 +20,7 @@
 {% if ns.execute_test %}
     {% set column_list = [] %}
     {% for column in columns %}
-        {% set column_list = column_list.append('case when "' + column + '" is not NULL then 1 else 0 end') %}
+        {% set column_list = column_list.append('case when ' + column + ' is not NULL then 1 else 0 end') %}
     {% endfor %}
     {% set calculation = column_list | join('\n    + ') %}
 
@@ -31,7 +31,7 @@
 
     {# Query to get the record count when executing the test. #}
     {% set query %}
-        select count(*) as "test_record_count"
+        select count(*) as test_record_count
         from {{ model }}
         where {{ calculation }} <> 1
     {% endset %}
@@ -72,7 +72,7 @@
         {% endif %}
     {% endif %}
 {% else %}
-    select 'dummy_value' as "dummy"
+    select 'dummy_value' as dummy
     where 1 = 0
 {% endif %}
 

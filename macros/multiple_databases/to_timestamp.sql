@@ -3,6 +3,8 @@
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
     try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}')
+{%- elif target.type == 'databricks' -%}
+    to_timestamp({{ field }})
 {%- elif target.type == 'sqlserver' -%}
     case
         when len({{ field }}) > 0
@@ -21,6 +23,8 @@
     where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}') is null
+        {%- elif target.type == 'databricks' -%}
+            to_timestamp({{ field }}) is null
         {% elif target.type == 'sqlserver' -%}
             case
                 when len({{ field }}) > 0

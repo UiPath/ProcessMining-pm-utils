@@ -5,7 +5,7 @@
 
 {%- set column_names = [] -%}
 {%- for column in columns -%}
-    {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- set column_names = column_names.append(column.name) -%}
 {%- endfor -%}
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
@@ -56,7 +56,7 @@
         {% endif %}
     {% endif %}
 {% else %}
-    select 'dummy_value' as "dummy"
+    select 'dummy_value' as dummy
     where 1 = 0
 {% endif %}
 

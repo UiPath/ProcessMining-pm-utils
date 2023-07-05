@@ -8,6 +8,8 @@ Snowflake try_to function requires an expression of type varchar. #}
             then {{ pm_utils.date_from_timestamp(field) }}
         else try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}')
     end
+{%- elif target.type == 'databricks' -%}
+    to_date({{ field }})
 {%- elif target.type == 'sqlserver' -%}
     case
         when len({{ field }}) > 0
@@ -21,8 +23,8 @@ Snowflake try_to function requires an expression of type varchar. #}
 {% if relation is defined %}
     {% set query %}
     select
-        count(*) as "record_count"
-    from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
+        count(*) as record_count
+    from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
     where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             case
@@ -30,6 +32,8 @@ Snowflake try_to function requires an expression of type varchar. #}
                     then {{ pm_utils.date_from_timestamp(field) }}
                 else try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}')
             end is null
+        {%- elif target.type == 'databricks' -%}
+            to_date({{ field }}) is null
         {% elif target.type == 'sqlserver' -%}
             case
                 when len({{ field }}) > 0

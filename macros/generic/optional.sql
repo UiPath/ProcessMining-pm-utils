@@ -11,7 +11,7 @@
 {# Create list of column names.#}
 {%- set column_names = [] -%}
 {%- for column in columns -%}
-    {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- set column_names = column_names.append(column.name) -%}
 {%- endfor -%}
 
 {# When the column is in the list, use the column, otherwise create the column with null values.#}

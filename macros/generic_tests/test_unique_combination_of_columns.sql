@@ -20,7 +20,7 @@
 {% if ns.execute_test %}
     {% set column_list = [] %}
     {% for column in combination_of_columns %}
-        {% set column_list = column_list.append('"' + column + '"') %}
+        {% set column_list = column_list.append( + column + ) %}
     {% endfor %}
 
     {% set columns_csv = column_list | join(', ') %}
@@ -33,12 +33,12 @@
 
     {# Query to get the record count when executing the test. #}
     {% set query %}
-        select count(*) as "test_record_count"
+        select count(*) as test_record_count
         from (
             select {{ columns_csv }}
             from {{ model }}
             group by {{ columns_csv }}
-            having count(*) > 1) as "table_grouped"
+            having count(*) > 1) as table_grouped
     {% endset %}
 
     {% set result = run_query(query) %}
@@ -56,11 +56,11 @@
             {% set log_text_list = [] %}
             {% for column in combination_of_columns %}
                 {% if loop.index < (combination_of_columns|length - 1) %}
-                    {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "', " %}
+                    {% set log_entry = "'" ~ model.name ~ '.' ~ column  ~ "', " %}
                 {% elif loop.index == combination_of_columns|length - 1 %}
-                    {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "' and " %}
+                    {% set log_entry = "'" ~ model.name ~ '.' ~ column ~ "' and " %}
                 {% else %}
-                    {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "'" %}
+                    {% set log_entry = "'" ~ model.name ~ '.' ~ column ~ "'" %}
                 {% endif %}
                 {% set log_text_list = log_text_list.append(log_entry) %}
             {% endfor %}
@@ -77,7 +77,7 @@
         {% endif %}
     {% endif %}
 {% else %}
-    select 'dummy_value' as "dummy"
+    select 'dummy_value' as dummy
     where 1 = 0
 {% endif %}
 

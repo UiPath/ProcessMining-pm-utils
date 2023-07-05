@@ -7,6 +7,19 @@
         else
             timestamp_from_parts(null, null)
     end
+{%- elif target.type == 'databricks' -%}
+    case
+        when len({{ date_field }}) > 0
+            then make_timestamp(
+                    date_part('YEAR', {{ date_field }}),
+                    date_part('MONTH', {{ date_field }}),
+                    date_part('DAY', {{ date_field }}),
+                    0,
+                    0,
+                    0
+                )
+        else make_timestamp(null, null, null, null, null, null)
+    end
 {%- elif target.type == 'sqlserver' -%}
     case
         when len({{ date_field }}) > 0
