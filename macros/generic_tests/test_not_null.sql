@@ -15,6 +15,10 @@
         select {{ column_name }}
         from {{ model }}
         where ({{ column_name }}) is null or len({{ column_name }}) = 0
+    {%- elif target.type == 'databricks' -%}
+        select {{ column_name }}
+        from {{ model }}
+        where ({{ column_name }}) is null or len({{ column_name }}) = 0
     {%- elif target.type == 'sqlserver' -%}
         select {{ column_name }}
         from {{ model }}
@@ -24,11 +28,15 @@
     {# Query to get the record count when executing the test. #}
     {% set query %}
         {%- if target.type == 'snowflake' -%}
-            select count(*) as "test_record_count"
+            select count(*) as test_record_count
+            from {{ model }}
+            where {{ column_name }} is null or len({{ column_name }}) = 0
+        {%- elif target.type == 'databricks' -%}
+            select count(*) as test_record_count
             from {{ model }}
             where {{ column_name }} is null or len({{ column_name }}) = 0
         {%- elif target.type == 'sqlserver' -%}
-            select count(*) as "test_record_count"
+            select count(*) as test_record_count
             from {{ model }}
             where {{ column_name }} is null or datalength({{ column_name }}) = 0
         {%- endif -%}

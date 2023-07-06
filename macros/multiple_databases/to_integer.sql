@@ -18,8 +18,8 @@
 {% if relation is defined %}
     {% set query %}
     select
-        count(*) as "record_count"
-    from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
+        count(*) as record_count
+    from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
     where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             try_to_number(to_varchar({{ field }})) is null

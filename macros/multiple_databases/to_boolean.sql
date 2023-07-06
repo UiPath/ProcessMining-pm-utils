@@ -8,7 +8,7 @@
         try_to_boolean(to_varchar({{ field }}))
     {%- endif -%}
 {%- elif target.type == 'databricks' -%}
-    try_cast({{ field }}, BOOLEAN)
+    try_cast({{ field }} as BOOLEAN)
 {%- elif target.type == 'sqlserver' -%}
     {%- if field in ('true', 'false', '1', '0') -%}
         try_convert(bit, '{{ field }}')
@@ -26,8 +26,8 @@
 {% if relation is defined %}
     {% set query %}
     select
-        count(*) as "record_count"
-    from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
+        count(*) as record_count
+    from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
     where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             {%- if field in ('true', 'false', '1', '0') -%}
@@ -36,7 +36,7 @@
                 try_to_boolean(to_varchar({{ field }})) is null
             {%- endif -%}
         {%- elif target.type == 'databricks' -%}
-            try_cast({{ field }}, BOOLEAN) is null
+            try_cast({{ field }} as BOOLEAN) is null
         {% elif target.type == 'sqlserver' -%}
             {%- if field in ('true', 'false', '1', '0') -%}
                 try_convert(bit, '{{ field }}') is null
