@@ -43,7 +43,7 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count == 0 %}
-        {% if var(log_result, False) == True %}
+        {% if var(log_result, True) == True %}
             {% if config.get('severity') == 'warn' %}
                 {% set log_category = 'UserWarning' %}
             {% elif config.get('severity') == 'error' %}
