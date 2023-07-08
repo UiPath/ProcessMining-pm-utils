@@ -24,14 +24,16 @@
 
     {# Query to get the record count when executing the test. #}
     {% set query %}
-            select count(*) as test_record_count
+        select count(*) as test_record_count
         from INFORMATION_SCHEMA.COLUMNS
             where INFORMATION_SCHEMA.COLUMNS.TABLE_SCHEMA = '{{ model.schema }}'
                 and INFORMATION_SCHEMA.COLUMNS.TABLE_NAME = '{{ model.name }}'
                 {%- if column_name is defined -%}
-            and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME = '{{ column_name }}'
+                and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME = replace('{{ column_name }}', '"', '')
                 {% endif %}
     {% endset %}
+
+    {{ log(tojson({'query': query})) }}
 
     {% set result = run_query(query) %}
 
