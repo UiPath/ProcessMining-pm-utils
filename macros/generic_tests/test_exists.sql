@@ -43,10 +43,10 @@
         {%- elif target.type == 'sqlserver' -%}
             select count(*) as test_record_count
             from {{ model }}
-            where INFORMATION_SCHEMA.COLUMNS.TABLE_SCHEMA = '{{ model.schema }}'
-                and INFORMATION_SCHEMA.COLUMNS.TABLE_NAME = '{{ model.name }}'
+            where "INFORMATION_SCHEMA"."COLUMNS"."TABLE_SCHEMA" = '{{ model.schema }}'
+                and "INFORMATION_SCHEMA"."COLUMNS"."TABLE_NAME" = '{{ model.name }}'
                 {%- if column_name is defined -%}
-                and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME =  replace('{{ column_name }}', '"', '')
+                and "INFORMATION_SCHEMA"."COLUMNS"."COLUMN_NAME" =  replace('{{ column_name }}', '"', '')
                 {% endif %}
         {%- endif -%}
 
