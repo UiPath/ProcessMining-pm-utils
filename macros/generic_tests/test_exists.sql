@@ -38,7 +38,7 @@
     {% set result = run_query(query) %}
 
     {% if execute %}
-        {% set test_record_count = result.columns['test_record_count'].values()[0] %}
+        {% set test_record_count = result.columns[0].values()[0] %}
     {% else %}
         {% set test_record_count = 1 %}
     {% endif %}
