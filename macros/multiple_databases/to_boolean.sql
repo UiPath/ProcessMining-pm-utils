@@ -5,7 +5,7 @@
     {%- if field in ('true', 'false', '1', '0') -%}
         try_to_boolean('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}')
     {%- else -%}
-        try_to_boolean(to_varchar({{ field }}))
+        try_to_boolean(to_varchar('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}'))
     {%- endif -%}
 {%- elif target.type == 'databricks' -%}
     try_cast({{ field }} as BOOLEAN)
