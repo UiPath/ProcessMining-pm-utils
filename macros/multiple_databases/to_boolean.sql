@@ -3,7 +3,7 @@
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
     {%- if field in ('true', 'false', '1', '0') -%}
-        try_to_boolean('{{ field }}')
+        try_to_boolean('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}')
     {%- else -%}
         try_to_boolean(to_varchar({{ field }}))
     {%- endif -%}
@@ -31,7 +31,7 @@
     where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             {%- if field in ('true', 'false', '1', '0') -%}
-                try_to_boolean('{{ field }}') is null
+                try_to_boolean('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}') is null
             {%- else -%}
                 try_to_boolean(to_varchar({{ field }})) is null
             {%- endif -%}

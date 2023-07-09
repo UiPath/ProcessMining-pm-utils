@@ -2,7 +2,7 @@
 
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
-    try_to_double(to_varchar({{ field }}))
+    try_to_double('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}')
 {%- elif target.type == 'databricks' -%}
     cast({{ field }} as DOUBLE)
 {%- elif target.type == 'sqlserver' -%}
