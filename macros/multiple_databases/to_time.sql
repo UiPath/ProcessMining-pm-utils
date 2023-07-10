@@ -15,7 +15,7 @@
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
-{% if relation is defined %}
+{% if False and relation is defined %}
     {% set query %}
     select
         count(*) as record_count

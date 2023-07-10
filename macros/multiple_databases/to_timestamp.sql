@@ -15,15 +15,15 @@
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
-{% if relation is defined %}
+{% if False and relation is defined %}
     {% set query %}
     select
         count(*) as record_count
-        {%- if target.type == 'snowflake' -%}
+        {% if target.type == 'snowflake' %}
             from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
-        {%- else  -%}
+        {% else  %}
             from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
-        {%- endif -%}
+        {% endif %}
         where {{ field }} is not null and
 
         {% if target.type == 'snowflake' -%}
@@ -42,13 +42,13 @@
     
     {% set result_query = run_query(query) %}
     {% if execute %}
-        {% set record_count = result_query.columns['record_count'].values()[0] %}
+        {% set record_count = result_query.columns[0].values()[0] %}
     {% else %}
         {% set record_count = 0 %}
     {% endif %}
 
     {% if record_count > 0 %}
-        {% if var("log_result", False) == True %}
+        {% if var("log_result", True) == True %}
             {{ log(tojson({'Key': 'ConvertDatetime', 'Details': {'relation_identifier': relation.identifier, 'field': field, 'record_count': record_count|string}, 'Category': 'UserWarning', 'Message': 'Failed to convert \'' ~ relation.identifier ~ '.' ~ field ~ '\' to a datetime for ' ~ record_count ~ ' records. Their values are set to NULL.'}), True) }}
         {% endif %}
     {% endif %}

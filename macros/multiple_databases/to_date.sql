@@ -20,15 +20,15 @@ Snowflake try_to function requires an expression of type varchar. #}
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
-{% if relation is defined %}
+{% if False and relation is defined %}
     {% set query %}
     select
         count(*) as record_count
-        {%- if target.type == 'snowflake' -%}
+        {% if target.type == 'snowflake' %}
             from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
-        {%- else -%}
+        {% else %}
             from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
-        {%- endif -%}
+        {% endif %}
         where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             case

@@ -17,7 +17,7 @@
 {# When the column is in the list, use the column, otherwise create the column with null values.#}
 {%- if optional_column in column_names -%}
     {% set column_value = optional_column -%}
-{%- else -%}    
+{%- else -%}
     {% set column_value = 'null' -%}
 {%- endif -%}
 
