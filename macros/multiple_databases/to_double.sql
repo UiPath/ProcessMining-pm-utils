@@ -19,8 +19,12 @@
     {% set query %}
     select
         count(*) as record_count
-    from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
-    where {{ field }} is not null and
+        {%- if target.type == 'snowflake' -%}
+            from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
+        {%- else -%}
+            from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
+        {%- endif -%}
+            where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             try_to_double(to_varchar({{ field }})) is null
         {%- elif target.type == 'databricks' -%}

@@ -24,8 +24,12 @@ Snowflake try_to function requires an expression of type varchar. #}
     {% set query %}
     select
         count(*) as record_count
-    from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
-    where {{ field }} is not null and
+        {%- if target.type == 'snowflake' -%}
+            from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
+        {%- else -%}
+            from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
+        {%- endif -%}
+        where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             case
                 when try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}') is null
