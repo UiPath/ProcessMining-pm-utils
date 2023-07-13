@@ -1,5 +1,5 @@
 {%- macro enquote( field ) -%}
-{%- if target.type == 'snowflake' -%}
+{%- if target.type == 'XXXsnowflake' -%}
     {{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}
 {%- else -%}
     {{ field }}
