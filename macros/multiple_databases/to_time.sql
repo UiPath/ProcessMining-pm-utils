@@ -2,7 +2,7 @@
 
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
-    try_to_time(to_varchar('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}'), '{{ var("time_format", "hh24:mi:ss.ff3") }}')
+    try_to_time(to_varchar({{ field }}), '{{ var("time_format", "hh24:mi:ss.ff3") }}')
 {%- elif target.type == 'databricks' -%}
     {{ field }}
 {%- elif target.type == 'sqlserver' -%}
@@ -15,14 +15,14 @@
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
-{% if False and relation is defined %}
+{% if relation is defined %}
     {% set query %}
     select
         count(*) as record_count
-        {%- if target.type == 'snowflake' -%}
+        {%- if target.type == 'databricks' -%}
+            from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
+        {%- else -%}
             from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
-        {%- else  -%}
-            from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
         {%- endif -%}
         where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
@@ -41,7 +41,7 @@
 
     {% set result_query = run_query(query) %}
     {% if execute %}
-        {% set record_count = result_query.columns['record_count'].values()[0] %}
+        {% set record_count = result_query.columns[0].values()[0] %}
     {% else %}
         {% set record_count = 0 %}
     {% endif %}
