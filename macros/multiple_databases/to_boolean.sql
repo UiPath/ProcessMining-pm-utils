@@ -3,9 +3,9 @@
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
     {%- if field in ('true', 'false', '1', '0') -%}
-        try_to_boolean('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}')
+        try_to_boolean('{{ field }}')
     {%- else -%}
-        try_to_boolean(to_varchar('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}'))
+        try_to_boolean(to_varchar({{ field }}))
     {%- endif -%}
 {%- elif target.type == 'databricks' -%}
     try_cast({{ field }} as BOOLEAN)
@@ -23,19 +23,19 @@
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
-{% if False and relation is defined %}
+{% if relation is defined %}
     {% set query %}
     select
         count(*) as record_count
-        {% if target.type == 'snowflake' %}
-            from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
+        {% if target.type == 'databricks' %}
+            from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
         {% else %}
-            from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
+            from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
         {% endif %}
         where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             {%- if field in ('true', 'false', '1', '0') -%}
-                try_to_boolean('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}') is null
+                try_to_boolean('{{ field }}') is null
             {%- else -%}
                 try_to_boolean(to_varchar({{ field }})) is null
             {%- endif -%}

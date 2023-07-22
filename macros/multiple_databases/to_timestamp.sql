@@ -2,7 +2,7 @@
 
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
-    try_to_timestamp(to_varchar('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}'), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}')
+    try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}')
 {%- elif target.type == 'databricks' -%}
     to_timestamp({{ field }})
 {%- elif target.type == 'sqlserver' -%}
@@ -15,17 +15,16 @@
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
-{% if False and relation is defined %}
+{% if relation is defined %}
     {% set query %}
     select
         count(*) as record_count
-        {% if target.type == 'snowflake' %}
+        {%- if target.type == 'databricks' -%}
+            from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
+        {%- else -%}
             from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
-        {% else  %}
-            from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
-        {% endif %}
+        {%- endif -%}
         where {{ field }} is not null and
-
         {% if target.type == 'snowflake' -%}
             try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}') is null
         {%- elif target.type == 'databricks' -%}
@@ -48,7 +47,7 @@
     {% endif %}
 
     {% if record_count > 0 %}
-        {% if var("log_result", True) == True %}
+        {% if var("log_result", False) == True %}
             {{ log(tojson({'Key': 'ConvertDatetime', 'Details': {'relation_identifier': relation.identifier, 'field': field, 'record_count': record_count|string}, 'Category': 'UserWarning', 'Message': 'Failed to convert \'' ~ relation.identifier ~ '.' ~ field ~ '\' to a datetime for ' ~ record_count ~ ' records. Their values are set to NULL.'}), True) }}
         {% endif %}
     {% endif %}

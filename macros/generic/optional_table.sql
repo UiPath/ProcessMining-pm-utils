@@ -11,17 +11,22 @@
 {%- else -%}
     {% set query %}
         {% if target.type == 'snowflake' %}
-            create or replace table {{ target.database }}.{{ target.schema }}.{{ source_table.name }} (dummy int)
+            create or replace table "{{ target.database }}"."{{ target.schema }}"."{{ source_table.name }}" (dummy int)
         {% elif target.type == 'databricks' %}
-            create or replace table {{ target.database }}.{{ target.schema }}.{{ source_table.name }} (dummy int)
+            create or replace table `{{ target.database }}`.`{{ target.schema }}`.`{{ source_table.name }}` (dummy int)
         {% elif target.type == 'sqlserver' %}
-            if object_id('{{ target.database }}.{{ target.schema }}.{{ source_table.name }}', 'U') is null
-            create table {{ target.database }}.{{ target.schema }}.{{ source_table.name }} (dummy int)
+            if object_id('"{{ target.database }}"."{{ target.schema }}"."{{ source_table.name }}"', 'U') is null
+            create table "{{ target.database }}"."{{ target.schema }}"."{{ source_table.name }}" (dummy int)
         {% endif %}
     {% endset %}
 
     {% do run_query(query) %}
-    {{ target.database }}.{{ target.schema }}.{{ source_table.name }}
+    {% if target.type == 'databricks' %}
+        `{{ target.database }}`.`{{ target.schema }}`.`{{ source_table.name }}
+    {% else %}
+        "{{ target.database }}"."{{ target.schema }}"."{{ source_table.name }}"
+    {% endif %}
+
 {%- endif -%}
 
 {%- endmacro -%}

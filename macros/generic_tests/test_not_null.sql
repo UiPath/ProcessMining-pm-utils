@@ -5,6 +5,11 @@
 
 {%- set column_names = [] -%}
 {%- for column in columns -%}
+    {%- if target.type == 'databricks' -%}
+        {%- set column_names = column_names.append('`' + column.name + '`') -%}
+    {%- else -%}
+        {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- endif -%}
     {%- set column_names = column_names.append(column.name) -%}
 {%- endfor -%}
 
@@ -45,7 +50,7 @@
     {% set result = run_query(query) %}
 
     {% if execute %}
-        {% set test_record_count = result.columns['test_record_count'].values()[0] %}
+        {% set test_record_count = result.columns[0].values()[0] %}
     {% else %}
         {% set test_record_count = 0 %}
     {% endif %}

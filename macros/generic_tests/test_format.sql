@@ -8,7 +8,11 @@
 
 {%- set column_names = [] -%}
 {%- for column in columns -%}
-    {%- set column_names = column_names.append( column.name ) -%}
+    {%- if target.type == 'databricks' -%}
+        {%- set column_names = column_names.append('`' + column.name + '`') -%}
+    {%- else -%}
+        {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- endif -%}
 {%- endfor -%}
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
@@ -39,7 +43,7 @@
     {% set result = run_query(query) %}
 
     {% if execute %}
-        {% set test_diff_count = result.columns['diff_count'].values()[0] %}
+        {% set test_diff_count = result.columns[0].values()[0] %}
     {% else %}
         {% set test_diff_count = 0 %}
     {% endif %}

@@ -20,7 +20,11 @@
 {% if ns.execute_test %}
     {% set column_list = [] %}
     {% for column in columns %}
-        {% set column_list = column_list.append('case when ' + column + ' is not NULL then 1 else 0 end') %}
+        {%- if target.type == 'databricks' -%}
+            {% set column_list = column_list.append('case when `' + column + '` is not NULL then 1 else 0 end') %}
+        {%- else -%}
+            {% set column_list = column_list.append('case when "' + column + '" is not NULL then 1 else 0 end') %}
+        {%- endif -%}
     {% endfor %}
     {% set calculation = column_list | join('\n    + ') %}
 
@@ -39,7 +43,7 @@
     {% set result = run_query(query) %}
 
     {% if execute %}
-        {% set test_record_count = result.columns['test_record_count'].values()[0] %}
+        {% set test_record_count = result.columns[0].values()[0] %}
     {% else %}
         {% set test_record_count = 0 %}
     {% endif %}

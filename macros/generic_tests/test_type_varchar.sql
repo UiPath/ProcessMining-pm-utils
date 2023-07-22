@@ -4,7 +4,7 @@ select *
 from INFORMATION_SCHEMA.COLUMNS
 where INFORMATION_SCHEMA.COLUMNS.TABLE_SCHEMA = '{{ model.schema }}'
     and INFORMATION_SCHEMA.COLUMNS.TABLE_NAME = '{{ model.name }}'
-    and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME = '{{ column_name }}'
+    and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME = replace(replace('{{ column_name }}', '"', ''), '`', '')
 {% if target.type == 'snowflake' %}
     and INFORMATION_SCHEMA.COLUMNS.DATA_TYPE <> 'TEXT'
 {# Check also whether the length is not max, indicated by the value -1. #}

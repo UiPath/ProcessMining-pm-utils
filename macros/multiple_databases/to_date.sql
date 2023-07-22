@@ -20,14 +20,14 @@ Snowflake try_to function requires an expression of type varchar. #}
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
-{% if False and relation is defined %}
+{% if relation is defined %}
     {% set query %}
     select
         count(*) as record_count
-        {% if target.type == 'snowflake' %}
-            from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
+        {% if target.type == 'databricks' %}
+            from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
         {% else %}
-            from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
+            from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
         {% endif %}
         where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
@@ -50,7 +50,7 @@ Snowflake try_to function requires an expression of type varchar. #}
 
     {% set result_query = run_query(query) %}
     {% if execute %}
-        {% set record_count = result_query.columns['record_count'].values()[0] %}
+        {% set record_count = result_query.columns[0].values()[0] %}
     {% else %}
         {% set record_count = 0 %}
     {% endif %}

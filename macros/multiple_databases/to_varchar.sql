@@ -1,7 +1,7 @@
 {%- macro to_varchar(field) -%}
 
 {%- if target.type == 'snowflake' -%}
-    to_varchar('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}')
+    to_varchar({{ field }})
 {%- elif target.type == 'databricks' -%}
     cast({{ field }} as STRING)
 {%- elif target.type == 'sqlserver' -%}

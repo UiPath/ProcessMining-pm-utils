@@ -2,7 +2,7 @@
 
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'snowflake' -%}
-    try_to_double('{{ "\"" ~ field.split(".")|join("\".\"") ~ "\""}}')
+    try_to_double(to_varchar({{ field }}))
 {%- elif target.type == 'databricks' -%}
     cast({{ field }} as DOUBLE)
 {%- elif target.type == 'sqlserver' -%}
@@ -15,14 +15,14 @@
 {%- endif -%}
 
 {# Warning if type casting will introduce null values for at least 1 record. #}
-{% if False and relation is defined %}
+{% if relation is defined %}
     {% set query %}
     select
         count(*) as record_count
-        {%- if target.type == 'snowflake' -%}
-            from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
+        {%- if target.type == 'databricks' -%}
+            from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
         {%- else -%}
-            from {{ relation.database }}.{{ relation.schema }}.{{ relation.identifier }}
+            from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
         {%- endif -%}
             where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}

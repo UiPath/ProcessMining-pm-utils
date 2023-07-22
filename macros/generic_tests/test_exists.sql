@@ -19,7 +19,7 @@
     where INFORMATION_SCHEMA.COLUMNS.TABLE_SCHEMA = '{{ model.schema }}'
         and INFORMATION_SCHEMA.COLUMNS.TABLE_NAME = '{{ model.name }}'
         {%- if column_name is defined -%}
-        and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME =  replace('{{ column_name }}', '"', '')
+        and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME = replace(replace('{{ column_name }}', '"', ''), '`', '')
         {%- endif -%}
 
     {# Query to get the record count when executing the test. #}
@@ -29,11 +29,9 @@
             where INFORMATION_SCHEMA.COLUMNS.TABLE_SCHEMA = '{{ model.schema }}'
                 and INFORMATION_SCHEMA.COLUMNS.TABLE_NAME = '{{ model.name }}'
                 {%- if column_name is defined -%}
-                and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME = replace('{{ column_name }}', '"', '')
+                and INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME =  replace(replace('{{ column_name }}', '"', ''), '`', '')
                 {% endif %}
     {% endset %}
-
-    {{ log(tojson({'query': query})) }}
 
     {% set result = run_query(query) %}
 
@@ -45,7 +43,7 @@
 
     {# User-friendly log message when the test fails. #}
     {% if test_record_count == 0 %}
-        {% if var(log_result, True) == True %}
+        {% if var("log_result", False) == True %}
             {% if config.get('severity') == 'warn' %}
                 {% set log_category = 'UserWarning' %}
             {% elif config.get('severity') == 'error' %}
