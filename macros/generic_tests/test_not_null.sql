@@ -10,7 +10,6 @@
     {%- else -%}
         {%- set column_names = column_names.append('"' + column.name + '"') -%}
     {%- endif -%}
-    {%- set column_names = column_names.append(column.name) -%}
 {%- endfor -%}
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
