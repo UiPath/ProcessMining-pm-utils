@@ -1,4 +1,4 @@
-{% macro test_edge_count(model, event_log, case_ID) %}
+{%- macro test_edge_count(model, event_log, case_ID) -%}
 
 {{ config(fail_calc = 'coalesce(diff_count, 0)') }}
 
@@ -14,4 +14,4 @@ cross join (select count(*) as count_events from {{ model.schema }}.{{ event_log
     cross join (select count(*) as count_cases from (select "{{ case_ID }}" from "{{ model.schema }}"."{{ event_log }}" group by "{{ case_ID }}") as grouped_event_log) as model_cases
 {%- endif -%}
 
-{% endmacro %}
+{%- endmacro -%}
