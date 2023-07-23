@@ -22,7 +22,7 @@
 
     {% do run_query(query) %}
     {% if target.type == 'databricks' %}
-        `{{ target.database }}`.`{{ target.schema }}`.`{{ source_table.name }}
+        `{{ target.database }}`.`{{ target.schema }}`.`{{ source_table.name }}`
     {% else %}
         "{{ target.database }}"."{{ target.schema }}"."{{ source_table.name }}"
     {% endif %}
