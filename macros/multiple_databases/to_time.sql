@@ -19,11 +19,11 @@
     {% set query %}
     select
         count(*) as record_count
-        {%- if target.type == 'databricks' -%}
+        {% if target.type == 'databricks' %}
             from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
-        {%- else -%}
+        {% else %}
             from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
-        {%- endif -%}
+        {% endif %}
         where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             try_to_time(to_varchar({{ field }}), '{{ var("time_format", "hh24:mi:ss.ff3") }}') is null

@@ -31,19 +31,19 @@
     
     {# Query to get the record count when executing the test. #}
     {% set query %}
-        {%- if target.type == 'snowflake' -%}
+        {% if target.type == 'snowflake' %}
             select count(*) as test_record_count
             from {{ model }}
             where {{ column_name }} is null or len({{ column_name }}) = 0
-        {%- elif target.type == 'databricks' -%}
+        {% elif target.type == 'databricks' %}
             select count(*) as test_record_count
             from {{ model }}
             where {{ column_name }} is null or len({{ column_name }}) = 0
-        {%- elif target.type == 'sqlserver' -%}
+        {% elif target.type == 'sqlserver' %}
             select count(*) as test_record_count
             from {{ model }}
             where {{ column_name }} is null or datalength({{ column_name }}) = 0
-        {%- endif -%}
+        {% endif %}
     {% endset %}
 
     {% set result = run_query(query) %}

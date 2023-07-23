@@ -19,15 +19,15 @@
     {% set query %}
     select
         count(*) as record_count
-        {%- if target.type == 'databricks' -%}
+        {% if target.type == 'databricks' %}
             from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
-        {%- else -%}
+        {% else %}
             from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
-        {%- endif -%}
+        {% endif %}
         where {{ field }} is not null and
         {% if target.type == 'snowflake' -%}
             try_to_number(to_varchar({{ field }})) is null
-        {%- elif target.type == 'databricks' -%}
+        {% elif target.type == 'databricks' %}
             cast({{ field }} as INTEGER) is null
         {% elif target.type == 'sqlserver' -%}
             case
@@ -36,7 +36,7 @@
                 else
                     try_convert(bigint, null)
             end is null
-        {%- endif -%}
+        {% endif %}
     {% endset %}
 
     {% set result_query = run_query(query) %}
