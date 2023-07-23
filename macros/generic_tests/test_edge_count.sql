@@ -8,10 +8,10 @@ select
 from (select count(*) as count_edges from {{ model }}) as model_edges
 cross join (select count(*) as count_events from {{ model.schema }}.{{ event_log }}) as model_events
 {# Compute number of cases by grouping the event log on case ID. #}
-    {%- if target.type == 'databricks' -%}
-        cross join (select count(*) as count_cases from (select {{ `case_ID` }} from {{ model.schema }}.{{ event_log }} group by {{ `case_ID` }}) as grouped_event_log) as model_cases
-    {%- else -%}
-        cross join (select count(*) as count_cases from (select "{{ case_ID }}" from "{{ model.schema }}"."{{ event_log }}" group by "{{ case_ID }}") as grouped_event_log) as model_cases
-    {%- endif -%}
+{%- if target.type == 'databricks' -%}
+    cross join (select count(*) as count_cases from (select {{ `case_ID` }} from {{ model.schema }}.{{ event_log }} group by {{ `case_ID` }}) as grouped_event_log) as model_cases
+{%- else -%}
+    cross join (select count(*) as count_cases from (select "{{ case_ID }}" from "{{ model.schema }}"."{{ event_log }}" group by "{{ case_ID }}") as grouped_event_log) as model_cases
+{%- endif -%}
 
 {% endmacro %}
