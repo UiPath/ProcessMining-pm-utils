@@ -4,9 +4,9 @@
    This function can only be used as an aggregate. #}
 {%- if target.type == 'snowflake' -%}
     {%- if delimiter is defined -%}
-        listagg({{ string_field }}, '{{ delimiter }}')
+        nullif(listagg({{ string_field }}, '{{ delimiter }}'), '')
     {%- else -%}
-        listagg({{ string_field }}, ', ')
+        nullif(listagg({{ string_field }}, ', '), '')
     {%- endif -%}
 {%- elif target.type == 'sqlserver' -%}
     {%- if delimiter is defined -%}
