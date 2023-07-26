@@ -10,9 +10,9 @@
     {%- endif -%}
 {%- elif target.type == 'sqlserver' -%}
     {%- if delimiter is defined -%}
-        string_agg(convert(nvarchar(2000), {{ string_field}}), '{{ delimiter }}')
+        nullif(string_agg(convert(nvarchar(2000), {{ string_field}}), '{{ delimiter }}'), '')
     {%- else -%}
-        string_agg(convert(nvarchar(2000), {{ string_field}}), ', ')
+        nullif(string_agg(convert(nvarchar(2000), {{ string_field}}), ', '), '')
     {%- endif -%}
 {%- endif -%}
 
