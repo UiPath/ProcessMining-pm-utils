@@ -42,7 +42,6 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [to_timestamp](#to_timestamp-source)
   - [to_varchar](#to_varchar-source)
 - [Generic tests](#Generic-tests)
-  - [test_edge_count](#test_edge_count-source)
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
   - [test_field_length](#test_field_length-source)
@@ -64,9 +63,6 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [mandatory](#mandatory-source)
   - [optional](#optional-source)
   - [optional_table](#optional_table-source)
-- [Process mining tables](#Process-mining-tables)
-  - [generate_edge_table](#generate_edge_table-source)
-  - [generate_variant](#generate_variant-source)
 
 ### Multiple databases
 
@@ -192,19 +188,6 @@ Usage:
 `{{ pm_utils.to_varchar('[expression]') }}`
 
 ### Generic tests
-
-#### test_edge_count ([source](macros/generic_tests/test_edge_count.sql))
-This generic test evaluates whether the number of edges is as expected based on the event log. The expected number of edges is equal to the number of events plus the number of cases, since also edges from the source node and to the sink node are taken into account.
-
-Usage:
-```
-models:
-  - name: Edge_table_A
-    tests:
-      - pm_utils.edge_count:
-          event_log: 'Event_log_model'
-          case_ID: 'Case_ID'
-```
 
 #### test_equal_rowcount ([source](macros/generic_tests/test_equal_rowcount.sql))
 This generic test evaluates whether two models have the same number of rows.
@@ -469,44 +452,3 @@ Usage:
 `{{ pm_utils.optional_table(source('source_name', 'table_name')) }}`
 
 Note: you can only apply the macro for source tables in combination with the `optional()` macro applied to all its fields.
-
-### Process mining tables
-
-#### generate_edge_table ([source](macros/process_mining_tables/generate_edge_table.sql))
-The edge table contains all transitions in the process graph. Each transition is indicated by the `From_activity` and the `To_activtiy` and for which case this transition took place. The edge table includes transitions from the source node and to the sink node.
-
-The required input is an event log model with fields describing the case ID, activity, and event order. With the argument `table_name` you indicate how to name the generated table. The generated table contains at least the following columns: `Edge_ID`, one according to the given case ID, `From_activity` and `To_activity`. It also generates a column `Unique_edge`, which contains the value 1 once per occurrence of an edge per case.
-
-Optional input is a list of properties. This generates columns like `Unique_edge`, which contains the value 1 once per occurrence of an edge per the given property. The name of this column is `Unique_edge` concatenated with the property.
-
-Usage:
-```
-{{ pm_utils.generate_edge_table(
-    table_name = 'Edge_table',
-    event_log_model = 'Event_log',
-    case_ID = 'Case_ID', 
-    activity = 'Activity', 
-    event_order = 'Event_order',
-    properties = ['Property1', 'Property2'])
-}}
-```
-
-This generates the table `Edge_table` with columns `Edge_ID`, `Case_ID`, `From_activity`, `To_activity`, `Unique_edge`, `Unique_edge_Property1` and `Unique_edge_Property2`.
-
-#### generate_variant ([source](macros/process_mining_tables/generate_variant.sql))
-A variant is a particular order of activities that a case executes. The most occurring variant is named "Variant 1", the next most occurring one "Variant 2", etc. This macro generates a cases table with for each case the variant. 
-
-The required input is an event log model with fields describing the case ID, activity, and event order. With the argument `table_name` you indicate how to name the generated table. The generated table contains two columns: one according to the given case ID and `Variant`.
-
-Usage:
-```
-{{ pm_utils.generate_variant(
-    table_name = 'Cases_table_with_variant',
-    event_log_model = 'Event_log',
-    case_ID = 'Case_ID',
-    activity = 'Activity',
-    event_order = 'Event_order')
-}}
-```
-
-This generates the table `Cases_table_with_variant` with columns `Case_ID` and `Variant`.
