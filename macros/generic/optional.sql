@@ -22,7 +22,11 @@
 {# Create list of column names.#}
 {%- set column_names = [] -%}
 {%- for column in columns -%}
-    {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- if target.type == 'databricks' -%}
+        {%- set column_names = column_names.append('`' + column.name + '`') -%}
+    {%- elif target.type in ('sqlserver', 'snowflake') -%}
+        {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {% endif %}
 {%- endfor -%}
 
 {# When the column is in the list, use the column, otherwise create the column with null values.#}
