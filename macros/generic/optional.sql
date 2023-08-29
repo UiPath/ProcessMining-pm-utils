@@ -8,6 +8,14 @@
     {%- set columns = adapter.get_columns_in_relation(relation) -%}
 {%- endif -%}
 
+{# Check if relation is a source. Dbt doesn't differentiate between source and model relations. 
+Check whether relation argument starts with the characters 'source('. #}
+{%- if relation.startswith('source(') -%}
+    {%- set is_source_relation = True -%}
+{%- else -%}
+    {%- set is_source_relation = False -%}
+{%- endif -%}
+
 {# Create list of column names.#}
 {%- set column_names = [] -%}
 {%- for column in columns -%}
@@ -17,32 +25,38 @@
 {# When the column is in the list, use the column, otherwise create the column with null values.#}
 {%- if optional_column in column_names -%}
     {% set column_value = optional_column -%}
-{%- else -%}    
+{%- else -%}
     {% set column_value = 'null' -%}
 {%- endif -%}
 
-{%- if data_type == 'boolean' -%}
-    {{ pm_utils.to_boolean(column_value, relation) }}
-{%- elif data_type == 'date' -%}
-    {{ pm_utils.to_date(column_value, relation) }}
-{%- elif data_type == 'double' -%}
-    {{ pm_utils.to_double(column_value, relation) }}
-{%- elif data_type == 'integer' -%}
-    {{ pm_utils.to_integer(column_value, relation) }}
-{%- elif data_type == 'time' -%}
-    {{ pm_utils.to_time(column_value, relation) }}
-{%- elif data_type == 'datetime' -%}
-    {{ pm_utils.to_timestamp(column_value, relation) }}
-{%- elif data_type == 'text' -%}
-    {{ pm_utils.to_varchar(column_value) }}
-{%- elif data_type == 'id' -%}
-    {% if optional_column in column_names %}
+{# Apply casting when relation is a source or when the field doesn't exist in the relation and is being created. #}
+{% if is_source_relation or column_value == 'null'%}
+    {%- if data_type == 'boolean' -%}
+        {{ pm_utils.to_boolean(column_value, relation) }}
+    {%- elif data_type == 'date' -%}
+        {{ pm_utils.to_date(column_value, relation) }}
+    {%- elif data_type == 'double' -%}
+        {{ pm_utils.to_double(column_value, relation) }}
+    {%- elif data_type == 'integer' -%}
         {{ pm_utils.to_integer(column_value, relation) }}
-    {% else %}
-        row_number() over (order by (select null))
-    {% endif%}
+    {%- elif data_type == 'time' -%}
+        {{ pm_utils.to_time(column_value, relation) }}
+    {%- elif data_type == 'datetime' -%}
+        {{ pm_utils.to_timestamp(column_value, relation) }}
+    {%- elif data_type == 'text' -%}
+        {{ pm_utils.to_varchar(column_value) }}
+    {%- elif data_type == 'id' -%}
+        {% if optional_column in column_names %}
+            {{ pm_utils.to_integer(column_value, relation) }}
+        {% else %}
+            row_number() over (order by (select null))
+        {% endif %}
+    {%- else -%}
+        {{ pm_utils.to_varchar(column_value) }}
+    {%- endif -%}
+{# Don't apply casting when relation is not a source. Casting should already have been done in a previous transformation step. #}
 {%- else -%}
-    {{ pm_utils.to_varchar(column_value) }}
+    {{ column_value }}
 {%- endif -%}
 
 {%- endmacro -%}
