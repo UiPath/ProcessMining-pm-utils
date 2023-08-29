@@ -8,13 +8,16 @@
     {%- set columns = adapter.get_columns_in_relation(relation) -%}
 {%- endif -%}
 
-{# Check if relation is a source. Dbt doesn't differentiate between source and model relations. 
-Check whether relation argument starts with the characters 'source('. #}
-{%- if relation.startswith('source(') -%}
-    {%- set is_source_relation = True -%}
-{%- else -%}
-    {%- set is_source_relation = False -%}
-{%- endif -%}
+{# Check if relation is a source based on whether the relation's schema and identifier is defined as source. #}
+{%- set ns = namespace(is_source_relation = false) -%}
+
+{% if execute %}
+    {% for node in graph.sources.values() -%}
+        {% if node.schema == relation.schema and node.identifier == relation.identifier %}
+            {% set ns.is_source_relation = true %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
 {# Create list of column names.#}
 {%- set column_names = [] -%}
@@ -30,7 +33,7 @@ Check whether relation argument starts with the characters 'source('. #}
 {%- endif -%}
 
 {# Apply casting when relation is a source or when the field doesn't exist in the relation and is being created. #}
-{% if is_source_relation or column_value == 'null'%}
+{% if ns.is_source_relation or column_value == 'null'%}
     {%- if data_type == 'boolean' -%}
         {{ pm_utils.to_boolean(column_value, relation) }}
     {%- elif data_type == 'date' -%}
