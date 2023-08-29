@@ -432,7 +432,7 @@ You can also set `id` as data type, which creates the column with unique integer
 Usage:
 `{{ pm_utils.optional(source('source_name', 'table_name'), '"Column_A"', 'data_type') }}`
 
-Alternatively, you can use this macro for non-source data. Use instead of the source function, the ref function: `ref(table_name)`.
+Alternatively, you can use this macro for non-source data. Use instead of the source function the ref function: `ref(table_name)`. In that case, data type casting is not applied.
 
 To keep the SQL in the model more readable, you can define a Jinja variable for the reference to the source table:
 
