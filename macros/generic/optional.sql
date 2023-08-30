@@ -33,7 +33,7 @@
 {%- endif -%}
 
 {# Apply casting when relation is a source or when the field doesn't exist in the relation and is being created. #}
-{% if ns.is_source_relation or column_value == 'null'%}
+{% if ns.is_source_relation or column_value == 'null' %}
     {%- if data_type == 'boolean' -%}
         {{ pm_utils.to_boolean(column_value, relation) }}
     {%- elif data_type == 'date' -%}
