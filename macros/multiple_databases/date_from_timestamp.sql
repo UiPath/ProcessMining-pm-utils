@@ -15,6 +15,13 @@
         else
             try_convert(date, null)
     end
+{%- elif target.type == 'databricks' -%}
+    case
+        when length({{ field }}) > 0
+            then to_date({{ field }})
+        else
+            to_date(null)
+    end
 {%- endif -%}
 
 {%- endmacro -%}
