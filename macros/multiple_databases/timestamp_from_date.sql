@@ -32,6 +32,8 @@
                 3
             )
     end
+{%- elif target.type == 'databricks' -%}
+    try_to_timestamp({{ date_field }})
 {%- endif -%}
 
 {%- endmacro -%}
