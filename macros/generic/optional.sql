@@ -8,10 +8,11 @@
     {%- set columns = adapter.get_columns_in_relation(relation) -%}
 {%- endif -%}
 
-{# Check if relation is a source based on whether the relation's schema and identifier is defined as source. #}
+{# Check if relation is a source based on whether the relation's schema and identifier is defined as source. 
+Only check when relation exists to prevent dbt compile errors. #}
 {%- set ns = namespace(is_source_relation = false) -%}
 
-{% if execute %}
+{% if execute and relation != null %}
     {% for node in graph.sources.values() -%}
         {% if node.schema == relation.schema and node.identifier == relation.identifier %}
             {% set ns.is_source_relation = true %}
@@ -32,7 +33,7 @@
     {% set column_value = 'null' -%}
 {%- endif -%}
 
-{# Apply casting when relation is a source or when the field doesn't exist in the relation and is being created. #}
+{# Apply casting when relation is a source or when the field doesn't exist and is being created. #}
 {% if ns.is_source_relation or column_value == 'null' %}
     {%- if data_type == 'boolean' -%}
         {{ pm_utils.to_boolean(column_value, relation) }}
