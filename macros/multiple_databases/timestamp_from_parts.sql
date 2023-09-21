@@ -32,6 +32,13 @@
                 3
             )
     end
+{%- elif target.type == 'databricks' -%}
+    case
+        when length({{ date_field }}) > 0 and length({{time_field}}) > 0
+            then timestamp_millis(bigint(bigint(unix_date({{ date_field }})) * 86400000) + unix_millis({{ time_field }}))
+        else
+            to_timestamp(null)
+    end
 {%- endif -%}
 
 {%- endmacro -%}
