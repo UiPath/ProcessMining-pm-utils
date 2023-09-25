@@ -14,6 +14,12 @@
     {%- else -%}
         nullif(string_agg(convert(nvarchar(2000), {{ string_field}}), ', '), '')
     {%- endif -%}
+{%- elif target.type == 'databricks' -%}
+    {%- if delimiter is defined -%}
+        concat_ws('{{ delimiter }}', collect_list(cast({{ string_field }} as string)))
+    {%- else -%}
+        concat_ws(', ', collect_list(cast({{ string_field }} as string)))
+    {%- endif -%}
 {%- endif -%}
 
 {%- endmacro -%}
