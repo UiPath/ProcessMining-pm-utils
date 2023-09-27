@@ -15,6 +15,8 @@
         else
             try_convert(date, null)
     end
+{%- elif target.type == 'databricks' -%}
+    to_date({{ field }})
 {%- endif -%}
 
 {%- endmacro -%}
