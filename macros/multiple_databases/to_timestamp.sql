@@ -1,7 +1,12 @@
 {%- macro to_timestamp(field, relation) -%}
 
 {%- if target.type == 'databricks' -%}
-    try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss[.SSS]") }}')
+    case
+        when try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss[.SSS]") }}') is not null
+            then try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss[.SSS]") }}')
+        else
+            try_to_timestamp({{ field }}, '{{ var("time_format", "HH:mm:ss[.SSS]") }}')
+    end
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- elif target.type == 'snowflake' -%}
     try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}')
@@ -28,7 +33,12 @@
     {% endif %}
     where {{ field }} is not null and
         {% if target.type == 'databricks' -%}
-        try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss[.SSS]") }}') is null
+            case
+                when try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss[.SSS]") }}') is not null
+                    then try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss[.SSS]") }}')
+                else
+                    try_to_timestamp({{ field }}, '{{ var("time_format", "HH:mm:ss[.SSS]") }}')
+            end is null
         {% elif target.type == 'snowflake' -%}
             try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}') is null
         {% elif target.type == 'sqlserver' -%}
