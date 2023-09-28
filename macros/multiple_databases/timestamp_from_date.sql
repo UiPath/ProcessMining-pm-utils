@@ -32,6 +32,8 @@
                 3
             )
     end
+{%- elif target.type == 'databricks' -%}
+    date_trunc('DD', {{ date_field }})
 {%- endif -%}
 
 {%- endmacro -%}
