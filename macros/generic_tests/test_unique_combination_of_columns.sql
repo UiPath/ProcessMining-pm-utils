@@ -68,12 +68,22 @@
             {# Generate variable part of log text. #}
             {% set log_text_list = [] %}
             {% for column in combination_of_columns %}
-                {% if loop.index < (combination_of_columns|length - 1) %}
-                    {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "', " %}
-                {% elif loop.index == combination_of_columns|length - 1 %}
-                    {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "' and " %}
+                {% if target.type == 'databricks' %}
+                    {% if loop.index < (combination_of_columns|length - 1) %}
+                        {% set log_entry = "'" ~ model.name ~ '.' ~ '`' ~ column ~ '`' ~ "', " %}
+                    {% elif loop.index == combination_of_columns|length - 1 %}
+                        {% set log_entry = "'" ~ model.name ~ '.' ~ '`' ~ column ~ '`' ~ "' and " %}
+                    {% else %}
+                        {% set log_entry = "'" ~ model.name ~ '.' ~ '`' ~ column ~ '`' ~ "'" %}
+                    {% endif %}
                 {% else %}
-                    {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "'" %}
+                    {% if loop.index < (combination_of_columns|length - 1) %}
+                        {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "', " %}
+                    {% elif loop.index == combination_of_columns|length - 1 %}
+                        {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "' and " %}
+                    {% else %}
+                        {% set log_entry = "'" ~ model.name ~ '.' ~ '"' ~ column ~ '"' ~ "'" %}
+                    {% endif %}
                 {% endif %}
                 {% set log_text_list = log_text_list.append(log_entry) %}
             {% endfor %}
