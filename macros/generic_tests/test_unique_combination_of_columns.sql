@@ -20,7 +20,11 @@
 {% if ns.execute_test %}
     {% set column_list = [] %}
     {% for column in combination_of_columns %}
-        {% set column_list = column_list.append('"' + column + '"') %}
+        {%- if target.type == 'databricks' -%}
+            {% set column_list = column_list.append('`' + column + '`') %}
+        {%- else -%}
+            {% set column_list = column_list.append('"' + column + '"') %}
+        {%- endif -%}
     {% endfor %}
 
     {% set columns_csv = column_list | join(', ') %}
@@ -33,12 +37,21 @@
 
     {# Query to get the record count when executing the test. #}
     {% set query %}
-        select count(*) as "test_record_count"
-        from (
-            select {{ columns_csv }}
-            from {{ model }}
-            group by {{ columns_csv }}
-            having count(*) > 1) as "table_grouped"
+        {%- if target.type == 'databricks' -%}
+            select count(*) as `test_record_count`
+            from (
+                select {{ columns_csv }}
+                from {{ model }}
+                group by {{ columns_csv }}
+                having count(*) > 1) as `table_grouped`
+        {%- else -%}
+            select count(*) as "test_record_count"
+            from (
+                select {{ columns_csv }}
+                from {{ model }}
+                group by {{ columns_csv }}
+                having count(*) > 1) as "table_grouped"
+        {%- endif -%}
     {% endset %}
 
     {% set result = run_query(query) %}
@@ -77,7 +90,11 @@
         {% endif %}
     {% endif %}
 {% else %}
-    select 'dummy_value' as "dummy"
+    {%- if target.type == 'databricks' -%}
+        select 'dummy_value' as `dummy`
+    {%- else -%}
+        select 'dummy_value' as "dummy"
+    {%- endif -%}
     where 1 = 0
 {% endif %}
 
