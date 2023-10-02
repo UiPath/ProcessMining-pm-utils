@@ -5,7 +5,11 @@
 
 {%- set column_names = [] -%}
 {%- for column in columns -%}
-    {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- if target.type == 'databricks' -%}
+        {%- set column_names = column_names.append('`' + column.name + '`') -%}
+    {%- else -%}
+        {%- set column_names = column_names.append('"' + column.name + '"') -%}
+    {%- endif -%}
 {%- endfor -%}
 
 {# Only execute test when field exists. Otherwise execute a dummy test that always succeeds. #}
@@ -19,6 +23,10 @@
         select {{ column_name }}
         from {{ model }}
         where {{ column_name }} is null or datalength({{ column_name }}) = 0
+    {%- elif target.type == 'databricks' -%}
+        select {{ column_name }}
+        from {{ model }}
+        where {{ column_name }} is null or length({{ column_name }}) = 0
     {%- endif -%}
     
     {# Query to get the record count when executing the test. #}
@@ -31,6 +39,10 @@
             select count(*) as "test_record_count"
             from {{ model }}
             where {{ column_name }} is null or datalength({{ column_name }}) = 0
+        {%- elif target.type == 'databricks' -%}
+            select count(*) as `test_record_count`
+            from {{ model }}
+            where {{ column_name }} is null or length({{ column_name }}) = 0
         {%- endif -%}
     {% endset %}
 
@@ -56,7 +68,11 @@
         {% endif %}
     {% endif %}
 {% else %}
-    select 'dummy_value' as "dummy"
+    {%- if target.type == 'databricks' -%}
+        select 'dummy_value' as `dummy`
+    {%- else -%}
+        select 'dummy_value' as "dummy"
+    {%- endif -%}
     where 1 = 0
 {% endif %}
 
