@@ -28,7 +28,7 @@
     {% endif %}
     where {{ field }} is not null and
         {% if target.type == 'databricks' -%}
-        try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss[.SSS]") }}') is null
+            try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss[.SSS]") }}') is null
         {% elif target.type == 'snowflake' -%}
             try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}') is null
         {% elif target.type == 'sqlserver' -%}
