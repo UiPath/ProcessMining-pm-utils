@@ -60,12 +60,22 @@
             {# Generate variable part of log text. #}
             {% set log_text_list = [] %}
             {% for column in columns %}
-                {% if loop.index < (columns|length - 1) %}
-                    {% set log_entry = "'" ~ column ~ "', " %}
-                {% elif loop.index == columns|length - 1 %}
-                    {% set log_entry = "'" ~ column ~ "' and " %}
+                {% if target.type == 'databricks' %}
+                    {% if loop.index < (columns|length - 1) %}
+                        {% set log_entry = "`" ~ column ~ "`, " %}
+                    {% elif loop.index == columns|length - 1 %}
+                        {% set log_entry = "`" ~ column ~ "` and " %}
+                    {% else %}
+                        {% set log_entry = "`" ~ column ~ "`" %}
+                    {% endif %}
                 {% else %}
-                    {% set log_entry = "'" ~ column ~ "'" %}
+                    {% if loop.index < (columns|length - 1) %}
+                        {% set log_entry = "'" ~ column ~ "', " %}
+                    {% elif loop.index == columns|length - 1 %}
+                        {% set log_entry = "'" ~ column ~ "' and " %}
+                    {% else %}
+                        {% set log_entry = "'" ~ column ~ "'" %}
+                    {% endif %}
                 {% endif %}
                 {% set log_text_list = log_text_list.append(log_entry) %}
             {% endfor %}
