@@ -97,7 +97,7 @@ Usage:
 `{{ pm_utils.date_from_timestamp('[expression]') }}`
 
 #### datediff ([source](macros/multiple_databases/datediff.sql))
-This macro computes the difference between two date, time, or datetime expressions based on the specified `datepart` and returns an integer value. The datepart can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond.
+This macro computes the difference between two date, time, or datetime expressions based on the specified `datepart` and returns an integer value. The datepart can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. The difference in weeks is calculated for weeks starting on Monday.
 
 Usage: 
 `{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
