@@ -5,14 +5,12 @@ For a successful test, return 0 records according to the dbt standard. #}
 {% set table_exists = load_relation(model) is not none %}
 
 {# Set severity for the user-friendly log message when the test fails. #}
-{% if var("log_result", False) == True %}
-    {% if config.get('severity') == 'warn' %}
-        {% set log_category = 'UserWarning' %}
-    {% elif config.get('severity') == 'error' %}
-        {% set log_category = 'UserError' %}
-    {% else %}
-        {% set log_category = 'UserError' %}
-    {% endif %}
+{% if config.get('severity') == 'warn' %}
+    {% set log_category = 'UserWarning' %}
+{% elif config.get('severity') == 'error' %}
+    {% set log_category = 'UserError' %}
+{% else %}
+    {% set log_category = 'UserError' %}
 {% endif %}
 
 {# If the test is for a column and the table doesn't exist, we return success to prevent the same error multiple times. #}
@@ -34,7 +32,9 @@ For a successful test, return 0 records according to the dbt standard. #}
         where 1 = 0
     {% else %}
         select 'dummy_value' as "dummy"
-        {{ log(tojson({'Key': 'TestExistsColumn', 'Details': {'model_name': model.name, 'column_name': column_name}, 'Category': log_category, 'Message': 'The field \'' ~ model.name ~ '.' ~ column_name ~ '\' doesn\'t exist in the source data. Note that the field detection is case-sensitive.'}), True) }}
+        {% if var("log_result", False) == True %}
+            {{ log(tojson({'Key': 'TestExistsColumn', 'Details': {'model_name': model.name, 'column_name': column_name}, 'Category': log_category, 'Message': 'The field \'' ~ model.name ~ '.' ~ column_name ~ '\' doesn\'t exist in the source data. Note that the field detection is case-sensitive.'}), True) }}
+        {% endif %}
     {% endif %}
 {# If column_name is not defined, the test is on a table level. #}
 {% elif column_name is not defined %}
@@ -43,7 +43,9 @@ For a successful test, return 0 records according to the dbt standard. #}
         where 1 = 0
     {% else %}
         select 'dummy_value' as "dummy"
-        {{ log(tojson({'Key': 'TestExistsTable', 'Details': {'model_name': model.name}, 'Category': log_category, 'Message': 'The table \'' ~ model.name ~ '\' doesn\'t exist in the source data. Note that the name is case-sensitive.'}), True) }}
+        {% if var("log_result", False) == True %}
+            {{ log(tojson({'Key': 'TestExistsTable', 'Details': {'model_name': model.name}, 'Category': log_category, 'Message': 'The table \'' ~ model.name ~ '\' doesn\'t exist in the source data. Note that the name is case-sensitive.'}), True) }}
+        {% endif %}
     {% endif %}
 {% endif %}
 
