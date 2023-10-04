@@ -10,19 +10,18 @@ packages:
     revision: [tag name of the release]
 ```
 
-This package contains some date/time conversion macros. You can override the default format that is used in the macros by defining variables in your `dbt_project.yml`. The following shows an example configuration of the possible date and time formatting variables and their default values:
+This package contains some date/datetime conversion macros. You can override the default format that is used in the macros by defining variables in your `dbt_project.yml`. The following shows an example configuration of the possible date and time formatting variables and their default values:
 
 ```
 vars:
   # Date and time formats.
-  # For SQL Server defined by integers and for Snowflake defined by strings.
-  date_format: 23     # default: SQL Server: 23, Snowflake: 'YYYY-MM-DD'
-  time_format: 14     # default: SQL Server: 14, Snowflake: 'hh24:mi:ss.ff3'
-  datetime_format: 21 # default: SQL Server: 21, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3'
+  # For SQL Server defined by integers and for Snowflake/Databricks defined by strings.
+  date_format: 23     # default: SQL Server: 23, Snowflake: 'YYYY-MM-DD', Databricks: 'yyyy-MM-dd'
+  datetime_format: 21 # default: SQL Server: 21, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3', Databricks: 'yyyy-MM-dd HH:mm:ss[.SSS]'
 ```
 
 ## Contents
-This dbt package contains macros for SQL functions to run the dbt project on multiple databases and for generic tests. The databases that are currently supported are Snowflake and SQL Server.
+This dbt package contains macros for SQL functions to run the dbt project on multiple databases and for generic tests. The databases that are currently supported are Snowflake, SQL Server and Databricks.
 
 - [Multiple databases](#Multiple-databases)
   - [as_varchar](#as_varchar-source)
@@ -30,7 +29,6 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [date_from_timestamp](#date_from_timestamp-source)
   - [datediff](#datediff-source)
   - [generate_id](#generate_id-source)
-  - [min_boolean](#min_boolean-source)
   - [string_agg](#string_agg-source)
   - [timestamp_from_date](#timestamp_from_date-source)
   - [timestamp_from_parts](#timestamp_from_parts-source)
@@ -38,28 +36,18 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [to_date](#to_date-source)
   - [to_double](#to_double-source)
   - [to_integer](#to_integer-source)
-  - [to_time](#to_time-source)
   - [to_timestamp](#to_timestamp-source)
   - [to_varchar](#to_varchar-source)
 - [Generic tests](#Generic-tests)
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
-  - [test_field_length](#test_field_length-source)
-  - [test_format](#test_format-source)
   - [test_not_negative](#test_not_negative-source)
   - [test_not_null](#test_not_null-source)
   - [test_one_column_not_null](#test_one_column_not_null-source)
-  - [test_type_boolean](#test_type_boolean-source)
-  - [test_type_date](#test_type_date-source)
-  - [test_type_double](#test_type_double-source)
-  - [test_type_integer](#test_type_integer-source)
-  - [test_type_timestamp](#test_type_timestamp-source)
-  - [test_type_varchar](#test_type_varchar-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
   - [test_unique](#test_unique-source)
 - [Generic](#Generic)
   - [concat](#concat-source)
-  - [left_from_char](#left_from_char-source)
   - [mandatory](#mandatory-source)
   - [optional](#optional-source)
   - [optional_table](#optional_table-source)
@@ -97,7 +85,7 @@ Usage:
 `{{ pm_utils.date_from_timestamp('[expression]') }}`
 
 #### datediff ([source](macros/multiple_databases/datediff.sql))
-This macro computes the difference between two date, time, or datetime expressions based on the specified `datepart` and returns an integer value. The datepart can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. The difference in weeks is calculated for weeks starting on Monday.
+This macro computes the difference between two date or datetime expressions based on the specified `datepart` and returns an integer value. The datepart can be any of the following values for SQL Server and Snowflake: year, quarter, month, week, day, hour, minute, second, millisecond. For Databricks, the datepart can be any of the following values: year, day, hour, minute, second, millisecond. The difference in weeks is calculated for weeks starting on Monday.
 
 Usage: 
 `{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
@@ -112,12 +100,6 @@ Usage:
 ) }}
 ```
 
-#### min_boolean ([source](macros/multiple_databases/min_boolean.sql))
-This macro selects the minimum of the records in an aggregate expression for boolean fields.
-
-Usage:
-`{{ pm_utils.min_boolean('[expression]') }}`
-
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
 This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function. For SQL Server, the maximum supported length is 2000. 
 
@@ -131,7 +113,7 @@ Usage:
 `{{ pm_utils.timestamp_from_date('[expression]') }}`
 
 #### timestamp_from_parts ([source](macros/multiple_databases/timestamp_from_parts.sql))
-This macro create a timestamp based on a date and time field.
+This macro create a timestamp based on a date and time field for SQL Server and Snowflake. For Databricks, the macro accepts two datetime fields, where the first field contains only the date and the second field only the time.
 
 Usage: 
 `{{ pm_utils.timestamp_from_parts('[date_expression]', '[time_expression]') }}`
@@ -162,15 +144,6 @@ This macro converts a field to an integer field.
 
 Usage: 
 `{{ pm_utils.to_integer('[expression]') }}`
-
-#### to_time ([source](macros/multiple_databases/to_time.sql))
-This macro converts a field to a time field.
-
-Usage: 
-`{{ pm_utils.to_time('[expression]') }}`
-
-Variables:
-- time_format
 
 #### to_timestamp ([source](macros/multiple_databases/to_timestamp.sql))
 This macro converts a field to a timestamp field.
@@ -216,32 +189,6 @@ models:
           - pm_utils.exists
 ```
 
-#### test_field_length ([source](macros/generic_tests/test_field_length.sql))
-This generic test evaluates whether the values of the column have a particular length. The test is only executed when the column exists on the table.
-
-Usage:
-```
-models:
-  - name: Model_A
-    tests:
-      - pm_utils.field_length:
-          length: 'Length'
-```
-
-#### test_format ([source](macros/generic_tests/test_format.sql))
-This generic test evaluates whether the format of values of the column is as expected. Use this test on source tables to test the format of values before any transformation takes place. The test fails if at least one value has an incorrect format. Use the argument `data_type` to indicate the data type of the column. Possible values are: `date`, `time`, and `datetime`. The test is only executed when the column exists on the table.
-
-Usage:
-```
-sources:
-  - name: Model_A
-    columns:
-      - name: '"Column_A"'
-        tests:
-          - pm_utils.format:
-              data_type: [data_type]
-```
-
 #### test_not_negative ([source](macros/generic_tests/test_not_negative.sql))
 This generic test evaluates whether the values of the column are not negative.
 
@@ -282,85 +229,6 @@ models:
             - 'Column_B'
 ```
 
-#### test_type_boolean ([source](macros/generic_tests/test_type_boolean.sql))
-This generic test evaluates whether a field is a boolean or bit data type depending on the database.
-
-Usage:
-```
-models:
-  - name: Model_A
-    columns:
-      - name: '"Column_A"'
-        tests:
-          - pm_utils.type_boolean
-```
-
-#### test_type_date ([source](macros/generic_tests/test_type_date.sql))
-This generic test evaluates whether a field is a date data type.
-
-Usage:
-```
-models:
-  - name: Model_A
-    columns:
-      - name: '"Column_A"'
-        tests:
-          - pm_utils.type_date
-```
-
-#### test_type_double ([source](macros/generic_tests/test_type_double.sql))
-This generic test evaluates whether a field is a double data type.
-
-Usage:
-```
-models:
-  - name: Model_A
-    columns:
-      - name: '"Column_A"'
-        tests:
-          - pm_utils.type_double
-```
-
-#### test_type_integer ([source](macros/generic_tests/test_type_integer.sql))
-This generic test evaluates whether a field is an integer data type.
-
-Usage:
-```
-models:
-  - name: Model_A
-    columns:
-      - name: '"Column_A"'
-        tests:
-          - pm_utils.type_integer
-```
-
-#### test_type_timestamp ([source](macros/generic_tests/test_type_timestamp.sql))
-This generic test evaluates whether a field is a timestamp data type.
-
-Usage:
-```
-models:
-  - name: Model_A
-    columns:
-      - name: '"Column_A"'
-        tests:
-          - pm_utils.type_timestamp
-```
-
-
-#### test_type_varchar ([source](macros/generic_tests/test_type_varchar.sql))
-This generic test evaluates whether a field is a string data type. For SQL Server, it is checked that the data type is `nvarchar` and that the length is not `max`.
-
-Usage:
-```
-models:
-  - name: Model_A
-    columns:
-      - name: '"Column_A"'
-        tests:
-          - pm_utils.type_varchar
-```
-
 #### test_unique_combination_of_columns ([source](macros/generic_tests/test_unique_combination_of_columns.sql))
 This generic test evaluates whether the combination of columns is unique. This test can be defined by two or more columns. The test is only executed when all columns exist on the table.
 
@@ -399,14 +267,8 @@ Usage:
 To pass a string as argument, make sure to use double quotes:
 `{{ pm_utils.concat('"Field_A"', "' - '", '"Field_B"') }}`
 
-#### left_from_char ([source](macros/generic/left_from_char.sql))
-This macro extracts the string left from the character.
-
-Usage: 
-`{{ pm_utils.left_from_char('[expression]', '[character]') }}`
-
 #### mandatory ([source](macros/generic/mandatory.sql))
-Use this macro for the mandatory columns in your source tables. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `time`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
+Use this macro for the mandatory columns in your source tables. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
 
 You can also set `id` as data type, which expects the values to be integers.
 
@@ -419,13 +281,12 @@ To keep the SQL in the model more readable, you can define a Jinja variable for 
 
 Variables:
 - date_format
-- time_format
 - datetime_format
 
-These variables are only required when the `data_type` is used with the values `date`, `time`, or `datetime`.
+These variables are only required when the `data_type` is used with the values `date` or `datetime`.
 
 #### optional ([source](macros/generic/optional.sql))
-This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `time`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
+This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
 
 You can also set `id` as data type, which creates the column with unique integer values if the column is not present. If the column is present in that case, the values are expected to be integers.
 
@@ -440,10 +301,9 @@ To keep the SQL in the model more readable, you can define a Jinja variable for 
 
 Variables:
 - date_format
-- time_format
 - datetime_format
 
-These variables are only required when the `data_type` is used with the values `date`, `time`, or `datetime`.
+These variables are only required when the `data_type` is used with the values `date` or `datetime`.
 
 #### optional_table ([source](macros/generic/optional_table.sql))
 This macro checks whether the source table is present. If the table is not present, it creates a table without records in your target schema. If the table is present, it selects the table from the source schema. Use this macro to allow for missing source tables when that data is optional.
