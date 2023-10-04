@@ -47,8 +47,6 @@ Only check when relation exists to prevent dbt compile errors. #}
         {{ pm_utils.to_double(column_value, relation) }}
     {%- elif data_type == 'integer' -%}
         {{ pm_utils.to_integer(column_value, relation) }}
-    {%- elif data_type == 'time' -%}
-        {{ pm_utils.to_time(column_value, relation) }}
     {%- elif data_type == 'datetime' -%}
         {{ pm_utils.to_timestamp(column_value, relation) }}
     {%- elif data_type == 'text' -%}

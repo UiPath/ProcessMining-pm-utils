@@ -8,8 +8,6 @@
     {{ pm_utils.to_double(mandatory_column, relation) }}
 {%- elif data_type == 'integer' -%}
     {{ pm_utils.to_integer(mandatory_column, relation) }}
-{%- elif data_type == 'time' -%}
-    {{ pm_utils.to_time(mandatory_column, relation) }}
 {%- elif data_type == 'datetime' -%}
     {{ pm_utils.to_timestamp(mandatory_column, relation) }}
 {%- elif data_type == 'text' -%}
