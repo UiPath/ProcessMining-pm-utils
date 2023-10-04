@@ -32,7 +32,7 @@ For a successful test, return 0 records according to the dbt standard. #}
         where 1 = 0
     {% else %}
         select 'dummy_value' as "dummy"
-        {% if var("log_result", False) == True %}
+        {% if var("log_result", False) == True and execute %}
             {{ log(tojson({'Key': 'TestExistsColumn', 'Details': {'model_name': model.name, 'column_name': column_name}, 'Category': log_category, 'Message': 'The field \'' ~ model.name ~ '.' ~ column_name ~ '\' doesn\'t exist in the source data. Note that the field detection is case-sensitive.'}), True) }}
         {% endif %}
     {% endif %}
@@ -43,7 +43,7 @@ For a successful test, return 0 records according to the dbt standard. #}
         where 1 = 0
     {% else %}
         select 'dummy_value' as "dummy"
-        {% if var("log_result", False) == True %}
+        {% if var("log_result", False) == True and execute %}
             {{ log(tojson({'Key': 'TestExistsTable', 'Details': {'model_name': model.name}, 'Category': log_category, 'Message': 'The table \'' ~ model.name ~ '\' doesn\'t exist in the source data. Note that the name is case-sensitive.'}), True) }}
         {% endif %}
     {% endif %}
