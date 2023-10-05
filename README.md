@@ -30,6 +30,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [date_from_timestamp](#date_from_timestamp-source)
   - [datediff](#datediff-source)
   - [generate_id](#generate_id-source)
+  - [id](#id-source)
   - [min_boolean](#min_boolean-source)
   - [string_agg](#string_agg-source)
   - [timestamp_from_date](#timestamp_from_date-source)
@@ -103,6 +104,8 @@ Usage:
 `{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
 
 #### generate_id ([source](macros/multiple_databases/generate_id.sql))
+**Note:** this macro is deprecated and will be removed in a future release. To create an ID, the `id()` macro should be used.
+
 This macro generates an id field for the current model. This macro can only be used in a dbt post-hook. With the argument you specify the name of the id field which can be referenced in next transformations like any other field.
 
 Usage:
@@ -111,6 +114,12 @@ Usage:
     post_hook="{{ pm_utils.generate_id('[id_field]') }}"
 ) }}
 ```
+
+#### id ([source](macros/multiple_databases/id.sql))
+This macro generates an id field that can be used as a column for the current model.
+
+Usage:
+`{{ pm_utils.id() }}`
 
 #### min_boolean ([source](macros/multiple_databases/min_boolean.sql))
 This macro selects the minimum of the records in an aggregate expression for boolean fields.
