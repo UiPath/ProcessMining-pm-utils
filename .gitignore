@@ -1,0 +1,14 @@
+# compiled code & logs
+**/target/
+**/logs/
+# package folder
+**/dbt_packages/
+# dbt folders that are not used
+**/snapshots/
+**/analysis/
+**/data/
+# user specific file
+**/.user.yml
+
+# MacOS specific files
+.DS_Store

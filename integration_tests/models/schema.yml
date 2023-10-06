@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: test_concat
+    tests:
+      - equal_value:
+          actual: '"Two_text_fields"'
+          expected: '"Two_text_fields_expected"'
+      - equal_value:
+          actual: '"One_null"'
+          expected: '"One_null_expected"'
