@@ -1,0 +1,27 @@
+default:
+  outputs:
+
+    sqlserver-ci:
+      type: sqlserver
+      driver: 'ODBC Driver 17 for SQL Server'
+      port: 1433
+      server: "{{ var('DBT_SQL_SERVER_SERVER') }}"
+      user: "{{ var('DBT_SQL_SERVER_USER') }}"
+      password: "{{ var('DBT_SQL_SERVER_PASSWORD') }}"
+      database: "{{ var('DBT_SQL_SERVER_DATABASE') }}"
+      schema: "{{ var('DBT_SCHEMA') }}"
+      encrypt: true
+      trust_cert: true
+
+    snowflake-ci:
+      type: snowflake
+      account: "{{ var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ var('DBT_SNOWFLAKE_USER') }}"
+      password: "{{ var('DBT_SNOWFLAKE_PASSWORD') }}"
+      role: "{{ var('DBT_SNOWFLAKE_ROLE') }}"
+      database: "{{ var('DBT_SNOWFLAKE_DATABASE') }}"
+      warehouse: "{{ var('DBT_SNOWFLAKE_WAREHOUSE') }}"
+      schema: "{{ var('DBT_SCHEMA') }}"
+      threads: 10
+
+  target: snowflake-ci
