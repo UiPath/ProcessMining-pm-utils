@@ -17,6 +17,7 @@ vars:
   # Date and time formats.
   # For SQL Server defined by integers and for Snowflake/Databricks defined by strings.
   date_format: 23     # default: SQL Server: 23, Snowflake: 'YYYY-MM-DD', Databricks: 'yyyy-MM-dd'
+  time_format: 14     # default: SQL Server: 14, Snowflake: 'hh24:mi:ss.ff3', Databricks: 'HH:mm:ss[.SSS]'
   datetime_format: 21 # default: SQL Server: 21, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3', Databricks: 'yyyy-MM-dd HH:mm:ss[.SSS]'
 ```
 
@@ -109,7 +110,10 @@ Usage:
 `{{ pm_utils.timestamp_from_date('[expression]') }}`
 
 #### timestamp_from_parts ([source](macros/multiple_databases/timestamp_from_parts.sql))
-This macro create a timestamp based on a date and time field for SQL Server and Snowflake. For Databricks, the macro accepts two datetime fields, where the first field contains only the date and the second field only the time.
+This macro creates a timestamp based on a date field and string containing the time field.
+
+Variables:
+- time_format
 
 Usage: 
 `{{ pm_utils.timestamp_from_parts('[date_expression]', '[time_expression]') }}`
