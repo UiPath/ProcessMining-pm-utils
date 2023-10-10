@@ -32,8 +32,8 @@ jobs:
     steps:
       - template: ./.pipelines/templates/get_keyvault_secrets.job.yml@testTransformations
         parameters:
-          serviceConnection: AzureDevTestEASubscription-ProcessMining-apps-team-development
-          keyVaultName: pmc-dev-config-kv
+          serviceConnection: $(serviceConnection)
+          keyVaultName: $(keyVaultName)
 
   - job: integration_tests
     displayName: Integration tests
