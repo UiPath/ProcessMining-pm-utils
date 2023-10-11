@@ -40,7 +40,6 @@ jobs:
     dependsOn: get_keyvault_secrets
     condition: eq(dependencies.get_keyvault_secrets.result, 'Succeeded')
     variables:
-        SNOWSQL_PWD_input: $[ dependencies.get_keyvault_secrets.outputs['set_variables.SNOWSQL_PWD_input'] ]
         DBT_SQL_SERVER_SERVER: $[ dependencies.get_keyvault_secrets.outputs['set_variables.DBT_SQL_SERVER_SERVER'] ]
         DBT_SQL_SERVER_USER: $[ dependencies.get_keyvault_secrets.outputs['set_variables.DBT_SQL_SERVER_USER'] ]
         DBT_SQL_SERVER_PASSWORD: $[ dependencies.get_keyvault_secrets.outputs['set_variables.DBT_SQL_SERVER_PASSWORD'] ]
