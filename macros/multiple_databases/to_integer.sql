@@ -1,8 +1,8 @@
 {%- macro to_integer(field, relation) -%}
 
-{# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'databricks' -%}
     try_cast({{ field }} as bigint)
+{# Snowflake try_to function requires an expression of type varchar. #}
 {%- elif target.type == 'snowflake' -%}
     try_to_number(to_varchar({{ field }}))
 {%- elif target.type == 'sqlserver' -%}
