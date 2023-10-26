@@ -1,8 +1,8 @@
 {%- macro to_double(field, relation) -%}
 
-{# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'databricks' -%}
     try_cast({{ field }} as double)
+{# Snowflake try_to function requires an expression of type varchar. #}
 {%- elif target.type == 'snowflake' -%}
     try_to_double(to_varchar({{ field }}))
 {%- elif target.type == 'sqlserver' -%}
