@@ -2,7 +2,7 @@
 
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- if target.type == 'databricks' -%}
-    try_cast({{ field }} as float)
+    try_cast({{ field }} as double)
 {%- elif target.type == 'snowflake' -%}
     try_to_double(to_varchar({{ field }}))
 {%- elif target.type == 'sqlserver' -%}
