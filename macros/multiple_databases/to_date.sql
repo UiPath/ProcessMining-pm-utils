@@ -2,7 +2,11 @@
 
 {# Cast to date when the input is in a date or a datetime format. This is default behavior for SQL Server. #}
 {%- if target.type == 'databricks' -%}
-    to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}')
+    case
+        when to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}') is null
+            then {{ pm_utils.date_from_timestamp(field) }}
+        else to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}')
+    end
 {# Snowflake try_to function requires an expression of type varchar. #}
 {%- elif target.type == 'snowflake' -%}
     case
@@ -33,7 +37,11 @@
     {% endif %}
     where {{ field }} is not null and
         {% if target.type == 'databricks' -%}
-            to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}') is null
+            case
+                when to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}') is null
+                    then {{ pm_utils.date_from_timestamp(field) }}
+                else to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}')
+            end is null
         {% elif target.type == 'snowflake' -%}
             case
                 when try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}') is null
