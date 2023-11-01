@@ -17,8 +17,8 @@ vars:
   # Date and time formats.
   # For SQL Server defined by integers and for Snowflake/Databricks defined by strings.
   date_format: 23     # default: SQL Server: 23, Snowflake: 'YYYY-MM-DD', Databricks: 'yyyy-MM-dd'
-  time_format: 14     # default: SQL Server: 14, Snowflake: 'hh24:mi:ss.ff3', Databricks: 'HH:mm:ss[.SSS]'
-  datetime_format: 21 # default: SQL Server: 21, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3', Databricks: 'yyyy-MM-dd HH:mm:ss[.SSS]'
+  time_format: 14     # default: SQL Server: 14, Snowflake: 'hh24:mi:ss.ff3', Databricks: 'HH:mm:ss'
+  datetime_format: 21 # default: SQL Server: 21, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3', Databricks: 'yyyy-MM-dd HH:mm:ss'
 ```
 
 ## Contents
@@ -146,7 +146,7 @@ Usage:
 `{{ pm_utils.to_integer('[expression]') }}`
 
 #### to_timestamp ([source](macros/multiple_databases/to_timestamp.sql))
-This macro converts a field to a timestamp field.
+This macro converts a field to a timestamp field. For Databricks, milliseconds will automatically be parsed. You should only set the milliseconds in your datetime patern if the second fraction is different than milliseconds.
 
 Usage: 
 `{{ pm_utils.to_timestamp('[expression]') }}`
