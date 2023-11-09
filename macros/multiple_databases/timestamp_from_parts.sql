@@ -35,9 +35,14 @@
 {%- elif target.type == 'databricks' -%}
     case
         when length({{ date_field }}) > 0 and length({{ time_field }}) > 0
-            then timestamp_millis(bigint(bigint(unix_date({{ date_field }})) * 86400000) + unix_millis(try_to_timestamp({{ time_field }}, '{{ var("time_format", "HH:mm:ss[.SSS]") }}')))
-        else
-            to_timestamp(null)
+            then
+                case
+                    when try_to_timestamp({{ time_field }}, '{{ var("time_format", "HH:mm:ss") }}.SSS') is null
+                        then timestamp_millis(bigint(bigint(unix_date({{ date_field }})) * 86400000) + unix_millis(try_to_timestamp({{ time_field }}, '{{ var("time_format", "HH:mm:ss") }}')))
+                    else timestamp_millis(bigint(bigint(unix_date({{ date_field }})) * 86400000) + unix_millis(try_to_timestamp({{ time_field }}, '{{ var("time_format", "HH:mm:ss") }}.SSS')))
+                end
+            else
+                to_timestamp(null)
     end
 {%- endif -%}
 
