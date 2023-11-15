@@ -26,6 +26,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 
 - [Multiple databases](#Multiple-databases)
   - [as_varchar](#as_varchar-source)
+  - [charindex](#charindex-source)
   - [create_index](#create_index-source)
   - [date_from_timestamp](#date_from_timestamp-source)
   - [datediff](#datediff-source)
@@ -60,6 +61,12 @@ This macro converts a string to the data type `nvarchar(2000)` for SQL Server. U
 
 Usage: 
 `{{ pm_utils.as_varchar('[expression]') }}`
+
+#### charindex ([source](macros/multiple_databases/charindex.sql))
+This macro returns the starting position of the first occurrence of a string in another string. The search is not case-sensitive. If the string is not found, the function returns 0. This macro can be used to check whether a string contains another string.
+
+Usage: 
+`{{ pm_utils.charindex('[expression_to_find]', '[field]', '[start_location]') }}`
 
 #### create_index ([source](macros/multiple_databases/create_index.sql))
 This macro creates a clustered columnstore index on the current model for SQL Server. This macro should be used in a dbt post-hook.
