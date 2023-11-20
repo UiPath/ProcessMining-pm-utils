@@ -33,3 +33,24 @@ models:
       - equal_value:
           actual: '`Find_null_value`'
           expected: '`Find_null_value_expected`'
+
+  - name: test_to_timestamp
+    tests:
+      - equal_value:
+          actual: '`timestamp_date`'
+          expected: '`timestamp_date_expected`'
+      - equal_value:
+          actual: '`timestamp_datetime`'
+          expected: '`timestamp_datetime_expected`'
+      - equal_value:
+          actual: '`timestamp_datetime_ms`'
+          expected: '`timestamp_datetime_ms_expected`'
+      - equal_value:
+          actual: '`timestamp_datetime_ms4`'
+          expected: '`timestamp_datetime_ms4_expected`'
+      - equal_value:
+          actual: '`timestamp_time`'
+          expected: '`timestamp_time_expected`'
+      - equal_value:
+          actual: '`null_value`'
+          expected: '`null_value_expected`'
