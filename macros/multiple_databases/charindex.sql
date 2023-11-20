@@ -1,6 +1,13 @@
 {%- macro charindex(expression_to_find, field, start_location=None) -%}
+{%- set expression_length -%}
+    {% if target.type == 'sqlserver' -%}
+        datalength('{{ expression_to_find }}')
+    {% else -%}
+        length('{{ expression_to_find }}')
+    {% endif -%}
+{%- endset -%}
 case
-    when len('{{ expression_to_find }}') > 0
+    when {{ expression_length }} > 0
     then
         {% if start_location is none -%}
             {% if target.type == 'databricks' -%}
