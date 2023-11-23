@@ -9,3 +9,27 @@ models:
       - equal_value:
           actual: '`One_null`'
           expected: '`One_null_expected`'
+
+  - name: test_charindex
+    tests:
+      - equal_value:
+          actual: '`Find_basic_scenario`'
+          expected: '`Find_basic_scenario_expected`'
+      - equal_value:
+          actual: '`Find_first_of_multiple_occurrences`'
+          expected: '`Find_first_of_multiple_occurrences_expected`'
+      - equal_value:
+          actual: '`Find_first_space`'
+          expected: '`Find_first_space_expected`'
+      - equal_value:
+          actual: '`Find_with_start_location`'
+          expected: '`Find_with_start_location_expected`'
+      - equal_value:
+          actual: '`Find_non_occurring_value`'
+          expected: '`Find_non_occurring_value_expected`'
+      - equal_value:
+          actual: '`Find_empty_value`'
+          expected: '`Find_empty_value_expected`'
+      - equal_value:
+          actual: '`Find_null_value`'
+          expected: '`Find_null_value_expected`'
