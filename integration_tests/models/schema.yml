@@ -54,3 +54,39 @@ models:
       - equal_value:
           actual: '`null_value`'
           expected: '`null_value_expected`'
+
+  - name: test_dateadd
+    tests:
+      - equal_value:
+          actual: '`add_milliseconds`'
+          expected: '`add_milliseconds_expected`'
+      - equal_value:
+          actual: '`add_seconds`'
+          expected: '`add_seconds_expected`'
+      - equal_value:
+          actual: '`add_minutes`'
+          expected: '`add_minutes_expected`'
+      - equal_value:
+          actual: '`add_hours`'
+          expected: '`add_hours_expected`'
+      - equal_value:
+          actual: '`add_days`'
+          expected: '`add_days_expected`'
+      - equal_value:
+          actual: '`add_weeks`'
+          expected: '`add_weeks_expected`'
+      - equal_value:
+          actual: '`add_months`'
+          expected: '`add_months_expected`'
+      - equal_value:
+          actual: '`add_quarters`'
+          expected: '`add_quarters_expected`'
+      - equal_value:
+          actual: '`add_years`'
+          expected: '`add_years_expected`'
+      - equal_value:
+          actual: '`add_bigint`'
+          expected: '`add_bigint_expected`'
+      - equal_value:
+          actual: '`add_to_null_value`'
+          expected: '`add_to_null_value_expected`'
