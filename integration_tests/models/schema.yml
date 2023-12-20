@@ -90,3 +90,12 @@ models:
       - equal_value:
           actual: '`add_to_null_value`'
           expected: '`add_to_null_value_expected`'
+
+  - name: test_stddev
+    tests:
+    - equal_value:
+        actual: '`stddev_actual`'
+        expected: '`stddev_expected`'
+    - equal_value:
+        actual: '`stddev_with_null_values_actual`'
+        expected: '`stddev_with_null_values_expected`'

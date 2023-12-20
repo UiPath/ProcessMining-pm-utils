@@ -31,6 +31,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [date_add](#date_add-source)
   - [date_from_timestamp](#date_from_timestamp-source)
   - [datediff](#datediff-source)
+  - [stddev](#stddev-source)
   - [string_agg](#string_agg-source)
   - [timestamp_from_date](#timestamp_from_date-source)
   - [timestamp_from_parts](#timestamp_from_parts-source)
@@ -110,6 +111,12 @@ This macro generates an id field that can be used as a column for the current mo
 
 Usage:
 `{{ pm_utils.id() }}`
+
+#### stddev ([source](macros/multiple_databases/stddev.sql))
+This macro computes the standard deviation of a set of values, `null` values are ignored in the calculation. This macro can only be used as an aggregate function. For SQL Server, at least one of the values provided should not be `null`.
+
+Usage: 
+`{{ pm_utils.stddev('[expression]') }}`
 
 #### string_agg ([source](macros/multiple_databases/string_agg.sql))
 This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function. For SQL Server, the maximum supported length is 2000. 
