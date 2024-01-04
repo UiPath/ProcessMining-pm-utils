@@ -22,12 +22,13 @@
         timestamp_millis(unix_millis(try_to_timestamp({{ date_or_datetime_field }})) + {{ number_bigint }} * 1000 * 60 * 60 * 24)
     {%- elif datepart == 'week' -%}
         timestamp_millis(unix_millis(try_to_timestamp({{ date_or_datetime_field }})) + {{ number_bigint }} * 1000 * 60 * 60 * 24 * 7)
+    {%- endif -%}
     {# Since the number of days in a month can differ, use the add_months function for month, quarter and year.
     Add the time part separately because add_months needs dates as input. Both parts are converted to milliseconds to do the addition. #}
     {%- set time_in_milliseconds -%}
         unix_millis(try_to_timestamp({{ date_or_datetime_field }})) - unix_millis(date_trunc('DD', try_to_timestamp({{ date_or_datetime_field }})))
     {%- endset -%}
-    {%- elif datepart == 'month' -%}
+    {%- if datepart == 'month' -%}
         timestamp_millis(unix_millis(try_to_timestamp(add_months(to_date({{ date_or_datetime_field }}), {{ number_bigint }}))) + {{ time_in_milliseconds }})
     {%- elif datepart == 'quarter' -%}
         timestamp_millis(unix_millis(try_to_timestamp(add_months(to_date({{ date_or_datetime_field }}), {{ number_bigint }} * 3))) + {{ time_in_milliseconds }})
