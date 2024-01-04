@@ -4,33 +4,35 @@
 {%- elif target.type == 'sqlserver' -%}
     dateadd({{ datepart }}, {{ number }}, try_convert(datetime2, {{ date_or_datetime_field }}))
 {%- elif target.type == 'databricks' -%}
-    {%- set number_int -%}
-        try_cast({{ number }} as INT)
+    {# Cast number to bigint to prevent overflow values when doing computations. #}
+    {%- set number_bigint -%}
+        try_cast({{ number }} as bigint)
     {%- endset -%}
-    {%- set datetime_field -%}
-        try_to_timestamp({{ date_or_datetime_field }})
-    {%- endset -%}
-    {%- set time_field -%}
-        unix_millis({{ datetime_field }}) - unix_millis(date_trunc('DD', {{ datetime_field }}))
-    {%- endset -%}
+    {# Convert the base date and the units to be added both to milliseconds to do the addition.
+    Convert the total milliseconds back to a timestamp using timestamp_millis. #}
     {%- if datepart == 'millisecond' -%}
-        timestamp_millis(unix_millis({{ datetime_field }}) + {{ number_int }})
+        timestamp_millis(unix_millis(try_to_timestamp({{ date_or_datetime_field }})) + {{ number_bigint }})
     {%- elif datepart == 'second' -%}
-        timestamp_millis(unix_millis({{ datetime_field }}) + {{ number_int }}*1000)
+        timestamp_millis(unix_millis(try_to_timestamp({{ date_or_datetime_field }})) + {{ number_bigint }} * 1000)
     {%- elif datepart == 'minute' -%}
-        timestamp_millis(unix_millis({{ datetime_field }}) + {{ number_int }}*60000)
+        timestamp_millis(unix_millis(try_to_timestamp({{ date_or_datetime_field }})) + {{ number_bigint }} * 1000 * 60)
     {%- elif datepart == 'hour' -%}
-        timestamp_millis(unix_millis({{ datetime_field }}) + {{ number_int }}*3600000)
+        timestamp_millis(unix_millis(try_to_timestamp({{ date_or_datetime_field }})) + {{ number_bigint }} * 1000 * 60 * 60)
     {%- elif datepart == 'day' -%}
-        timestamp_millis(unix_millis(try_to_timestamp(date_add(to_date({{ datetime_field }}), {{ number_int }}))) + {{ time_field }})
+        timestamp_millis(unix_millis(try_to_timestamp({{ date_or_datetime_field }})) + {{ number_bigint }} * 1000 * 60 * 60 * 24)
     {%- elif datepart == 'week' -%}
-        timestamp_millis(unix_millis(try_to_timestamp(date_add(to_date({{ datetime_field }}), {{ number_int }}*7))) + {{ time_field }})
+        timestamp_millis(unix_millis(try_to_timestamp({{ date_or_datetime_field }})) + {{ number_bigint }} * 1000 * 60 * 60 * 24 * 7)
+    {# Since the number of days in a month can differ, use the add_months function for month, quarter and year.
+    Add the time part separately because add_months needs dates as input. Both parts are converted to milliseconds to do the addition. #}
+    {%- set time_in_milliseconds -%}
+        unix_millis(try_to_timestamp({{ date_or_datetime_field }})) - unix_millis(date_trunc('DD', try_to_timestamp({{ date_or_datetime_field }})))
+    {%- endset -%}
     {%- elif datepart == 'month' -%}
-        timestamp_millis(unix_millis(try_to_timestamp(add_months(to_date({{ datetime_field }}), {{ number_int }}))) + {{ time_field }})
+        timestamp_millis(unix_millis(try_to_timestamp(add_months(to_date({{ date_or_datetime_field }}), {{ number_bigint }}))) + {{ time_in_milliseconds }})
     {%- elif datepart == 'quarter' -%}
-        timestamp_millis(unix_millis(try_to_timestamp(add_months(to_date({{ datetime_field }}), {{ number_int }}*3))) + {{ time_field }})
+        timestamp_millis(unix_millis(try_to_timestamp(add_months(to_date({{ date_or_datetime_field }}), {{ number_bigint }} * 3))) + {{ time_in_milliseconds }})
     {%- elif datepart == 'year' -%}
-        timestamp_millis(unix_millis(try_to_timestamp(add_months(to_date({{ datetime_field }}), {{ number_int }}*12))) + {{ time_field }})
+        timestamp_millis(unix_millis(try_to_timestamp(add_months(to_date({{ date_or_datetime_field }}), {{ number_bigint }} * 12))) + {{ time_in_milliseconds }})
     {%- endif -%}
 {%- endif -%}
 {%- endmacro -%}
