@@ -28,7 +28,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [as_varchar](#as_varchar-source)
   - [charindex](#charindex-source)
   - [create_index](#create_index-source)
-  - [date_add](#date_add-source)
+  - [dateadd](#dateadd-source)
   - [date_from_timestamp](#date_from_timestamp-source)
   - [datediff](#datediff-source)
   - [stddev](#stddev-source)
@@ -89,10 +89,10 @@ In case you want to create the index on a source table, refer to the table using
 ```
 
 #### dateadd ([source](macros/multiple_databases/dateadd.sql))
-This macro adds a specified number value (as a signed integer) of the specified datepart to an input date or datetime and then returns that modified value. The datepart can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond.
+This macro adds the specified number of units for the `datepart` to a date or datetime expression. The `datepart` can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. The number of units will be interpreted as an integer value.
 
 Usage: 
-`{{ pm_utils.dateadd('[datepart]', [number], '[expression]') }}`
+`{{ pm_utils.dateadd('[datepart]', '[number]', '[date_expression]') }}`
 
 #### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
 This macro extracts the date part from a datetime field. 
