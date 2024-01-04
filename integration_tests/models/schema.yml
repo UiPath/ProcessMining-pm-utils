@@ -97,6 +97,9 @@ models:
           actual: '`add_bigint_30_days`'
           expected: '`add_bigint_30_days_expected`'
       - equal_value:
+          actual: '`add_double_days`'
+          expected: '`add_double_days_expected`'
+      - equal_value:
           actual: '`add_to_null_value`'
           expected: '`add_to_null_value_expected`'
 

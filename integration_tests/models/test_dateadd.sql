@@ -3,7 +3,7 @@ with Input_data as (
         '2023-11-12 13:14:15.678' as `testdate`,
         null as `null_value`,
         {{ pm_utils.to_integer('1') }} as `bigint_value`,
-        {{ pm_utils.to_integer('30') }} as `bigint_value_30`,
+        {{ pm_utils.to_integer('30') }} as `bigint_value_30`
 )
 
 select
@@ -26,8 +26,8 @@ select
     {{ pm_utils.to_varchar(pm_utils.dateadd('year', '`bigint_value`', '`testdate`')) }} as `add_bigint`,
     {{ pm_utils.to_varchar(pm_utils.dateadd('day', '`bigint_value_30`', '`testdate`')) }} as `add_bigint_30_days`,
 
+    {# SQL Server uses datetime2 format, which has a precision of 7 digits. #}
     {% if target.type == 'sqlserver' %}
-        {# SQL Server uses datetime2 format, which has a precision of 7 digits #}
         '2023-11-12 13:14:15.6790000' as `add_milliseconds_expected`,
         '2023-11-12 13:14:16.6780000' as `add_seconds_expected`,
         '2023-11-12 13:15:15.6780000' as `add_minutes_expected`,
@@ -56,7 +56,19 @@ select
         '2024-11-12 13:14:15.678' as `add_bigint_expected`,
         '2023-12-12 13:14:15.678' as `add_bigint_30_days_expected`,
     {% endif %}
-    
+
+    {# Add 1.5 days to cover the scenario that the number of units is not an integer. #}
+    {{ pm_utils.to_varchar(pm_utils.dateadd('day', 1.5, '`testdate`')) }} as `add_double_days`,
+
+    {# Snowflake rounds to the nearest integer value and SQL Server and Databricks round to the lowest integer value. #}
+    {% if target.type == 'snowflake' %}
+        '2023-11-14 13:14:15.678' as `add_double_days_expected`,
+    {% elif target.type == 'sqlserver' %}
+        '2023-11-13 13:14:15.6780000' as `add_double_days_expected`,
+    {% elif target.type == 'databricks' %}
+        '2023-11-13 13:14:15.678' as `add_double_days_expected`,
+    {% endif %}
+
     {# Use null as the date #}
     {{ pm_utils.to_varchar(pm_utils.dateadd('year', 1, '`null_value`')) }} as `add_to_null_value`,
     '' as `add_to_null_value_expected`
