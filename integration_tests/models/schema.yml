@@ -85,8 +85,17 @@ models:
           actual: '`add_years`'
           expected: '`add_years_expected`'
       - equal_value:
+          actual: '`add_30_days_in_days`'
+          expected: '`add_30_days_in_days_expected`'
+      - equal_value:
+          actual: '`add_30_days_in_seconds`'
+          expected: '`add_30_days_in_seconds_expected`'
+      - equal_value:
           actual: '`add_bigint`'
           expected: '`add_bigint_expected`'
+      - equal_value:
+          actual: '`add_bigint_30_days`'
+          expected: '`add_bigint_30_days_expected`'
       - equal_value:
           actual: '`add_to_null_value`'
           expected: '`add_to_null_value_expected`'
