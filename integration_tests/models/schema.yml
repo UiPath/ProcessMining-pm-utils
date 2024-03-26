@@ -111,3 +111,36 @@ models:
     - equal_value:
         actual: '`stddev_with_null_values_actual`'
         expected: '`stddev_with_null_values_expected`'
+
+  - name: test_datediff
+    tests:
+    - equal_value:
+        actual: '`Year`'
+        expected: '`Year_expected`'
+    - equal_value:
+        actual: '`Quarter`'
+        expected: '`Quarter_expected`'
+    - equal_value:
+        actual: '`Month`'
+        expected: '`Month_expected`'
+    - equal_value:
+        actual: '`Week_saturday_to_sunday`'
+        expected: '`Week_saturday_to_sunday_expected`'
+    - equal_value:
+        actual: '`Week_sunday_to_saturday`'
+        expected: '`Week_sunday_to_saturday_expected`'
+    - equal_value:
+        actual: '`Day`'
+        expected: '`Day_expected`'
+    - equal_value:
+        actual: '`Hour`'
+        expected: '`Hour_expected`'
+    - equal_value:
+        actual: '`Minute`'
+        expected: '`Minute_expected`'
+    - equal_value:
+        actual: '`Second`'
+        expected: '`Second_expected`'
+    - equal_value:
+        actual: '`Millisecond`'
+        expected: '`Millisecond_expected`'

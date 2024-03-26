@@ -101,7 +101,7 @@ Usage:
 `{{ pm_utils.date_from_timestamp('[expression]') }}`
 
 #### datediff ([source](macros/multiple_databases/datediff.sql))
-This macro computes the difference between two date or datetime expressions based on the specified `datepart` and returns an integer value. The datepart can be any of the following values for SQL Server and Snowflake: year, quarter, month, week, day, hour, minute, second, millisecond. For Databricks, the datepart can be any of the following values: year, day, hour, minute, second, millisecond. The difference in weeks is calculated for weeks starting on Monday.
+This macro computes the difference between two date or datetime expressions based on the specified `datepart` and returns an integer value. The datepart can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. Weeks are defined from Sunday to Saturday.
 
 Usage: 
 `{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
