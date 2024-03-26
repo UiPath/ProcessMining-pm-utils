@@ -106,6 +106,12 @@ This macro computes the difference between two date or datetime expressions base
 Usage: 
 `{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
 
+#### diff_weekdays ([source](macros/multiple_databases/diff_weekdays.sql))
+This macro computes the number of days between a start and end date. It returns one day when the start and end date are on the same date. The Saturdays and Sundays are excluded from the number of days.
+
+Usage: 
+`{{ pm_utils.diff_weekdays('[start_date_expression]', '[end_date_expression]') }}`
+
 #### id ([source](macros/multiple_databases/id.sql))
 This macro generates an id field that can be used as a column for the current model.
 

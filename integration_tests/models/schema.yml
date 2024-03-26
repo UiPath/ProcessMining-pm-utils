@@ -144,3 +144,30 @@ models:
     - equal_value:
         actual: '`Millisecond`'
         expected: '`Millisecond_expected`'
+
+  - name: test_diff_weekdays
+    tests:
+    - equal_value:
+        actual: '`Two_weekends`'
+        expected: '`Two_weekends_expected`'
+    - equal_value:
+        actual: '`One_half_weekends`'
+        expected: '`One_half_weekends_expected`'
+    - equal_value:
+        actual: '`One_weekend`'
+        expected: '`One_weekend_expected`'
+    - equal_value:
+        actual: '`One_weekend_end`'
+        expected: '`One_weekend_end_expected`'
+    - equal_value:
+        actual: '`Half_weekend`'
+        expected: '`Half_weekend_expected`'
+    - equal_value:
+        actual: '`Start_weekend`'
+        expected: '`Start_weekend_expected`'
+    - equal_value:
+        actual: '`Start_half_weekend`'
+        expected: '`Start_half_weekend_expected`'
+    - equal_value:
+        actual: '`Only_weekend`'
+        expected: '`Only_weekend_expected`'
