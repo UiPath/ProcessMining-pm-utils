@@ -31,6 +31,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [dateadd](#dateadd-source)
   - [date_from_timestamp](#date_from_timestamp-source)
   - [datediff](#datediff-source)
+  - [diff_weekdays](#diff_weekdays-source)
   - [stddev](#stddev-source)
   - [string_agg](#string_agg-source)
   - [timestamp_from_date](#timestamp_from_date-source)
