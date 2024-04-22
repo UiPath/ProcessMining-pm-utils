@@ -170,7 +170,7 @@ from Table_A
 Select all fields from `Table_A`, except for the field `Creation_date`. More fields can be added to the except list. Additional select statements can be written before and after the `star()` macro by separating the statements with a comma.
 ```
 select
-    {{ pm_utils.star(ref('Table_A'), except['Creation_date']) }},
+    {{ pm_utils.star(ref('Table_A'), except=['Creation_date']) }},
     {{ pm_utils.to_date('"Creation_date"') }} as "Creation_date"
 from Table_A
 ```
