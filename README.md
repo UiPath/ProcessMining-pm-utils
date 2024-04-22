@@ -132,6 +132,49 @@ Usage:
 
 Note: you can only apply the macro for source tables in combination with the `optional()` macro applied to all its fields.
 
+#### star ([source](macros/SQL_generators/star.sql))
+This macro generates a select statement of all fields that are available on the given relation. This relation can be a source or a model in the dbt project. Optionally, you can provide a list of fields as the second argument that need to be excluded from the select statement.
+
+You can choose to exclude fields from the select statement, for example:
+- When you don't want to expose a field on next transformation steps.
+- When you apply logic to a field and don't want to keep the original.
+- When you join tables and a field with the same name is available on multiple tables.
+
+Usage:
+
+Select all fields from model `Table_A`.
+```
+select
+    {{ pm_utils.star(ref('Table_A')) }}
+from ref('Table_A')
+```
+
+Select all fields from source `Table_A`.
+```
+select
+    {{ pm_utils.star(source('sources', 'Table_A')) }}
+from source('sources', 'Table_A')
+```
+
+Select all fields from `Table_A`, which is first created as CTE. You can write `from Table_A`, but the argument of the star macro requires the `ref()`.
+```
+with Table_A as (
+    select * from {{ ref('Table_A') }}
+)
+
+select
+    {{ pm_utils.star(ref('Table_A')) }}
+from Table_A
+```
+
+Select all fields from `Table_A`, except for the field `Creation_date`. More fields can be added to the except list. Additional select statements can be written before and after the `star()` macro by separating the statements with a comma.
+```
+select
+    {{ pm_utils.star(ref('Table_A'), except['Creation_date']) }},
+    {{ pm_utils.to_date('"Creation_date"') }} as "Creation_date"
+from Table_A
+```
+
 ### Data type cast functions
 
 #### as_varchar ([source](macros/multiple_databases/as_varchar.sql))
