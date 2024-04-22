@@ -62,7 +62,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 
 ### SQL generators
 
-#### create_index ([source](macros/multiple_databases/create_index.sql))
+#### create_index ([source](macros/SQL_generators/create_index.sql))
 This macro creates a clustered columnstore index on the current model for SQL Server. This macro should be used in a dbt post-hook.
 
 Usage:
@@ -80,13 +80,13 @@ In case you want to create the index on a source table, refer to the table using
 ) }}
 ```
 
-#### id ([source](macros/multiple_databases/id.sql))
+#### id ([source](macros/SQL_generators/id.sql))
 This macro generates an id field that can be used as a column for the current model.
 
 Usage:
 `{{ pm_utils.id() }}`
 
-#### mandatory ([source](macros/generic/mandatory.sql))
+#### mandatory ([source](macros/SQL_generators/mandatory.sql))
 Use this macro for the mandatory columns in your source tables. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
 
 You can also set `id` as data type, which expects the values to be integers.
@@ -104,7 +104,7 @@ Variables:
 
 These variables are only required when the `data_type` is used with the values `date` or `datetime`.
 
-#### optional ([source](macros/generic/optional.sql))
+#### optional ([source](macros/SQL_generators/optional.sql))
 This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
 
 You can also set `id` as data type, which creates the column with unique integer values if the column is not present. If the column is present in that case, the values are expected to be integers.
@@ -124,7 +124,7 @@ Variables:
 
 These variables are only required when the `data_type` is used with the values `date` or `datetime`.
 
-#### optional_table ([source](macros/generic/optional_table.sql))
+#### optional_table ([source](macros/SQL_generators/optional_table.sql))
 This macro checks whether the source table is present. If the table is not present, it creates a table without records in your target schema. If the table is present, it selects the table from the source schema. Use this macro to allow for missing source tables when that data is optional.
 
 Usage:
@@ -177,19 +177,19 @@ from Table_A
 
 ### Data type cast functions
 
-#### as_varchar ([source](macros/multiple_databases/as_varchar.sql))
+#### as_varchar ([source](macros/data_type_cast_functions/as_varchar.sql))
 This macro converts a string to the data type `nvarchar(2000)` for SQL Server. Use the macro `to_varchar()` to convert a field to this data type.
 
 Usage: 
 `{{ pm_utils.as_varchar('[expression]') }}`
 
-#### to_boolean ([source](macros/multiple_databases/to_boolean.sql))
+#### to_boolean ([source](macros/data_type_cast_functions/to_boolean.sql))
 This macro converts a field to a boolean field.
 
 Usage: 
 `{{ pm_utils.to_boolean('[expression]') }}`
 
-#### to_date ([source](macros/multiple_databases/to_date.sql))
+#### to_date ([source](macros/data_type_cast_functions/to_date.sql))
 This macro converts a field to a date field. The expression can be in a date or a datetime format.
 
 Usage: 
@@ -198,19 +198,19 @@ Usage:
 Variables:
 - date_format
 
-#### to_double ([source](macros/multiple_databases/to_double.sql))
+#### to_double ([source](macros/data_type_cast_functions/to_double.sql))
 This macro converts a field to a double field.
 
 Usage: 
 `{{ pm_utils.to_double('[expression]') }}`
 
-#### to_integer ([source](macros/multiple_databases/to_integer.sql))
+#### to_integer ([source](macros/data_type_cast_functions/to_integer.sql))
 This macro converts a field to an integer field.
 
 Usage: 
 `{{ pm_utils.to_integer('[expression]') }}`
 
-#### to_timestamp ([source](macros/multiple_databases/to_timestamp.sql))
+#### to_timestamp ([source](macros/data_type_cast_functions/to_timestamp.sql))
 This macro converts a field to a timestamp field. For Databricks, milliseconds will automatically be parsed. You should only set the milliseconds in your datetime patern if the second fraction is different than milliseconds.
 
 Usage: 
@@ -219,7 +219,7 @@ Usage:
 Variables:
 - datetime_format
 
-#### to_varchar ([source](macros/multiple_databases/to_varchar.sql))
+#### to_varchar ([source](macros/data_type_cast_functions/to_varchar.sql))
 This macro converts a field to the data type `nvarchar(2000)` for SQL Server. Use the macro `as_varchar()` to convert a string to the this data type.
 
 Usage: 
@@ -227,37 +227,37 @@ Usage:
 
 ### Date time functions
 
-#### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
+#### date_from_timestamp ([source](macros/date_time_functions/date_from_timestamp.sql))
 This macro extracts the date part from a datetime field. 
 
 Usage: 
 `{{ pm_utils.date_from_timestamp('[expression]') }}`
 
-#### dateadd ([source](macros/multiple_databases/dateadd.sql))
+#### dateadd ([source](macros/date_time_functions/dateadd.sql))
 This macro adds the specified number of units for the `datepart` to a date or datetime expression. The `datepart` can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. The number of units will be interpreted as an integer value.
 
 Usage: 
 `{{ pm_utils.dateadd('[datepart]', '[number]', '[date_expression]') }}`
 
-#### datediff ([source](macros/multiple_databases/datediff.sql))
+#### datediff ([source](macros/date_time_functions/datediff.sql))
 This macro computes the difference between two date or datetime expressions based on the specified `datepart` and returns an integer value. The datepart can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. Weeks are defined from Sunday to Saturday.
 
 Usage: 
 `{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
 
-#### diff_weekdays ([source](macros/multiple_databases/diff_weekdays.sql))
+#### diff_weekdays ([source](macros/date_time_functions/diff_weekdays.sql))
 This macro computes the number of days between a start and end date. It returns one day when the start and end date are on the same date. The Saturdays and Sundays are excluded from the number of days.
 
 Usage: 
 `{{ pm_utils.diff_weekdays('[start_date_expression]', '[end_date_expression]') }}`
 
-#### timestamp_from_date ([source](macros/multiple_databases/timestamp_from_date.sql))
+#### timestamp_from_date ([source](macros/date_time_functions/timestamp_from_date.sql))
 This macro creates a timestamp based on only a date field. The time part of the timestamp is set to 00:00:00. 
 
 Usage:
 `{{ pm_utils.timestamp_from_date('[expression]') }}`
 
-#### timestamp_from_parts ([source](macros/multiple_databases/timestamp_from_parts.sql))
+#### timestamp_from_parts ([source](macros/date_time_functions/timestamp_from_parts.sql))
 This macro creates a timestamp based on a date field and string containing the time field.
 
 Variables:
@@ -268,13 +268,13 @@ Usage:
 
 ### String functions
 
-#### charindex ([source](macros/multiple_databases/charindex.sql))
+#### charindex ([source](macros/string_functions/charindex.sql))
 This macro returns the starting position of the first occurrence of a string in another string. The search is not case-sensitive. If the string is not found, the function returns 0. This macro can be used to check whether a string contains another string.
 
 Usage: 
 `{{ pm_utils.charindex('[expression_to_find]', '[field]', '[start_location]') }}`
 
-#### concat ([source](macros/generic/concat.sql))
+#### concat ([source](macros/string_functions/concat.sql))
 This macro concatenates two or more strings together. In case a value is `null` it is concatenated as the empty string `''`. 
 
 Usage: 
@@ -285,13 +285,13 @@ To pass a string as argument, make sure to use double quotes:
 
 ### Aggregate functions
 
-#### stddev ([source](macros/multiple_databases/stddev.sql))
+#### stddev ([source](macros/aggregate_functions/stddev.sql))
 This macro computes the standard deviation of a set of values, `null` values are ignored in the calculation. This macro can only be used as an aggregate function. For SQL Server, at least one of the values provided should not be `null`.
 
 Usage: 
 `{{ pm_utils.stddev('[expression]') }}`
 
-#### string_agg ([source](macros/multiple_databases/string_agg.sql))
+#### string_agg ([source](macros/aggregate_functions/string_agg.sql))
 This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function. For SQL Server, the maximum supported length is 2000. 
 
 Usage:
@@ -299,7 +299,7 @@ Usage:
 
 ### Tests
 
-#### test_equal_rowcount ([source](macros/generic_tests/test_equal_rowcount.sql))
+#### test_equal_rowcount ([source](macros/tests/test_equal_rowcount.sql))
 This generic test evaluates whether two models have the same number of rows.
 
 Usage:
@@ -311,7 +311,7 @@ models:
           compare_model: 'Model_B'
 ```
 
-#### test_exists ([source](macros/generic_tests/test_exists.sql))
+#### test_exists ([source](macros/tests/test_exists.sql))
 This generic test evaluates whether a model is available or if a column is available in the model. When used to check the existence of a column, the check is only executed when the model exists to prevent the same error occurring multiple times. You should add this test on the model level whenever the existence of the model is uncertain (e.g. source tests).
 
 Usage:
@@ -326,7 +326,7 @@ models:
           - pm_utils.exists
 ```
 
-#### test_not_negative ([source](macros/generic_tests/test_not_negative.sql))
+#### test_not_negative ([source](macros/tests/test_not_negative.sql))
 This generic test evaluates whether the values of the column are not negative.
 
 Usage:
@@ -339,7 +339,7 @@ models:
           - pm_utils.not_negative
 ```
 
-#### test_not_null ([source](macros/generic_tests/test_not_null.sql))
+#### test_not_null ([source](macros/tests/test_not_null.sql))
 This generic test evaluates whether the values of the column are not null or empty. The test is only executed when the column exists on the table.
 
 Usage:
@@ -352,7 +352,7 @@ models:
           - pm_utils.not_null
 ```
 
-#### test_one_column_not_null ([source](macros/generic_tests/test_one_column_not_null.sql))
+#### test_one_column_not_null ([source](macros/tests/test_one_column_not_null.sql))
 This generic test evaluates whether exactly one out of the specified columns does contain a value. This test can be defined by two or more columns. The test is only executed when all columns exist on the table.
 
 Usage:
@@ -366,7 +366,7 @@ models:
             - 'Column_B'
 ```
 
-#### test_unique_combination_of_columns ([source](macros/generic_tests/test_unique_combination_of_columns.sql))
+#### test_unique_combination_of_columns ([source](macros/tests/test_unique_combination_of_columns.sql))
 This generic test evaluates whether the combination of columns is unique. This test can be defined by two or more columns. The test is only executed when all columns exist on the table.
 
 Usage:
@@ -380,7 +380,7 @@ models:
             - 'Column_B'
 ```
 
-#### test_unique ([source](macros/generic_tests/test_unique.sql))
+#### test_unique ([source](macros/tests/test_unique.sql))
 This generic test evaluates whether the values of the column are unique. The test is only executed when the column exists on the table.
 
 Usage:
