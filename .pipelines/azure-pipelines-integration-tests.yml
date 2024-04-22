@@ -87,9 +87,8 @@ jobs:
           python3 -m venv dbt-env-sqlserver
 
           source dbt-env/bin/activate
-          pip install databricks-sql-connector==2.9.3
-          pip install dbt-databricks==1.7.1
-          pip install dbt-snowflake==1.7.0
+          pip install dbt-databricks==1.7.7
+          pip install dbt-snowflake==1.7.1
           dbt --version
 
           source dbt-env-sqlserver/bin/activate
