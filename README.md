@@ -22,27 +22,36 @@ vars:
 ```
 
 ## Contents
-This dbt package contains macros for SQL functions to run the dbt project on multiple databases and for generic tests. The databases that are currently supported are Snowflake, SQL Server and Databricks.
+This dbt package contains macros for SQL functions to run the dbt project on multiple databases. The databases that are currently supported are Snowflake, SQL Server and Databricks.
 
-- [Multiple databases](#Multiple-databases)
-  - [as_varchar](#as_varchar-source)
-  - [charindex](#charindex-source)
+- [SQL generators](#SQL-generators)
   - [create_index](#create_index-source)
-  - [dateadd](#dateadd-source)
-  - [date_from_timestamp](#date_from_timestamp-source)
-  - [datediff](#datediff-source)
-  - [diff_weekdays](#diff_weekdays-source)
-  - [stddev](#stddev-source)
-  - [string_agg](#string_agg-source)
-  - [timestamp_from_date](#timestamp_from_date-source)
-  - [timestamp_from_parts](#timestamp_from_parts-source)
+  - [id](#id-source)
+  - [mandatory](#mandatory-source)
+  - [optional](#optional-source)
+  - [optional_table](#optional_table-source)
+- [Data type cast functions](#Data-type-cast-functions)
+  - [as_varchar](#as_varchar-source)
   - [to_boolean](#to_boolean-source)
   - [to_date](#to_date-source)
   - [to_double](#to_double-source)
   - [to_integer](#to_integer-source)
   - [to_timestamp](#to_timestamp-source)
   - [to_varchar](#to_varchar-source)
-- [Generic tests](#Generic-tests)
+- [Date time functions](#Date-time-functions)
+  - [date_from_timestamp](#date_from_timestamp-source)
+  - [dateadd](#dateadd-source)
+  - [datediff](#datediff-source)
+  - [diff_weekdays](#diff_weekdays-source)
+  - [timestamp_from_date](#timestamp_from_date-source)
+  - [timestamp_from_parts](#timestamp_from_parts-source)
+- [String functions](#String-functions)
+  - [charindex](#charindex-source)
+  - [concat](#concat-source)
+- [Aggregate functions](#Aggregate-functions)
+  - [stddev](#stddev-source)
+  - [string_agg](#string_agg-source)
+- [Tests](#Tests)
   - [test_equal_rowcount](#test_equal_rowcount-source)
   - [test_exists](#test_exists-source)
   - [test_not_negative](#test_not_negative-source)
@@ -50,26 +59,8 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_one_column_not_null](#test_one_column_not_null-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
   - [test_unique](#test_unique-source)
-- [Generic](#Generic)
-  - [concat](#concat-source)
-  - [id](#id-source)
-  - [mandatory](#mandatory-source)
-  - [optional](#optional-source)
-  - [optional_table](#optional_table-source)
 
-### Multiple databases
-
-#### as_varchar ([source](macros/multiple_databases/as_varchar.sql))
-This macro converts a string to the data type `nvarchar(2000)` for SQL Server. Use the macro `to_varchar()` to convert a field to this data type.
-
-Usage: 
-`{{ pm_utils.as_varchar('[expression]') }}`
-
-#### charindex ([source](macros/multiple_databases/charindex.sql))
-This macro returns the starting position of the first occurrence of a string in another string. The search is not case-sensitive. If the string is not found, the function returns 0. This macro can be used to check whether a string contains another string.
-
-Usage: 
-`{{ pm_utils.charindex('[expression_to_find]', '[field]', '[start_location]') }}`
+### SQL generators
 
 #### create_index ([source](macros/multiple_databases/create_index.sql))
 This macro creates a clustered columnstore index on the current model for SQL Server. This macro should be used in a dbt post-hook.
@@ -89,62 +80,65 @@ In case you want to create the index on a source table, refer to the table using
 ) }}
 ```
 
-#### dateadd ([source](macros/multiple_databases/dateadd.sql))
-This macro adds the specified number of units for the `datepart` to a date or datetime expression. The `datepart` can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. The number of units will be interpreted as an integer value.
-
-Usage: 
-`{{ pm_utils.dateadd('[datepart]', '[number]', '[date_expression]') }}`
-
-#### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
-This macro extracts the date part from a datetime field. 
-
-Usage: 
-`{{ pm_utils.date_from_timestamp('[expression]') }}`
-
-#### datediff ([source](macros/multiple_databases/datediff.sql))
-This macro computes the difference between two date or datetime expressions based on the specified `datepart` and returns an integer value. The datepart can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. Weeks are defined from Sunday to Saturday.
-
-Usage: 
-`{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
-
-#### diff_weekdays ([source](macros/multiple_databases/diff_weekdays.sql))
-This macro computes the number of days between a start and end date. It returns one day when the start and end date are on the same date. The Saturdays and Sundays are excluded from the number of days.
-
-Usage: 
-`{{ pm_utils.diff_weekdays('[start_date_expression]', '[end_date_expression]') }}`
-
 #### id ([source](macros/multiple_databases/id.sql))
 This macro generates an id field that can be used as a column for the current model.
 
 Usage:
 `{{ pm_utils.id() }}`
 
-#### stddev ([source](macros/multiple_databases/stddev.sql))
-This macro computes the standard deviation of a set of values, `null` values are ignored in the calculation. This macro can only be used as an aggregate function. For SQL Server, at least one of the values provided should not be `null`.
+#### mandatory ([source](macros/generic/mandatory.sql))
+Use this macro for the mandatory columns in your source tables. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
 
-Usage: 
-`{{ pm_utils.stddev('[expression]') }}`
-
-#### string_agg ([source](macros/multiple_databases/string_agg.sql))
-This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function. For SQL Server, the maximum supported length is 2000. 
+You can also set `id` as data type, which expects the values to be integers.
 
 Usage:
-`{{ pm_utils.string_agg('[expression]', '[delimiter]') }}`
+`{{ pm_utils.mandatory(source('source_name', 'table_name'), '"Column_A"', 'data_type') }}`
 
-#### timestamp_from_date ([source](macros/multiple_databases/timestamp_from_date.sql))
-This macro creates a timestamp based on only a date field. The time part of the timestamp is set to 00:00:00. 
+To keep the SQL in the model more readable, you can define a Jinja variable for the reference to the source table:
 
-Usage:
-`{{ pm_utils.timestamp_from_date('[expression]') }}`
-
-#### timestamp_from_parts ([source](macros/multiple_databases/timestamp_from_parts.sql))
-This macro creates a timestamp based on a date field and string containing the time field.
+`{% set source_table = source('source_name', 'table_name') %}`
 
 Variables:
-- time_format
+- date_format
+- datetime_format
+
+These variables are only required when the `data_type` is used with the values `date` or `datetime`.
+
+#### optional ([source](macros/generic/optional.sql))
+This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
+
+You can also set `id` as data type, which creates the column with unique integer values if the column is not present. If the column is present in that case, the values are expected to be integers.
+
+Usage:
+`{{ pm_utils.optional(source('source_name', 'table_name'), '"Column_A"', 'data_type') }}`
+
+Alternatively, you can use this macro for non-source data. Use instead of the source function the ref function: `ref(table_name)`. In that case, data type casting is not applied.
+
+To keep the SQL in the model more readable, you can define a Jinja variable for the reference to the source table:
+
+`{% set source_table = source('source_name', 'table_name') %}`
+
+Variables:
+- date_format
+- datetime_format
+
+These variables are only required when the `data_type` is used with the values `date` or `datetime`.
+
+#### optional_table ([source](macros/generic/optional_table.sql))
+This macro checks whether the source table is present. If the table is not present, it creates a table without records in your target schema. If the table is present, it selects the table from the source schema. Use this macro to allow for missing source tables when that data is optional.
+
+Usage:
+`{{ pm_utils.optional_table(source('source_name', 'table_name')) }}`
+
+Note: you can only apply the macro for source tables in combination with the `optional()` macro applied to all its fields.
+
+### Data type cast functions
+
+#### as_varchar ([source](macros/multiple_databases/as_varchar.sql))
+This macro converts a string to the data type `nvarchar(2000)` for SQL Server. Use the macro `to_varchar()` to convert a field to this data type.
 
 Usage: 
-`{{ pm_utils.timestamp_from_parts('[date_expression]', '[time_expression]') }}`
+`{{ pm_utils.as_varchar('[expression]') }}`
 
 #### to_boolean ([source](macros/multiple_databases/to_boolean.sql))
 This macro converts a field to a boolean field.
@@ -188,7 +182,79 @@ This macro converts a field to the data type `nvarchar(2000)` for SQL Server. Us
 Usage: 
 `{{ pm_utils.to_varchar('[expression]') }}`
 
-### Generic tests
+### Date time functions
+
+#### date_from_timestamp ([source](macros/multiple_databases/date_from_timestamp.sql))
+This macro extracts the date part from a datetime field. 
+
+Usage: 
+`{{ pm_utils.date_from_timestamp('[expression]') }}`
+
+#### dateadd ([source](macros/multiple_databases/dateadd.sql))
+This macro adds the specified number of units for the `datepart` to a date or datetime expression. The `datepart` can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. The number of units will be interpreted as an integer value.
+
+Usage: 
+`{{ pm_utils.dateadd('[datepart]', '[number]', '[date_expression]') }}`
+
+#### datediff ([source](macros/multiple_databases/datediff.sql))
+This macro computes the difference between two date or datetime expressions based on the specified `datepart` and returns an integer value. The datepart can be any of the following values: year, quarter, month, week, day, hour, minute, second, millisecond. Weeks are defined from Sunday to Saturday.
+
+Usage: 
+`{{ pm_utils.datediff('[datepart]', '[start_date_expression]', '[end_date_expression]') }}`
+
+#### diff_weekdays ([source](macros/multiple_databases/diff_weekdays.sql))
+This macro computes the number of days between a start and end date. It returns one day when the start and end date are on the same date. The Saturdays and Sundays are excluded from the number of days.
+
+Usage: 
+`{{ pm_utils.diff_weekdays('[start_date_expression]', '[end_date_expression]') }}`
+
+#### timestamp_from_date ([source](macros/multiple_databases/timestamp_from_date.sql))
+This macro creates a timestamp based on only a date field. The time part of the timestamp is set to 00:00:00. 
+
+Usage:
+`{{ pm_utils.timestamp_from_date('[expression]') }}`
+
+#### timestamp_from_parts ([source](macros/multiple_databases/timestamp_from_parts.sql))
+This macro creates a timestamp based on a date field and string containing the time field.
+
+Variables:
+- time_format
+
+Usage: 
+`{{ pm_utils.timestamp_from_parts('[date_expression]', '[time_expression]') }}`
+
+### String functions
+
+#### charindex ([source](macros/multiple_databases/charindex.sql))
+This macro returns the starting position of the first occurrence of a string in another string. The search is not case-sensitive. If the string is not found, the function returns 0. This macro can be used to check whether a string contains another string.
+
+Usage: 
+`{{ pm_utils.charindex('[expression_to_find]', '[field]', '[start_location]') }}`
+
+#### concat ([source](macros/generic/concat.sql))
+This macro concatenates two or more strings together. In case a value is `null` it is concatenated as the empty string `''`. 
+
+Usage: 
+`{{ pm_utils.concat('"Field_A"', '"Field_B"') }}`
+
+To pass a string as argument, make sure to use double quotes:
+`{{ pm_utils.concat('"Field_A"', "' - '", '"Field_B"') }}`
+
+### Aggregate functions
+
+#### stddev ([source](macros/multiple_databases/stddev.sql))
+This macro computes the standard deviation of a set of values, `null` values are ignored in the calculation. This macro can only be used as an aggregate function. For SQL Server, at least one of the values provided should not be `null`.
+
+Usage: 
+`{{ pm_utils.stddev('[expression]') }}`
+
+#### string_agg ([source](macros/multiple_databases/string_agg.sql))
+This macro aggregates string fields separated by the given delimiter. If no delimiter is specified, strings are separated by a comma followed by a space. This macro can only be used as an aggregate function. For SQL Server, the maximum supported length is 2000. 
+
+Usage:
+`{{ pm_utils.string_agg('[expression]', '[delimiter]') }}`
+
+### Tests
 
 #### test_equal_rowcount ([source](macros/generic_tests/test_equal_rowcount.sql))
 This generic test evaluates whether two models have the same number of rows.
@@ -283,60 +349,3 @@ models:
         tests:
           - pm_utils.unique
 ```
-
-### Generic
-
-#### concat ([source](macros/generic/concat.sql))
-This macro concatenates two or more strings together. In case a value is `null` it is concatenated as the empty string `''`. 
-
-Usage: 
-`{{ pm_utils.concat('"Field_A"', '"Field_B"') }}`
-
-To pass a string as argument, make sure to use double quotes:
-`{{ pm_utils.concat('"Field_A"', "' - '", '"Field_B"') }}`
-
-#### mandatory ([source](macros/generic/mandatory.sql))
-Use this macro for the mandatory columns in your source tables. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
-
-You can also set `id` as data type, which expects the values to be integers.
-
-Usage:
-`{{ pm_utils.mandatory(source('source_name', 'table_name'), '"Column_A"', 'data_type') }}`
-
-To keep the SQL in the model more readable, you can define a Jinja variable for the reference to the source table:
-
-`{% set source_table = source('source_name', 'table_name') %}`
-
-Variables:
-- date_format
-- datetime_format
-
-These variables are only required when the `data_type` is used with the values `date` or `datetime`.
-
-#### optional ([source](macros/generic/optional.sql))
-This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
-
-You can also set `id` as data type, which creates the column with unique integer values if the column is not present. If the column is present in that case, the values are expected to be integers.
-
-Usage:
-`{{ pm_utils.optional(source('source_name', 'table_name'), '"Column_A"', 'data_type') }}`
-
-Alternatively, you can use this macro for non-source data. Use instead of the source function the ref function: `ref(table_name)`. In that case, data type casting is not applied.
-
-To keep the SQL in the model more readable, you can define a Jinja variable for the reference to the source table:
-
-`{% set source_table = source('source_name', 'table_name') %}`
-
-Variables:
-- date_format
-- datetime_format
-
-These variables are only required when the `data_type` is used with the values `date` or `datetime`.
-
-#### optional_table ([source](macros/generic/optional_table.sql))
-This macro checks whether the source table is present. If the table is not present, it creates a table without records in your target schema. If the table is present, it selects the table from the source schema. Use this macro to allow for missing source tables when that data is optional.
-
-Usage:
-`{{ pm_utils.optional_table(source('source_name', 'table_name')) }}`
-
-Note: you can only apply the macro for source tables in combination with the `optional()` macro applied to all its fields.
