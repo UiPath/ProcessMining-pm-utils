@@ -30,6 +30,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [mandatory](#mandatory-source)
   - [optional](#optional-source)
   - [optional_table](#optional_table-source)
+  - [star](#star-source)
 - [Data type cast functions](#Data-type-cast-functions)
   - [as_varchar](#as_varchar-source)
   - [to_boolean](#to_boolean-source)
