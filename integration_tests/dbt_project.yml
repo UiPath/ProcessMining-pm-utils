@@ -3,3 +3,14 @@ version: '1.0.0'
 config-version: 2
 
 profile: 'integration_tests'
+
+# All models are materialized as table.
+models:
+  pm_utils_integration_tests:
+    materialized: table
+
+# Quoting is enabled for databases, schemas, and identifiers.
+quoting:
+  database: true
+  schema: true
+  identifier: true
