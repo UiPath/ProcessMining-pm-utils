@@ -8,9 +8,9 @@
     {%- for column in columns -%}
         {%- if column.name not in except -%}
             {%- if target.type == 'databricks' -%}
-                {%- set selects = selects.append(relation.identifier + '.`' + column.name + '`') -%}
+                {%- set selects = selects.append('`' + relation.identifier + '`.`' + column.name + '`') -%}
             {%- elif target.type in ('sqlserver', 'snowflake') -%}
-                {%- set selects = selects.append(relation.identifier + '."' + column.name + '"') -%}
+                {%- set selects = selects.append('"' + relation.identifier + '"."' + column.name + '"') -%}
             {%- endif -%}
         {%- endif -%}
     {%- endfor -%}
@@ -23,7 +23,11 @@
         {%- endif -%}
     {% endfor %}
 {% else %}
-    {{ relation.identifier }}.*
+    {%- if target.type == 'databricks' -%}
+        `{{ relation.identifier }}`.*
+    {%- elif target.type in ('sqlserver', 'snowflake') -%}
+        "{{ relation.identifier }}".*
+    {%- endif -%}
 {% endif %}
 
 {% endmacro %}
