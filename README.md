@@ -141,13 +141,15 @@ You can choose to exclude fields from the select statement, for example:
 - When you apply logic to a field and don't want to keep the original.
 - When you join tables and a field with the same name is available on multiple tables.
 
+Make sure to put the relation also in the from clause. Otherwise, the table from which you select can't be found.
+
 Usage:
 
 Select all fields from model `Table_A`.
 ```
 select
     {{ pm_utils.star(ref('Table_A')) }}
-from ref('Table_A')
+from {{ ref('Table_A') }}
 ```
 
 Select all fields from source `Table_A`.
@@ -157,23 +159,12 @@ select
 from source('sources', 'Table_A')
 ```
 
-Select all fields from `Table_A`, which is first created as CTE. You can write `from Table_A`, but the argument of the star macro requires the `ref()`.
-```
-with Table_A as (
-    select * from {{ ref('Table_A') }}
-)
-
-select
-    {{ pm_utils.star(ref('Table_A')) }}
-from Table_A
-```
-
 Select all fields from `Table_A`, except for the field `Creation_date`. More fields can be added to the except list. Additional select statements can be written before and after the `star()` macro by separating the statements with a comma.
 ```
 select
     {{ pm_utils.star(ref('Table_A'), except=['Creation_date']) }},
     {{ pm_utils.to_date('"Creation_date"') }} as "Creation_date"
-from Table_A
+from {{ ref('Table_A') }}
 ```
 
 ### Data type cast functions
