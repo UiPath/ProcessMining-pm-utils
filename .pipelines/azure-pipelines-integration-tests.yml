@@ -93,10 +93,6 @@ jobs:
         path: self
         displayName: Checkout current repository
 
-      - checkout: testTransformations
-        path: framework_resources
-        displayName: Checkout framework resources repository
-
       - bash: |
           echo "##vso[task.setvariable variable=DBT_SCHEMA]pm_utils_integration_tests"
           echo "##vso[task.setvariable variable=dbtProjectPath]$(Agent.BuildDirectory)/self/integration_tests"
