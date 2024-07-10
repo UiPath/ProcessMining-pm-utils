@@ -8,12 +8,6 @@ resources:
       name: UiPath/AzurePipelinesTemplates
       ref: refs/tags/uipath.kv-access.1.2.7
 
-    - repository: testTransformations
-      endpoint: UiPath
-      type: github
-      name: UiPath/ProcessMining-framework-resources
-      ref: main
-
 # Trigger the pipeline for all PRs we open, but do not start as long as there is no PR.
 trigger:
   none
@@ -30,10 +24,54 @@ jobs:
   - job: get_keyvault_secrets
     displayName: Get keyvault secrets
     steps:
-      - template: ./.pipelines/templates/get_keyvault_secrets.job.yml@testTransformations
+      - template: Helpers/toggle.vault.access.steps.yml@toggleKeyVaultRepo
         parameters:
           serviceConnection: $(serviceConnection)
           keyVaultName: $(keyVaultName)
+          enabled: true
+
+      # Get all secrets to be used for running dbt transformations
+      - task: AzureKeyVault@1
+        displayName: Download secrets from $(keyVaultName)
+        retryCountOnTaskFailure: 3
+        condition: succeeded()
+        inputs:
+          azureSubscription: $(serviceConnection)
+          KeyVaultName: $(keyVaultName)
+          secretsFilter: 'devSQLServerCIServer,
+            devSQLServerCIUser,
+            devSQLServerCIPassword,
+            devSQLServerCIDatabase,
+            devSnowflakeCIAccountPassword,
+            devSnowflakeCIAccount,
+            devSnowflakeCIUser,
+            devSnowflakeCIRole,
+            devSnowflakeCIDatabase,
+            devSnowflakeCIWarehouse,
+            connectorsAzureStorageAccessKey'
+
+      - template: Helpers/toggle.vault.access.steps.yml@toggleKeyVaultRepo
+        parameters:
+          serviceConnection: $(serviceConnection)
+          keyVaultName: $(keyVaultName)
+          enabled: false
+
+      # The variables are set as output variables, so they can be used in other jobs.
+      # All are set as secret variables, so they are not set automatically as environment variables.
+      - bash: |
+          echo '##vso[task.setvariable variable=DBT_SQL_SERVER_SERVER;isOutput=true;issecret=true]$(devSQLServerCIServer)'
+          echo '##vso[task.setvariable variable=DBT_SQL_SERVER_USER;isOutput=true;issecret=true]$(devSQLServerCIUser)'
+          echo '##vso[task.setvariable variable=DBT_SQL_SERVER_PASSWORD;isOutput=true;issecret=true]$(devSQLServerCIPassword)'
+          echo '##vso[task.setvariable variable=DBT_SQL_SERVER_DATABASE;isOutput=true;issecret=true]$(devSQLServerCIDatabase)'
+          echo '##vso[task.setvariable variable=SNOWSQL_PWD_input;isOutput=true;issecret=true]$(devSnowflakeCIAccountPassword)'
+          echo '##vso[task.setvariable variable=DBT_SNOWFLAKE_ACCOUNT;isOutput=true;issecret=true]$(devSnowflakeCIAccount)'
+          echo '##vso[task.setvariable variable=DBT_SNOWFLAKE_USER;isOutput=true;issecret=true]$(devSnowflakeCIUser)'
+          echo '##vso[task.setvariable variable=DBT_SNOWFLAKE_PASSWORD;isOutput=true;issecret=true]$(devSnowflakeCIAccountPassword)'
+          echo '##vso[task.setvariable variable=DBT_SNOWFLAKE_ROLE;isOutput=true;issecret=true]$(devSnowflakeCIRole)'
+          echo '##vso[task.setvariable variable=DBT_SNOWFLAKE_DATABASE;isOutput=true;issecret=true]$(devSnowflakeCIDatabase)'
+          echo '##vso[task.setvariable variable=DBT_SNOWFLAKE_WAREHOUSE;isOutput=true;issecret=true]$(devSnowflakeCIWarehouse)'
+          echo '##vso[task.setvariable variable=STORAGE_ACCESS_KEY;isOutput=true;issecret=true]$(connectorsAzureStorageAccessKey)'      
+        name: set_variables
 
   - job: integration_tests
     displayName: Integration tests
