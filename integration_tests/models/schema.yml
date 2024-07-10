@@ -4,170 +4,170 @@ models:
   - name: test_concat
     tests:
       - equal_value:
-          actual: '`Two_text_fields`'
-          expected: '`Two_text_fields_expected`'
+          actual: '"Two_text_fields"'
+          expected: '"Two_text_fields_expected"'
       - equal_value:
-          actual: '`One_null`'
-          expected: '`One_null_expected`'
+          actual: '"One_null"'
+          expected: '"One_null_expected"'
 
   - name: test_charindex
     tests:
       - equal_value:
-          actual: '`Find_basic_scenario`'
-          expected: '`Find_basic_scenario_expected`'
+          actual: '"Find_basic_scenario"'
+          expected: '"Find_basic_scenario_expected"'
       - equal_value:
-          actual: '`Find_first_of_multiple_occurrences`'
-          expected: '`Find_first_of_multiple_occurrences_expected`'
+          actual: '"Find_first_of_multiple_occurrences"'
+          expected: '"Find_first_of_multiple_occurrences_expected"'
       - equal_value:
-          actual: '`Find_first_space`'
-          expected: '`Find_first_space_expected`'
+          actual: '"Find_first_space"'
+          expected: '"Find_first_space_expected"'
       - equal_value:
-          actual: '`Find_with_start_location`'
-          expected: '`Find_with_start_location_expected`'
+          actual: '"Find_with_start_location"'
+          expected: '"Find_with_start_location_expected"'
       - equal_value:
-          actual: '`Find_non_occurring_value`'
-          expected: '`Find_non_occurring_value_expected`'
+          actual: '"Find_non_occurring_value"'
+          expected: '"Find_non_occurring_value_expected"'
       - equal_value:
-          actual: '`Find_empty_value`'
-          expected: '`Find_empty_value_expected`'
+          actual: '"Find_empty_value"'
+          expected: '"Find_empty_value_expected"'
       - equal_value:
-          actual: '`Find_null_value`'
-          expected: '`Find_null_value_expected`'
+          actual: '"Find_null_value"'
+          expected: '"Find_null_value_expected"'
 
   - name: test_to_timestamp
     tests:
       - equal_value:
-          actual: '`timestamp_date`'
-          expected: '`timestamp_date_expected`'
+          actual: '"timestamp_date"'
+          expected: '"timestamp_date_expected"'
       - equal_value:
-          actual: '`timestamp_datetime`'
-          expected: '`timestamp_datetime_expected`'
+          actual: '"timestamp_datetime"'
+          expected: '"timestamp_datetime_expected"'
       - equal_value:
-          actual: '`timestamp_datetime_ms`'
-          expected: '`timestamp_datetime_ms_expected`'
+          actual: '"timestamp_datetime_ms"'
+          expected: '"timestamp_datetime_ms_expected"'
       - equal_value:
-          actual: '`timestamp_datetime_ms4`'
-          expected: '`timestamp_datetime_ms4_expected`'
+          actual: '"timestamp_datetime_ms4"'
+          expected: '"timestamp_datetime_ms4_expected"'
       - equal_value:
-          actual: '`timestamp_time`'
-          expected: '`timestamp_time_expected`'
+          actual: '"timestamp_time"'
+          expected: '"timestamp_time_expected"'
       - equal_value:
-          actual: '`null_value`'
-          expected: '`null_value_expected`'
+          actual: '"null_value"'
+          expected: '"null_value_expected"'
 
   - name: test_dateadd
     tests:
       - equal_value:
-          actual: '`add_milliseconds`'
-          expected: '`add_milliseconds_expected`'
+          actual: '"add_milliseconds"'
+          expected: '"add_milliseconds_expected"'
       - equal_value:
-          actual: '`add_seconds`'
-          expected: '`add_seconds_expected`'
+          actual: '"add_seconds"'
+          expected: '"add_seconds_expected"'
       - equal_value:
-          actual: '`add_minutes`'
-          expected: '`add_minutes_expected`'
+          actual: '"add_minutes"'
+          expected: '"add_minutes_expected"'
       - equal_value:
-          actual: '`add_hours`'
-          expected: '`add_hours_expected`'
+          actual: '"add_hours"'
+          expected: '"add_hours_expected"'
       - equal_value:
-          actual: '`add_days`'
-          expected: '`add_days_expected`'
+          actual: '"add_days"'
+          expected: '"add_days_expected"'
       - equal_value:
-          actual: '`add_weeks`'
-          expected: '`add_weeks_expected`'
+          actual: '"add_weeks"'
+          expected: '"add_weeks_expected"'
       - equal_value:
-          actual: '`add_months`'
-          expected: '`add_months_expected`'
+          actual: '"add_months"'
+          expected: '"add_months_expected"'
       - equal_value:
-          actual: '`add_quarters`'
-          expected: '`add_quarters_expected`'
+          actual: '"add_quarters"'
+          expected: '"add_quarters_expected"'
       - equal_value:
-          actual: '`add_years`'
-          expected: '`add_years_expected`'
+          actual: '"add_years"'
+          expected: '"add_years_expected"'
       - equal_value:
-          actual: '`add_30_days_in_days`'
-          expected: '`add_30_days_in_days_expected`'
+          actual: '"add_30_days_in_days"'
+          expected: '"add_30_days_in_days_expected"'
       - equal_value:
-          actual: '`add_30_days_in_seconds`'
-          expected: '`add_30_days_in_seconds_expected`'
+          actual: '"add_30_days_in_seconds"'
+          expected: '"add_30_days_in_seconds_expected"'
       - equal_value:
-          actual: '`add_bigint`'
-          expected: '`add_bigint_expected`'
+          actual: '"add_bigint"'
+          expected: '"add_bigint_expected"'
       - equal_value:
-          actual: '`add_bigint_30_days`'
-          expected: '`add_bigint_30_days_expected`'
+          actual: '"add_bigint_30_days"'
+          expected: '"add_bigint_30_days_expected"'
       - equal_value:
-          actual: '`add_double_days`'
-          expected: '`add_double_days_expected`'
+          actual: '"add_double_days"'
+          expected: '"add_double_days_expected"'
       - equal_value:
-          actual: '`add_to_null_value`'
-          expected: '`add_to_null_value_expected`'
+          actual: '"add_to_null_value"'
+          expected: '"add_to_null_value_expected"'
 
   - name: test_stddev
     tests:
     - equal_value:
-        actual: '`stddev_actual`'
-        expected: '`stddev_expected`'
+        actual: '"stddev_actual"'
+        expected: '"stddev_expected"'
     - equal_value:
-        actual: '`stddev_with_null_values_actual`'
-        expected: '`stddev_with_null_values_expected`'
+        actual: '"stddev_with_null_values_actual"'
+        expected: '"stddev_with_null_values_expected"'
 
   - name: test_datediff
     tests:
     - equal_value:
-        actual: '`Year`'
-        expected: '`Year_expected`'
+        actual: '"Year"'
+        expected: '"Year_expected"'
     - equal_value:
-        actual: '`Quarter`'
-        expected: '`Quarter_expected`'
+        actual: '"Quarter"'
+        expected: '"Quarter_expected"'
     - equal_value:
-        actual: '`Month`'
-        expected: '`Month_expected`'
+        actual: '"Month"'
+        expected: '"Month_expected"'
     - equal_value:
-        actual: '`Week_saturday_to_sunday`'
-        expected: '`Week_saturday_to_sunday_expected`'
+        actual: '"Week_saturday_to_sunday"'
+        expected: '"Week_saturday_to_sunday_expected"'
     - equal_value:
-        actual: '`Week_sunday_to_saturday`'
-        expected: '`Week_sunday_to_saturday_expected`'
+        actual: '"Week_sunday_to_saturday"'
+        expected: '"Week_sunday_to_saturday_expected"'
     - equal_value:
-        actual: '`Day`'
-        expected: '`Day_expected`'
+        actual: '"Day"'
+        expected: '"Day_expected"'
     - equal_value:
-        actual: '`Hour`'
-        expected: '`Hour_expected`'
+        actual: '"Hour"'
+        expected: '"Hour_expected"'
     - equal_value:
-        actual: '`Minute`'
-        expected: '`Minute_expected`'
+        actual: '"Minute"'
+        expected: '"Minute_expected"'
     - equal_value:
-        actual: '`Second`'
-        expected: '`Second_expected`'
+        actual: '"Second"'
+        expected: '"Second_expected"'
     - equal_value:
-        actual: '`Millisecond`'
-        expected: '`Millisecond_expected`'
+        actual: '"Millisecond"'
+        expected: '"Millisecond_expected"'
 
   - name: test_diff_weekdays
     tests:
     - equal_value:
-        actual: '`Two_weekends`'
-        expected: '`Two_weekends_expected`'
+        actual: '"Two_weekends"'
+        expected: '"Two_weekends_expected"'
     - equal_value:
-        actual: '`One_half_weekends`'
-        expected: '`One_half_weekends_expected`'
+        actual: '"One_half_weekends"'
+        expected: '"One_half_weekends_expected"'
     - equal_value:
-        actual: '`One_weekend`'
-        expected: '`One_weekend_expected`'
+        actual: '"One_weekend"'
+        expected: '"One_weekend_expected"'
     - equal_value:
-        actual: '`One_weekend_end`'
-        expected: '`One_weekend_end_expected`'
+        actual: '"One_weekend_end"'
+        expected: '"One_weekend_end_expected"'
     - equal_value:
-        actual: '`Half_weekend`'
-        expected: '`Half_weekend_expected`'
+        actual: '"Half_weekend"'
+        expected: '"Half_weekend_expected"'
     - equal_value:
-        actual: '`Start_weekend`'
-        expected: '`Start_weekend_expected`'
+        actual: '"Start_weekend"'
+        expected: '"Start_weekend_expected"'
     - equal_value:
-        actual: '`Start_half_weekend`'
-        expected: '`Start_half_weekend_expected`'
+        actual: '"Start_half_weekend"'
+        expected: '"Start_half_weekend_expected"'
     - equal_value:
-        actual: '`Only_weekend`'
-        expected: '`Only_weekend_expected`'
+        actual: '"Only_weekend"'
+        expected: '"Only_weekend_expected"'

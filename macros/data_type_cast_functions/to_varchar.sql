@@ -1,8 +1,6 @@
 {%- macro to_varchar(field) -%}
 
-{%- if target.type == 'databricks' -%}
-    cast({{ field }} as string)
-{%- elif target.type == 'snowflake' -%}
+{%- if target.type == 'snowflake' -%}
     to_varchar({{ field }})
 {%- elif target.type == 'sqlserver' -%}
     case

@@ -5,7 +5,7 @@ When the star macro doesn't work as expected, the SQL statements fail due to dup
 with Select_all_except as (
     select
         {{ pm_utils.star(ref('input_table'), except=['Column_A']) }},
-        'A' as `Column_A`
+        'A' as "Column_A"
     from {{ ref('input_table') }}
 ),
 
@@ -17,6 +17,6 @@ Select_all as (
 )
 
 select
-    `Column_A`,
-    `Column_B`
+    "Column_A",
+    "Column_B"
 from Select_all

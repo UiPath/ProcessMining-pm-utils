@@ -10,9 +10,7 @@
     {{ source_table }}
 {%- else -%}
     {% set query %}
-        {% if target.type == 'databricks' %}
-            create or replace table `{{ target.database }}`.`{{ target.schema }}`.`{{ source_table.name }}` (dummy int)
-        {% elif target.type == 'snowflake' %}
+        {% if target.type == 'snowflake' %}
             create or replace table "{{ target.database }}"."{{ target.schema }}"."{{ source_table.name }}" (dummy int)
         {% elif target.type == 'sqlserver' %}
             if object_id('"{{ target.database }}"."{{ target.schema }}"."{{ source_table.name }}"', 'U') is null
@@ -21,11 +19,7 @@
     {% endset %}
 
     {% do run_query(query) %}
-    {% if target.type == 'databricks' %}
-        `{{ target.database }}`.`{{ target.schema }}`.`{{ source_table.name }}`
-    {% elif target.type in ('snowflake', 'sqlserver') %}
         "{{ target.database }}"."{{ target.schema }}"."{{ source_table.name }}"
-    {% endif %}
 {%- endif -%}
 
 {%- endmacro -%}

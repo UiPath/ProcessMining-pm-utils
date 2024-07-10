@@ -1,14 +1,7 @@
 {%- macro to_timestamp(field, relation) -%}
 
-{# For Databricks, try to convert the milliseconds if present. If not, fallback on the same formatting without milliseconds. If the precision part of the seconds is greater than milliseconds, set that in the datetime_format. #}
-{%- if target.type == 'databricks' -%}
-    case
-        when try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss") }}.SSS') is null
-            then try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss") }}')
-        else try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss") }}.SSS')
-    end
 {# Snowflake try_to function requires an expression of type varchar. #}
-{%- elif target.type == 'snowflake' -%}
+{%- if target.type == 'snowflake' -%}
     try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}')
 {%- elif target.type == 'sqlserver' -%}
     case
@@ -22,23 +15,11 @@
 {# Warning if type casting will introduce null values for at least 1 record. #}
 {% if relation is defined %}
     {% set query %}
-    {% if target.type == 'databricks' -%}
-    select
-        count(*) as `record_count`
-    from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
-    {%- elif target.type in ('sqlserver', 'snowflake') -%}
     select
         count(*) as "record_count"
     from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
-    {% endif %}
     where {{ field }} is not null and
-        {% if target.type == 'databricks' -%}
-            case
-                when try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss") }}.SSS') is null
-                    then try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss") }}')
-                else try_to_timestamp({{ field }}, '{{ var("datetime_format", "yyyy-MM-dd HH:mm:ss") }}.SSS')
-            end is null
-        {% elif target.type == 'snowflake' -%}
+        {% if target.type == 'snowflake' -%}
             try_to_timestamp(to_varchar({{ field }}), '{{ var("datetime_format", "YYYY-MM-DD hh24:mi:ss.ff3") }}') is null
         {% elif target.type == 'sqlserver' -%}
             case

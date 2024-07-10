@@ -15,11 +15,7 @@ For a successful test, return 0 records according to the dbt standard. #}
 
 {# If the test is for a column and the table doesn't exist, we return success to prevent the same error multiple times. #}
 {% if column_name is defined and not table_exists %}
-    {%- if target.type == 'databricks' -%}
-        select 'dummy_value' as `dummy`
-    {% else %}
-        select 'dummy_value' as "dummy"
-    {% endif %}
+    select 'dummy_value' as "dummy"
     where 1 = 0
 {# If column_name is defined, the test is on a column level. #}
 {% elif column_name is defined and table_exists %}
@@ -28,26 +24,14 @@ For a successful test, return 0 records according to the dbt standard. #}
 
     {%- set column_names = [] -%}
     {%- for column in columns -%}
-        {%- if target.type == 'databricks' -%}
-            {%- set column_names = column_names.append('`' + column.name + '`') -%}
-        {%- else -%}
-            {%- set column_names = column_names.append('"' + column.name + '"') -%}
-        {%- endif -%}
+        {%- set column_names = column_names.append('"' + column.name + '"') -%}
     {%- endfor -%}
 
     {% if column_name in column_names %}
-        {%- if target.type == 'databricks' -%}
-            select 'dummy_value' as `dummy`
-        {%- else -%}
-            select 'dummy_value' as "dummy"
-        {%- endif -%}
+        select 'dummy_value' as "dummy"
         where 1 = 0
     {% else %}
-        {%- if target.type == 'databricks' -%}
-            select 'dummy_value' as `dummy`
-        {%- else -%}
-            select 'dummy_value' as "dummy"
-        {%- endif -%}
+        select 'dummy_value' as "dummy"
         {% if var("log_result", False) == True and execute %}
             {{ log(tojson({'Key': 'TestExistsColumn', 'Details': {'model_name': model.name, 'column_name': column_name}, 'Category': log_category, 'Message': 'The field \'' ~ model.name ~ '.' ~ column_name ~ '\' doesn\'t exist in the source data. Note that the field detection is case-sensitive.'}), True) }}
         {% endif %}
@@ -55,18 +39,10 @@ For a successful test, return 0 records according to the dbt standard. #}
 {# If column_name is not defined, the test is on a table level. #}
 {% elif column_name is not defined %}
     {% if table_exists %}
-        {%- if target.type == 'databricks' -%}
-            select 'dummy_value' as `dummy`
-        {%- else -%}
-            select 'dummy_value' as "dummy"
-        {%- endif -%}
+        select 'dummy_value' as "dummy"
         where 1 = 0
     {% else %}
-        {%- if target.type == 'databricks' -%}
-            select 'dummy_value' as `dummy`
-        {%- else -%}
-            select 'dummy_value' as "dummy"
-        {%- endif -%}
+        select 'dummy_value' as "dummy"
         {% if var("log_result", False) == True and execute %}
             {{ log(tojson({'Key': 'TestExistsTable', 'Details': {'model_name': model.name}, 'Category': log_category, 'Message': 'The table \'' ~ model.name ~ '\' doesn\'t exist in the source data. Note that the name is case-sensitive.'}), True) }}
         {% endif %}

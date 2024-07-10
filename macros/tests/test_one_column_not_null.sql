@@ -20,11 +20,7 @@
 {% if ns.execute_test %}
     {% set column_list = [] %}
     {% for column in columns %}
-        {%- if target.type == 'databricks' -%}
-            {% set column_list = column_list.append('case when `' + column + '` is not NULL then 1 else 0 end') %}
-        {%- else -%}
-            {% set column_list = column_list.append('case when "' + column + '" is not null then 1 else 0 end') %}
-        {%- endif -%}
+        {% set column_list = column_list.append('case when "' + column + '" is not null then 1 else 0 end') %}
     {% endfor %}
     {% set calculation = column_list | join('\n    + ') %}
 
@@ -35,15 +31,9 @@
 
     {# Query to get the record count when executing the test. #}
     {% set query %}
-        {%- if target.type == 'databricks' -%}
-            select count(*) as `test_record_count`
-            from {{ model }}
-            where {{ calculation }} <> 1
-        {%- else -%}
-            select count(*) as "test_record_count"
-            from {{ model }}
-            where {{ calculation }} <> 1
-        {%- endif -%}
+        select count(*) as "test_record_count"
+        from {{ model }}
+        where {{ calculation }} <> 1
     {% endset %}
 
     {% set result = run_query(query) %}
@@ -60,22 +50,12 @@
             {# Generate variable part of log text. #}
             {% set log_text_list = [] %}
             {% for column in columns %}
-                {% if target.type == 'databricks' %}
-                    {% if loop.index < (columns|length - 1) %}
-                        {% set log_entry = "`" ~ column ~ "`, " %}
-                    {% elif loop.index == columns|length - 1 %}
-                        {% set log_entry = "`" ~ column ~ "` and " %}
-                    {% else %}
-                        {% set log_entry = "`" ~ column ~ "`" %}
-                    {% endif %}
+                {% if loop.index < (columns|length - 1) %}
+                    {% set log_entry = "'" ~ column ~ "', " %}
+                {% elif loop.index == columns|length - 1 %}
+                    {% set log_entry = "'" ~ column ~ "' and " %}
                 {% else %}
-                    {% if loop.index < (columns|length - 1) %}
-                        {% set log_entry = "'" ~ column ~ "', " %}
-                    {% elif loop.index == columns|length - 1 %}
-                        {% set log_entry = "'" ~ column ~ "' and " %}
-                    {% else %}
-                        {% set log_entry = "'" ~ column ~ "'" %}
-                    {% endif %}
+                    {% set log_entry = "'" ~ column ~ "'" %}
                 {% endif %}
                 {% set log_text_list = log_text_list.append(log_entry) %}
             {% endfor %}
@@ -92,11 +72,7 @@
         {% endif %}
     {% endif %}
 {% else %}
-    {%- if target.type == 'databricks' -%}
-        select 'dummy_value' as `dummy`
-    {%- else -%}
-        select 'dummy_value' as "dummy"
-    {%- endif -%}
+    select 'dummy_value' as "dummy"
     where 1 = 0
 {% endif %}
 

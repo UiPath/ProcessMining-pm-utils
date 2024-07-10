@@ -10,17 +10,9 @@ case
     when {{ expression_length }} > 0
     then
         {% if start_location is none -%}
-            {% if target.type == 'databricks' -%}
-                position('{{ expression_to_find }}', {{ field }})
-            {% else -%}
-                charindex('{{ expression_to_find }}', {{ field }})
-            {% endif -%}
+            charindex('{{ expression_to_find }}', {{ field }})
         {% else -%}
-            {% if target.type == 'databricks' -%}
-                position('{{ expression_to_find }}', {{ field }}, {{ start_location }})
-            {% else -%}
-                charindex('{{ expression_to_find }}', {{ field }}, {{ start_location }})
-            {% endif -%}
+            charindex('{{ expression_to_find }}', {{ field }}, {{ start_location }})
         {% endif -%}
     else
         0
