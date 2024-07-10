@@ -1,9 +1,7 @@
 {%- macro to_integer(field, relation) -%}
 
-{%- if target.type == 'databricks' -%}
-    try_cast({{ field }} as bigint)
 {# Snowflake try_to function requires an expression of type varchar. #}
-{%- elif target.type == 'snowflake' -%}
+{%- if target.type == 'snowflake' -%}
     try_to_number(to_varchar({{ field }}))
 {%- elif target.type == 'sqlserver' -%}
     case
@@ -17,19 +15,11 @@
 {# Warning if type casting will introduce null values for at least 1 record. #}
 {% if relation is defined %}
     {% set query %}
-    {% if target.type == 'databricks' -%}
-    select
-        count(*) as `record_count`
-    from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
-    {%- elif target.type in ('sqlserver', 'snowflake') -%}
     select
         count(*) as "record_count"
     from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
-    {% endif %}
     where {{ field }} is not null and
-        {% if target.type == 'databricks' -%}
-            try_cast({{ field }} as bigint) is null
-        {% elif target.type == 'snowflake' -%}
+        {% if target.type == 'snowflake' -%}
             try_to_number(to_varchar({{ field }})) is null
         {% elif target.type == 'sqlserver' -%}
             case

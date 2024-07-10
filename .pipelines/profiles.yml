@@ -24,15 +24,4 @@ default:
       schema: "{{ var('DBT_SCHEMA') }}"
       threads: 10
 
-    databricks-ci:
-      type: databricks
-      catalog: "{{ var('DBT_DATABRICKS_CATALOG') }}"
-      schema: "{{ var('DBT_SCHEMA') }}"
-      host: "{{ var('DBT_DATABRICKS_HOST') }}"
-      http_path: "{{ var('DBT_DATABRICKS_HTTP_PATH') }}"
-      token: "{{ var('DBT_DATABRICKS_TOKEN') }}"
-      threads: 10
-      session_properties:
-        legacy_time_parser_policy: LEGACY
-
-  target: databricks-ci
+  target: snowflake-ci

@@ -4,10 +4,6 @@
 
 select abs(count_a - count_b) as diff_count
 from (select count(*) as count_a from {{ model }}) as model_a
-{% if target.type == 'databricks' -%}
-    cross join (select count(*) as count_b from `{{ model.schema }}`.`{{ compare_model }}`) as model_b
-{% else -%}
     cross join (select count(*) as count_b from "{{ model.schema }}"."{{ compare_model }}") as model_b
-{% endif -%}
 
 {% endmacro %}

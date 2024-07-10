@@ -1,14 +1,8 @@
 {%- macro to_date(field, relation) -%}
 
 {# Cast to date when the input is in a date or a datetime format. This is default behavior for SQL Server. #}
-{%- if target.type == 'databricks' -%}
-    case
-        when to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}') is null
-            then {{ pm_utils.date_from_timestamp(field) }}
-        else to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}')
-    end
 {# Snowflake try_to function requires an expression of type varchar. #}
-{%- elif target.type == 'snowflake' -%}
+{%- if target.type == 'snowflake' -%}
     case
         when try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}') is null
             then {{ pm_utils.date_from_timestamp(field) }}
@@ -26,23 +20,11 @@
 {# Warning if type casting will introduce null values for at least 1 record. #}
 {% if relation is defined %}
     {% set query %}
-    {% if target.type == 'databricks' -%}
-    select
-        count(*) as `record_count`
-    from `{{ relation.database }}`.`{{ relation.schema }}`.`{{ relation.identifier }}`
-    {%- elif target.type in ('sqlserver', 'snowflake') -%}
     select
         count(*) as "record_count"
     from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
-    {% endif %}
     where {{ field }} is not null and
-        {% if target.type == 'databricks' -%}
-            case
-                when to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}') is null
-                    then {{ pm_utils.date_from_timestamp(field) }}
-                else to_date({{ field }}, '{{ var("date_format", "yyyy-MM-dd") }}')
-            end is null
-        {% elif target.type == 'snowflake' -%}
+        {% if target.type == 'snowflake' -%}
             case
                 when try_to_date(to_varchar({{ field }}), '{{ var("date_format", "YYYY-MM-DD") }}') is null
                     then {{ pm_utils.date_from_timestamp(field) }}

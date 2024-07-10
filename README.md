@@ -15,14 +15,14 @@ This package contains some date/datetime conversion macros. You can override the
 ```
 vars:
   # Date and time formats.
-  # For SQL Server defined by integers and for Snowflake/Databricks defined by strings.
-  date_format: 23     # default: SQL Server: 23, Snowflake: 'YYYY-MM-DD', Databricks: 'yyyy-MM-dd'
-  time_format: 14     # default: SQL Server: 14, Snowflake: 'hh24:mi:ss.ff3', Databricks: 'HH:mm:ss'
-  datetime_format: 21 # default: SQL Server: 21, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3', Databricks: 'yyyy-MM-dd HH:mm:ss'
+  # For SQL Server defined by integers and for Snowflake defined by strings.
+  date_format: 23     # default: SQL Server: 23, Snowflake: 'YYYY-MM-DD'
+  time_format: 14     # default: SQL Server: 14, Snowflake: 'hh24:mi:ss.ff3'
+  datetime_format: 21 # default: SQL Server: 21, Snowflake: 'YYYY-MM-DD hh24:mi:ss.ff3'
 ```
 
 ## Contents
-This dbt package contains macros for SQL functions to run the dbt project on multiple databases. The databases that are currently supported are Snowflake, SQL Server and Databricks.
+This dbt package contains macros for SQL functions to run the dbt project on multiple databases. The databases that are currently supported are Snowflake and SQL Server.
 
 - [SQL generators](#SQL-generators)
   - [create_index](#create_index-source)
@@ -203,7 +203,7 @@ Usage:
 `{{ pm_utils.to_integer('[expression]') }}`
 
 #### to_timestamp ([source](macros/data_type_cast_functions/to_timestamp.sql))
-This macro converts a field to a timestamp field. For Databricks, milliseconds will automatically be parsed. You should only set the milliseconds in your datetime patern if the second fraction is different than milliseconds.
+This macro converts a field to a timestamp field. 
 
 Usage: 
 `{{ pm_utils.to_timestamp('[expression]') }}`
