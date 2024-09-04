@@ -49,6 +49,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 - [String functions](#String-functions)
   - [charindex](#charindex-source)
   - [concat](#concat-source)
+  - [json](#json-source)
 - [Aggregate functions](#Aggregate-functions)
   - [stddev](#stddev-source)
   - [string_agg](#string_agg-source)
@@ -274,6 +275,12 @@ Usage:
 
 To pass a string as argument, make sure to use double quotes:
 `{{ pm_utils.concat('"Field_A"', "' - '", '"Field_B"') }}`
+
+#### json ([source](macros/string_functions/json.sql))
+This macro returns the value defined in the path of a JSON string. The first argument indicates the field that stores the JSON string and the second argument is the path for which the value should be returned.
+
+Usage:
+`{{ pm_utils.json('[field]', '[path]') }}`
 
 ### Aggregate functions
 
