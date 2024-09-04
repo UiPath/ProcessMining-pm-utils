@@ -171,3 +171,12 @@ models:
     - equal_value:
         actual: '"Only_weekend"'
         expected: '"Only_weekend_expected"'
+
+  - name: test_json
+    tests:
+    - equal_value:
+        actual: '"One_level_field"'
+        expected: '"One_level_field_expected"'
+    - equal_value:
+        actual: '"Two_level_field"'
+        expected: '"Two_level_field_expected"'
