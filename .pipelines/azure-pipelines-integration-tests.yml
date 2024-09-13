@@ -31,7 +31,7 @@ jobs:
           enabled: true
 
       # Get all secrets to be used for running dbt transformations
-      - task: AzureKeyVault@1
+      - task: AzureKeyVault@2
         displayName: Download secrets from $(keyVaultName)
         retryCountOnTaskFailure: 3
         condition: succeeded()
