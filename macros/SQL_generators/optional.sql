@@ -47,11 +47,30 @@ Only check when relation exists to prevent dbt compile errors. #}
         {{ pm_utils.to_timestamp(column_value, relation) }}
     {%- elif data_type == 'text' -%}
         {{ pm_utils.to_varchar(column_value) }}
+    {# Generate an id when the column doesn't exist or only contains null values. #}
     {%- elif data_type == 'id' -%}
-        {% if optional_column in column_names %}
-            {{ pm_utils.to_integer(column_value, relation) }}
-        {% else %}
-            row_number() over (order by (select null))
+        {% if relation is defined %}
+            {% set query %}
+                select
+                    count(*) as "total_count",
+                    sum(case when {{ column_value }} is null then 1 else 0 end) as "null_records"
+                from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
+            {% endset %}
+
+            {% set result_query = run_query(query) %}
+            {% if execute %}
+                {% set record_count =
+                    result_query.columns['total_count'].values()[0]
+                    - result_query.columns['null_records'].values()[0] %}
+            {% else %}
+                {% set record_count = 0 %}
+            {% endif %}
+
+            {% if optional_column in column_names and record_count > 0 %}
+                {{ pm_utils.to_integer(column_value, relation) }}
+            {% else %}
+                {{ pm_utils.id() }}
+            {% endif %}
         {% endif %}
     {%- else -%}
         {{ pm_utils.to_varchar(column_value) }}
