@@ -109,7 +109,7 @@ These variables are only required when the `data_type` is used with the values `
 #### optional ([source](macros/SQL_generators/optional.sql))
 This macro checks in a table whether a column is present. If the column is not present, it creates the column with `null` values. If the column is present, it selects the column from the table. Use this macro to allow for missing columns in your source tables when that data is optional. Use the optional argument `data_type` to indicate the data type of the column. Possible values are: `boolean`, `date`, `double`, `integer`, `datetime`, and `text`. When no data type is set, the column is considered to be text.
 
-You can also set `id` as data type, which creates the column with unique integer values if the column is not present. If the column is present in that case, the values are expected to be integers.
+You can also set `id` as data type, which creates the column with unique integer values if the column is not present or when it only contains null values. If the column is present, the values are expected to be integers.
 
 Usage:
 `{{ pm_utils.optional(source('source_name', 'table_name'), '"Column_A"', 'data_type') }}`
