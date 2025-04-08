@@ -25,7 +25,6 @@ vars:
 This dbt package contains macros for SQL functions to run the dbt project on multiple databases. The databases that are currently supported are Snowflake and SQL Server.
 
 - [SQL generators](#SQL-generators)
-  - [create_index](#create_index-source)
   - [id](#id-source)
   - [mandatory](#mandatory-source)
   - [optional](#optional-source)
@@ -61,26 +60,11 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [test_one_column_not_null](#test_one_column_not_null-source)
   - [test_unique_combination_of_columns](#test_unique_combination_of_columns-source)
   - [test_unique](#test_unique-source)
+- [Post hooks](#Post-hooks)
+  - [create_index](#create_index-source)
+  - [record_count](#record_count-source)
 
 ### SQL generators
-
-#### create_index ([source](macros/SQL_generators/create_index.sql))
-This macro creates a clustered columnstore index on the current model for SQL Server. This macro should be used in a dbt post-hook.
-
-Usage:
-```
-{{ config(
-    post_hook="{{ pm_utils.create_index() }}"
-) }}
-```
-
-In case you want to create the index on a source table, refer to the table using the source function in the argument. Use the macro in a pre-hook of the model where you use the source table.
-
-```
-{{ config(
-    pre_hook="{{ pm_utils.create_index(source('[source_name]', '[source_table]')) }}"
-) }}
-```
 
 #### id ([source](macros/SQL_generators/id.sql))
 This macro generates an id field that can be used as a column for the current model.
@@ -391,3 +375,38 @@ models:
         tests:
           - pm_utils.unique
 ```
+
+### Post hooks
+
+#### create_index ([source](macros/post_hooks/create_index.sql))
+This macro creates a clustered columnstore index on the current model for SQL Server. This macro should be used in a dbt post-hook.
+
+Usage:
+```
+{{ config(
+    post_hook="{{ pm_utils.create_index() }}"
+) }}
+```
+
+In case you want to create the index on a source table, refer to the table using the source function in the argument. Use the macro in a pre-hook of the model where you use the source table.
+
+```
+{{ config(
+    pre_hook="{{ pm_utils.create_index(source('[source_name]', '[source_table]')) }}"
+) }}
+```
+
+#### record_count ([source](macros/post_hooks/record_count.sql))
+This macro counts the number of records in the current relation using `{{ this }}`. This macro should be used in a dbt post-hook.
+A warning or error message is logged based on whether the record count of the table exceeds the value in the variables that indicate the max record count.
+
+Usage:
+```
+{{ config(
+    post_hook="{{ pm_utils.record_count() }}"
+) }}
+```
+
+Variables:
+- max_records_error
+- max_records_warning
