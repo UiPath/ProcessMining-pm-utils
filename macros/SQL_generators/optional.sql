@@ -67,7 +67,7 @@ Only check when relation exists to prevent dbt compile errors. #}
             {% endif %}
 
             {% if optional_column in column_names and record_count > 0 %}
-                {{ pm_utils.to_integer(column_value, relation) }}
+                {{ column_value }}
             {% else %}
                 {{ pm_utils.id() }}
             {% endif %}
