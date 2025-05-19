@@ -13,7 +13,7 @@
 {%- elif data_type == 'text' -%}
     {{ pm_utils.to_varchar(mandatory_column) }}
 {%- elif data_type == 'id' -%}
-    {{ pm_utils.to_integer(mandatory_column, relation) }}
+    {{ mandatory_column }}
 {%- else -%}
     {{ pm_utils.to_varchar(mandatory_column) }}
 {%- endif -%}
