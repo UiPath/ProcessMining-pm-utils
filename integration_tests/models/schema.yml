@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: test_concat
-    tests:
+    data_tests:
       - equal_value:
           actual: '"Two_text_fields"'
           expected: '"Two_text_fields_expected"'
@@ -11,7 +11,7 @@ models:
           expected: '"One_null_expected"'
 
   - name: test_charindex
-    tests:
+    data_tests:
       - equal_value:
           actual: '"Find_basic_scenario"'
           expected: '"Find_basic_scenario_expected"'
@@ -35,7 +35,7 @@ models:
           expected: '"Find_null_value_expected"'
 
   - name: test_to_timestamp
-    tests:
+    data_tests:
       - equal_value:
           actual: '"timestamp_date"'
           expected: '"timestamp_date_expected"'
@@ -56,7 +56,7 @@ models:
           expected: '"null_value_expected"'
 
   - name: test_dateadd
-    tests:
+    data_tests:
       - equal_value:
           actual: '"add_milliseconds"'
           expected: '"add_milliseconds_expected"'
@@ -104,7 +104,7 @@ models:
           expected: '"add_to_null_value_expected"'
 
   - name: test_stddev
-    tests:
+    data_tests:
     - equal_value:
         actual: '"stddev_actual"'
         expected: '"stddev_expected"'
@@ -113,7 +113,7 @@ models:
         expected: '"stddev_with_null_values_expected"'
 
   - name: test_datediff
-    tests:
+    data_tests:
     - equal_value:
         actual: '"Year"'
         expected: '"Year_expected"'
@@ -146,7 +146,7 @@ models:
         expected: '"Millisecond_expected"'
 
   - name: test_diff_weekdays
-    tests:
+    data_tests:
     - equal_value:
         actual: '"Two_weekends"'
         expected: '"Two_weekends_expected"'
@@ -173,7 +173,7 @@ models:
         expected: '"Only_weekend_expected"'
 
   - name: test_json
-    tests:
+    data_tests:
     - equal_value:
         actual: '"One_level_field"'
         expected: '"One_level_field_expected"'
