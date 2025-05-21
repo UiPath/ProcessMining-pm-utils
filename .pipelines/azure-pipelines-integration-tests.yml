@@ -18,7 +18,7 @@ pr:
     - '*'
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: ubuntu-22.04
 
 jobs:
   - job: get_keyvault_secrets
