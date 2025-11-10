@@ -53,7 +53,7 @@ Only check when relation exists to prevent dbt compile errors. #}
             {% set query %}
                 select
                     count(*) as "total_count",
-                    sum(case when {{ column_value }} is null then 1 else 0 end) as "null_records"
+                    coalesce(sum(case when {{ column_value }} is null then 1 else 0 end), 0) as "null_records"
                 from "{{ relation.database }}"."{{ relation.schema }}"."{{ relation.identifier }}"
             {% endset %}
 
