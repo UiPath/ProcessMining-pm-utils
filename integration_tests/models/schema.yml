@@ -180,3 +180,27 @@ models:
     - equal_value:
         actual: '"Two_level_field"'
         expected: '"Two_level_field_expected"'
+
+  - name: test_union_relations
+    data_tests:
+    - equal_value:
+        actual: '"Column_A"'
+        expected: '"Column_A_Expected"'
+    - equal_value:
+        actual: '"Column_B"'
+        expected: '"Column_B_Expected"'
+    - equal_value:
+        actual: '"Column_C"'
+        expected: '"Column_C_Expected"'
+    - equal_value:
+        actual: '"Column_D"'
+        expected: '"Column_D_Expected"'
+    - equal_value:
+        actual: '"Column_E"'
+        expected: '"Column_E_Expected"'
+    - equal_value:
+        actual: '"Column_F"'
+        expected: '"Column_F_Expected"'
+    - equal_value:
+        actual: '"Column_G"'
+        expected: '"Column_G_Expected"'
