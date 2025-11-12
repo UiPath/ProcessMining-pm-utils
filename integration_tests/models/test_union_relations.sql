@@ -8,7 +8,7 @@ select
     Union_Three."Column_C",
     Union_Three."Column_E",
     Union_Three."Column_F",
-    Union_Three."Column_G"
+    Union_Three."Column_G",
     Union_Three_Expected."Column_A" as "Column_A_Expected",
     Union_Three_Expected."Column_B" as "Column_B_Expected",
     Union_Three_Expected."Column_C" as "Column_C_Expected",
