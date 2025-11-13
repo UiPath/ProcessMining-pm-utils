@@ -4,11 +4,11 @@ with Union_Three as (
 
 Union_Three_Expected as (
     select 
-    1 as "RN", 'A' as "Column_A_Expected", {{pm_utils.to_boolean('true')}} as "Column_B_Expected", null as "Column_C_Expected", null as "Column_D_Expected", null as "Column_E_Expected", null as "Column_F_Expected"
+    {{ pm_utils.to_integer('1') }} as "RN", 'A' as "Column_A_Expected", {{pm_utils.to_boolean('true')}} as "Column_B_Expected", null as "Column_C_Expected", null as "Column_D_Expected", null as "Column_E_Expected", null as "Column_F_Expected"
     union all
-    select 2, 'B', null, 5, 3.5, null, null
+    select {{ pm_utils.to_integer('2') }}, 'B', null, {{ pm_utils.to_integer('5') }}, {{ pm_utils.to_double('3.5') }}, null, null
     union all
-    select 3, null, {{pm_utils.to_boolean('false')}}, 7, null, 2.1, null
+    select {{ pm_utils.to_integer('3') }}, null, {{pm_utils.to_boolean('false')}}, {{ pm_utils.to_integer('7') }}, null, {{ pm_utils.to_double('2.1') }}, null
 )
 
 select
