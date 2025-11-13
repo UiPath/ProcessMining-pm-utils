@@ -2,7 +2,6 @@ version: 2
 
 sources:
   - name: sources
-    schema: "{{ var('schema_sources', target.schema) }}"
     tables:
       - name: input_data_1
         columns:
