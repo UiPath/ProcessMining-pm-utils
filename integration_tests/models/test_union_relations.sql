@@ -8,7 +8,7 @@ Union_Three_Expected as (
     union all
     select {{ pm_utils.to_integer('2') }}, 'B', null, {{ pm_utils.to_integer('5') }}, {{ pm_utils.to_double('3.5') }}, null, null
     union all
-    select {{ pm_utils.to_integer('3') }}, null, {{pm_utils.to_boolean('false')}}, {{ pm_utils.to_integer('7') }}, null, {{ pm_utils.to_double('2.1') }}, null
+    select {{ pm_utils.to_integer('3') }}, null, {{pm_utils.to_boolean('false')}}, {{ pm_utils.to_integer('7') }}, null, {{ pm_utils.to_boolean('false') }}, null
 )
 
 select
