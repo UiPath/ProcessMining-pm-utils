@@ -193,11 +193,11 @@ models:
         actual: '"Column_C"'
         expected: '"Column_C_Expected"'
     - equal_value:
+        actual: '"Column_D"'
+        expected: '"Column_D_Expected"'
+    - equal_value:
         actual: '"Column_E"'
         expected: '"Column_E_Expected"'
     - equal_value:
         actual: '"Column_F"'
         expected: '"Column_F_Expected"'
-    - equal_value:
-        actual: '"Column_G"'
-        expected: '"Column_G_Expected"'
