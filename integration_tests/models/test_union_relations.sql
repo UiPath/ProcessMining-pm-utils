@@ -18,5 +18,3 @@ select
 from Union_Three
 join {{ source('sources', 'union_data') }} as Union_Three_Expected
     on Union_Three."RN" = Union_Three_Expected."RN"
-
-
