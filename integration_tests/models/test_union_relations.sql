@@ -1,5 +1,9 @@
 with Union_Three as (
     {{ pm_utils.union_relations([source('sources', 'input_data_1'), source('sources', 'input_data_2'), source('sources', 'input_data_3')]) }}
+),
+
+Union_Three_Expected as (
+    select * from {{ source('sources', 'union_data') }} 
 )
 
 select
@@ -16,5 +20,5 @@ select
     Union_Three_Expected."Column_F" as "Column_F_Expected",
     Union_Three_Expected."Column_G" as "Column_G_Expected"
 from Union_Three
-join {{ source('sources', 'union_data') }} as Union_Three_Expected
+left join Union_Three_Expected
     on Union_Three."RN" = Union_Three_Expected."RN"
