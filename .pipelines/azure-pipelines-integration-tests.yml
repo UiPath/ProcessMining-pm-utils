@@ -126,15 +126,15 @@ jobs:
         displayName: Install dbt dependencies
 
       - bash: |
-          source dbt-env/bin/activate
-          cd $(dbtProjectPath)
-          dbt build --profiles-dir $(Agent.BuildDirectory)/self/.pipelines --profile default -t snowflake-ci \
-            --vars '{"DBT_SNOWFLAKE_ACCOUNT": "$(DBT_SNOWFLAKE_ACCOUNT)", "DBT_SNOWFLAKE_USER": "$(DBT_SNOWFLAKE_USER)", "DBT_SNOWFLAKE_PASSWORD": "$(DBT_SNOWFLAKE_PASSWORD)", "DBT_SNOWFLAKE_ROLE": "$(DBT_SNOWFLAKE_ROLE)", "DBT_SNOWFLAKE_DATABASE": "$(DBT_SNOWFLAKE_DATABASE)", "DBT_SNOWFLAKE_WAREHOUSE": "$(DBT_SNOWFLAKE_WAREHOUSE)", "DBT_SCHEMA": "$(DBT_SCHEMA)"}'
-        displayName: Test (Snowflake)
-
-      - bash: |
           source dbt-env-sqlserver/bin/activate
           cd $(dbtProjectPath)
           dbt build --profiles-dir $(Agent.BuildDirectory)/self/.pipelines --profile default -t sqlserver-ci \
             --vars '{"DBT_SQL_SERVER_SERVER": "$(DBT_SQL_SERVER_SERVER)", "DBT_SQL_SERVER_USER": "$(DBT_SQL_SERVER_USER)", "DBT_SQL_SERVER_PASSWORD": "$(DBT_SQL_SERVER_PASSWORD)", "DBT_SQL_SERVER_DATABASE": "$(DBT_SQL_SERVER_DATABASE)", "DBT_SCHEMA": "$(DBT_SCHEMA)"}'
         displayName: Test (SQL Server)
+
+      - bash: |
+          source dbt-env/bin/activate
+          cd $(dbtProjectPath)
+          dbt build --profiles-dir $(Agent.BuildDirectory)/self/.pipelines --profile default -t snowflake-ci \
+            --vars '{"DBT_SNOWFLAKE_ACCOUNT": "$(DBT_SNOWFLAKE_ACCOUNT)", "DBT_SNOWFLAKE_USER": "$(DBT_SNOWFLAKE_USER)", "DBT_SNOWFLAKE_PASSWORD": "$(DBT_SNOWFLAKE_PASSWORD)", "DBT_SNOWFLAKE_ROLE": "$(DBT_SNOWFLAKE_ROLE)", "DBT_SNOWFLAKE_DATABASE": "$(DBT_SNOWFLAKE_DATABASE)", "DBT_SNOWFLAKE_WAREHOUSE": "$(DBT_SNOWFLAKE_WAREHOUSE)", "DBT_SCHEMA": "$(DBT_SCHEMA)"}'
+        displayName: Test (Snowflake)
