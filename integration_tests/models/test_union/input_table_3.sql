@@ -3,5 +3,5 @@ select
     3 as "RN",
     {{ pm_utils.to_boolean('false') }} as "Column_B",
     7 as "Column_C",
-    {{ pm_utils.to_boolean('false') }} as "Column_E",
+    2.3 as "Column_E",
     null as "Column_F"
