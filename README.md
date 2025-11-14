@@ -30,6 +30,7 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
   - [optional](#optional-source)
   - [optional_table](#optional_table-source)
   - [star](#star-source)
+  - [union](#union-source)
 - [Data type cast functions](#Data-type-cast-functions)
   - [as_varchar](#as_varchar-source)
   - [to_boolean](#to_boolean-source)
@@ -63,7 +64,6 @@ This dbt package contains macros for SQL functions to run the dbt project on mul
 - [Post hooks](#Post-hooks)
   - [create_index](#create_index-source)
   - [record_count](#record_count-source)
-- [union](#union-source)
 
 ### SQL generators
 
@@ -152,6 +152,13 @@ select
     {{ pm_utils.to_date('"Creation_date"') }} as "Creation_date"
 from {{ ref('Table_A') }}
 ```
+
+#### union ([source](macros/SQL_generators/union.sql))
+This macro performs a union of two or more relations. The relations can be models or source tables in the dbt project. The macro automatically aligns the columns based on the column names. If a column is missing in one of the relations, the macro adds the column with null values to that relation. The order of the columns in the result is based on the order of the columns in the first relation provided as argument.
+
+Usage:
+`{{ pm_utils.union([ref('Model_A'), source('source_name', 'Table_B'), ref('Model_C')]) }}`
+
 
 ### Data type cast functions
 
@@ -407,13 +414,6 @@ Usage:
     post_hook="{{ pm_utils.record_count() }}"
 ) }}
 ```
-
-#### union ([source](macros/aggregate_functions/union.sql))
-This macro performs a union of two or more relations. The relations can be models or source tables in the dbt project. The macro automatically aligns the columns based on the column names. If a column is missing in one of the relations, the macro adds the column with null values to that relation. The order of the columns in the result is based on the order of the columns in the first relation provided as argument.
-
-Usage:
-`{{ pm_utils.union([ref('Model_A'), source('source_name', 'Table_B'), ref('Model_C')]) }}`
-
 
 Variables:
 - max_records_error
