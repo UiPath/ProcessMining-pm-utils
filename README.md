@@ -127,7 +127,7 @@ You can choose to exclude fields from the select statement, for example:
 - When you apply logic to a field and don't want to keep the original.
 - When you join tables and a field with the same name is available on multiple tables.
 
-Make sure to put the relation also in the from clause. Otherwise, the table from which you select can't be found.
+Make sure to put the relation also in the from clause without using an alias. Otherwise, the table from which you select can't be found.
 
 Usage:
 
